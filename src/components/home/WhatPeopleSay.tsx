@@ -1,23 +1,27 @@
-import React from 'react';
+import React from "react";
 
 const testimonials = [
   {
-    quote: "I did not expect someone to knock on my door that morning. My children had never seen them before. If my husband had the box, so we say thank you and mean it.",
+    quote:
+      "I did not expect someone to knock on my door that morning. My children had never seen them before. If my husband had the box, so we say thank you and mean it.",
     category: "RESIDENT",
     location: "Kano Hub",
   },
   {
-    quote: "People think giving is easy. It is not. It requires logistics, patience, and money. NOCF has found a way to standardize love. That is the only way I can describe what happens here.",
+    quote:
+      "People think giving is easy. It is not. It requires logistics, patience, and money. NOCF has found a way to standardize love. That is the only way I can describe what happens here.",
     category: "VOLUNTEER",
     location: "Lagos Hub",
   },
   {
-    quote: "I have supplied the medical kits for three years. They don't just ask for a discount, they ask for the expiration dates. They care about what goes in.",
+    quote:
+      "I have supplied the medical kits for three years. They don't just ask for a discount, they ask for the expiration dates. They care about what goes in.",
     category: "PARTNER",
     location: "Logistics Partner",
   },
   {
-    quote: "There are no cameras in our faces when they come. They give us the box, they ask how we are doing, and they leave. It is respectful.",
+    quote:
+      "There are no cameras in our faces when they come. They give us the box, they ask how we are doing, and they leave. It is respectful.",
     category: "RESIDENT",
     location: "Lagos Hub",
   },
@@ -31,13 +35,11 @@ export function WhatPeopleSay() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-[55px] md:mb-[70px]">
           <div className="flex items-center gap-3">
             <div className="w-[20px] h-[1px] md:h-[2px] bg-[#FF4500]" />
-            <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
+            <span className="font-heading font-bold text-[12px] md:text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               WHAT PEOPLE SAY
             </span>
           </div>
-          <div className="font-heading font-medium md:font-semibold text-[8px] md:text-[9px] tracking-[0.05em] uppercase text-[#9A9A9A]">
-            EVENTS  •  CAUSES  •  VOLUNTEERS  •  DONORS  •  PARTNERS
-          </div>
+          ''{" "}
         </div>
 
         {/* Featured Testimonial */}
@@ -46,7 +48,10 @@ export function WhatPeopleSay() {
             “
           </span>
           <h2 className="font-heading font-bold text-[21px] md:text-[36px] leading-[1.25] tracking-[-0.03em] text-[#171717] z-10">
-            We have lived in this neighbourhood for eleven years. Nobody has ever come to our door with something for us. The volunteers came at seven in the morning, before the sun was hot. My husband did not know what to say. I told him: say thank you and mean it.
+            We have lived in this neighbourhood for eleven years. Nobody has
+            ever come to our door with something for us. The volunteers came at
+            seven in the morning, before the sun was hot. My husband did not
+            know what to say. I told him: say thank you and mean it.
           </h2>
         </div>
 
@@ -63,7 +68,7 @@ export function WhatPeopleSay() {
           {testimonials.map((t, i) => (
             <div key={i} className="flex flex-col relative pl-4 md:pl-5">
               <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#FF4500]" />
-              <p className="font-body font-medium text-[11px] md:text-[13px] leading-[1.55] text-[#252525] mb-4 flex-1">
+              <p className="font-body font-medium text-[15px] md:text-[13px] leading-[1.55] text-[#252525] mb-4 flex-1">
                 “{t.quote}”
               </p>
               <div className="flex flex-col gap-1">
