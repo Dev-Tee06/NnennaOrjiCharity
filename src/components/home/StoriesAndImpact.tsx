@@ -1,25 +1,25 @@
-import React from 'react';
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
 
 const stories = [
   {
     category: "LAGOS",
     title: "The morning the van left at 5am",
     desc: "Before the sun comes up, over thirty volunteers assemble at our staging ground. This field note details the logistics, energy, and unexpected moments that happen before the first box is even loaded.",
-    image: "/images/hero3.JPG"
+    image: "/images/hero3.JPG",
   },
   {
     category: "LAGOS",
     title: "Cooking for a street you don’t know",
     desc: "When we receive requests from community leaders, we have to scale our operations rapidly. Here is how our kitchen team handles the pressure of cooking hundreds of meals while maintaining quality and warmth.",
-    image: "/images/about-us-1.jpg"
+    image: "/images/about-us-1.jpg",
   },
   {
     category: "FIELD NOTE",
     title: "What families actually ask for",
     desc: "We spend time listening. Often, what we assume people need isn't what they want most. This note explores the real conversations happening on the ground and how they shape our annual delivery lists.",
-    image: "/images/volunteer4.JPG"
-  }
+    image: "/images/volunteer4.JPG",
+  },
 ];
 
 export function StoriesAndImpact() {
@@ -31,7 +31,7 @@ export function StoriesAndImpact() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <div className="w-[20px] h-[1px] md:h-[2px] bg-[#FF4500]" />
-              <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.08em] uppercase text-[#FF4500]">
+              <span className="font-heading font-bold text-[12px] md:text-[10px] tracking-[0.08em] uppercase text-[#FF4500]">
                 STORIES & IMPACT
               </span>
             </div>
@@ -39,18 +39,20 @@ export function StoriesAndImpact() {
               What actually happened, written by the people who were there.
             </h2>
           </div>
-          
+
           <button className="group flex items-center justify-center gap-2 bg-[#070D16] text-[#FFFFFF] rounded-[6px] h-[43px] md:h-[48px] px-[20px] md:px-[24px] font-body font-semibold text-[10px] md:text-[12px] transition-transform duration-300 hover:-translate-y-1">
             Read Our Stories
-            <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            <span className="transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
           </button>
         </div>
 
         {/* Story Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-[20px] md:gap-[24px]">
           {stories.map((story, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className="group flex flex-col bg-[#FFFFFF] rounded-[7px] md:rounded-[9px] border border-[#E9E5E3] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-sm"
             >
               <div className="relative w-full h-[200px] md:h-[220px] overflow-hidden">

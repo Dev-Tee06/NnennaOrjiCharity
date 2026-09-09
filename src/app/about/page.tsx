@@ -190,7 +190,7 @@ export default function About() {
 
             <div className="flex flex-col">
               <h3 className="font-heading font-bold text-[13px] md:text-[14px] tracking-[0.05em] text-[#FF4500] uppercase mb-6">
-                FACT SHEET
+                BY THE NUMBERS
               </h3>
 
               <div className="flex flex-col border-t border-[#E8E4E2]">
