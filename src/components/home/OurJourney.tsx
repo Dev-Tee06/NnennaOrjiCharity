@@ -94,22 +94,20 @@ export function OurJourney() {
               OUR JOURNEY
             </span>
           </div>
-          
+
           <h2 className="font-heading font-bold text-[36px] md:text-[42px] leading-[1.1] text-[#171717] tracking-tight">
             2020 – 2026
           </h2>
-          
-          <p className="font-body text-[14px] md:text-[16px] text-[#777777] max-w-[700px] leading-[1.6]">
-            From a single event in Lagos to a two-city operation with purpose—and giving, care and impact.
-          </p>
+
           <p className="font-body font-normal text-[16px] leading-[24.8px] text-[#171717] mt-2">
-            From a single street in Ikeja to a two-city operation with year-round giving channels.
+            From a single street in Ikeja to a two-city operation with
+            year-round giving channels.
           </p>
         </div>
       </div>
 
       {/* Cards Track */}
-      <div 
+      <div
         ref={containerRef}
         className="flex overflow-x-auto gap-5 md:gap-6 px-4 md:px-8 xl:px-[calc((100vw-1320px)/2+48px)] hide-scrollbar cursor-grab active:cursor-grabbing snap-x md:snap-none pb-4"
         style={{ paddingRight: "24px" }}
