@@ -10,7 +10,7 @@ const DISPATCHES = [
     title: "The morning the van left at 5am", 
     excerpt: "A Kano loading run that turned into 600 boxes delivered before noon, and the three things that nearly went wrong.", 
     image: "/images/hero3.JPG", 
-    href: "https://substack.com" 
+    href: "https://medium.com" 
   },
   { 
     category: "LAGOS", 
@@ -18,7 +18,7 @@ const DISPATCHES = [
     title: "Cooking for a street you don't know", 
     excerpt: "Notes from the community kitchen that feeds the Ikeja outreach every December — 40 pots, 11 hours.", 
     image: "/images/about-us-1.jpg", 
-    href: "https://substack.com" 
+    href: "https://medium.com" 
   },
   { 
     category: "FIELD NOTES", 
@@ -26,7 +26,7 @@ const DISPATCHES = [
     title: "What families actually ask for", 
     excerpt: "Three years of listening changed what we put inside the box. Soap ranked higher than we expected.", 
     image: "/images/volunteer4.JPG", 
-    href: "https://substack.com" 
+    href: "https://medium.com" 
   },
   { 
     category: "TRANSPARENCY", 
@@ -34,7 +34,7 @@ const DISPATCHES = [
     title: "Where ₦50 million went", 
     excerpt: "A line-by-line breakdown of aid delivered since 2020, and how we price a box at market rate.", 
     image: "/images/hero2.JPG", 
-    href: "https://substack.com" 
+    href: "https://medium.com" 
   },
   { 
     category: "VOLUNTEERS", 
@@ -42,7 +42,7 @@ const DISPATCHES = [
     title: "Sorting day is the hardest day", 
     excerpt: "Why the clothing table is the most demanding shift in the calendar, and who keeps showing up for it.", 
     image: "/images/volunteer1.JPG", 
-    href: "https://substack.com" 
+    href: "https://medium.com" 
   },
   { 
     category: "ORIGINS", 
@@ -50,7 +50,7 @@ const DISPATCHES = [
     title: "Project 26, five years on", 
     excerpt: "The founder revisits the street where the first 120 meals were served, with the people who served them.", 
     image: "/images/who-we-are.jpg", 
-    href: "https://substack.com" 
+    href: "https://medium.com" 
   }
 ];
 
@@ -62,7 +62,7 @@ export default function Stories() {
       <section className="pt-24 md:pt-32 pb-16 px-4 md:px-8 xl:px-12 max-w-[1320px] mx-auto flex flex-col items-center text-center">
         <div className="flex items-center gap-2 bg-white border border-border px-4 py-1.5 rounded-full w-fit mb-8">
           <div className="w-2 h-2 rounded-full bg-orangeRed1" />
-          <span className="font-body text-[13px] text-blackKnight font-medium">Published on Substack</span>
+          <span className="font-body text-[13px] text-blackKnight font-medium">Published on Medium</span>
         </div>
         
         <h1 className="font-heading font-bold text-[34px] md:text-[46px] lg:text-[56px] xl:text-[62px] leading-[1.05] md:leading-[1.0] tracking-tight md:tracking-[-0.035em] text-blackKnight max-w-[850px] xl:max-w-[900px]">
@@ -70,11 +70,11 @@ export default function Stories() {
         </h1>
         
         <p className="font-body text-[15px] md:text-base lg:text-[17px] text-text-secondary mt-6 max-w-[720px] leading-[1.6]">
-          We write after every outreach: what was delivered, what it cost, what we got wrong. No polished campaign copy, no stock photography. Full archive lives on our Substack.
+          We write after every outreach: what was delivered, what it cost, what we got wrong. No polished campaign copy, no stock photography. Full archive lives on our Medium.
         </p>
         
-        <Button href="https://substack.com" variant="primary" className="mt-8 px-6">
-          Read Our Stories ↗
+        <Button href="https://medium.com" variant="primary" className="mt-8 px-6">
+          Read Our Stories
         </Button>
       </section>
 
@@ -82,7 +82,7 @@ export default function Stories() {
       <section className="py-12 lg:py-[60px] bg-white border-y border-border-subtle">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <SectionLabel text="LATEST" />
-          <h2 className="font-heading font-bold text-3xl md:text-[34px] lg:text-[38px] text-blackKnight mb-12">
+          <h2 className="font-heading font-bold md: lg: text-blackKnight mb-12 text-[19px]">
             Recent dispatches
           </h2>
           
@@ -123,10 +123,8 @@ export default function Stories() {
                       className="inline-flex items-center gap-1 font-body font-semibold text-[14px] lg:text-[15px] text-orangeRed1 group/link"
                       target="_blank"
                     >
-                      Read on Substack 
-                      <span className="text-[12px] transition-transform duration-300 group-hover/link:translate-x-[2px] group-hover/link:-translate-y-[2px]">
-                        ↗
-                      </span>
+                      Read on Medium 
+                      
                     </Link>
                   </div>
                 </div>

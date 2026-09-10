@@ -89,19 +89,25 @@ export function Footer() {
             </p>
             <div className="flex items-center gap-3 mt-2">
               <a
-                href="#"
+                href="https://www.linkedin.com/company/nnennaorjicharityorganization"
                 className="flex items-center justify-center w-10 h-10 rounded-[8px] border border-white/20 hover:border-orangeRed1 hover:bg-orangeRed1 hover:text-white transition-colors text-white/80"
               >
                 <Linkedin size={18} />
               </a>
               <a
-                href="#"
+                href="https://x.com/nocfhq"
                 className="flex items-center justify-center w-10 h-10 rounded-[8px] border border-white/20 hover:border-orangeRed1 hover:bg-orangeRed1 hover:text-white transition-colors text-white/80"
               >
-                <Facebook size={18} />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z" /><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" /></svg>
               </a>
               <a
-                href="#"
+                href="https://www.tiktok.com/@nocfhq"
+                className="flex items-center justify-center w-10 h-10 rounded-[8px] border border-white/20 hover:border-orangeRed1 hover:bg-orangeRed1 hover:text-white transition-colors text-white/80"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4v-12a5 5 0 0 0 5 5" /></svg>
+              </a>
+              <a
+                href="https://www.instagram.com/nnennaorjicharityfoundation"
                 className="flex items-center justify-center w-10 h-10 rounded-[8px] border border-white/20 hover:border-orangeRed1 hover:bg-orangeRed1 hover:text-white transition-colors text-white/80"
               >
                 <Instagram size={18} />

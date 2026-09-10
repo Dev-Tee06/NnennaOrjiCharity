@@ -74,7 +74,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col items-start gap-6">
               <SectionLabel text="Who we are" />
-              <h2 className="font-heading font-bold text-[28.5px] leading-[31.92px] tracking-[-0.57px] text-blackKnight">
+              <h2 className="font-heading font-bold leading-[31.92px] tracking-[-0.57px] text-blackKnight text-[19px]">
                 It began with one December, one street, and 120 plates of food.
               </h2>
               <div className="font-body text-[17px] leading-[28.05px] text-text-secondary flex flex-col gap-4">
@@ -111,7 +111,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
             <div className="flex flex-col items-start gap-6">
               <SectionLabel text="A BOX FULL OF HOPE" />
-              <h2 className="font-heading font-bold text-[28.5px] leading-[31.92px] tracking-[-0.57px] text-white">
+              <h2 className="font-heading font-bold leading-[31.92px] tracking-[-0.57px] text-white text-[19px]">
                 It began with one December, one street, and 120 plates of food.
               </h2>
               <div className="font-body text-[17px] leading-[28.05px] text-white/70 flex flex-col gap-4">
@@ -171,7 +171,7 @@ export default function Home() {
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 flex flex-col gap-12">
           <div className="flex flex-col gap-4">
             <span className="font-heading font-semibold text-[12px] leading-[18.6px] tracking-[1.68px] uppercase text-[#F82C00]">Ways to help</span>
-            <h2 className="font-heading font-bold text-[28.5px] leading-[31.92px] tracking-[-0.57px] text-blackKnight">
+            <h2 className="font-heading font-bold leading-[31.92px] tracking-[-0.57px] text-blackKnight text-[19px]">
               Five ways to put something in the box.
             </h2>
           </div>
@@ -231,7 +231,7 @@ export default function Home() {
                   href={item.href}
                   className="font-body text-sm font-semibold text-orangeRed1 hover:underline mt-2"
                 >
-                  {item.cta} →
+                  {item.cta}
                 </Link>
               </div>
             ))}

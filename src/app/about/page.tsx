@@ -53,7 +53,7 @@ const PEOPLE = [
     name: "Daniel Orjikalu",
     role: "DIRECTOR OF COMMUNICATIONS",
     desc: "Started Project 26 in 2020 with six friends and a rented pot. Leads strategy and partner relationships.",
-    image: "/images/volunteer1.JPG",
+    image: "/images/volunteer-image1.jpg",
   },
   {
     name: "Bethel Ezemah",
@@ -65,7 +65,7 @@ const PEOPLE = [
     name: "David Orji",
     role: "KANO HUB LEAD",
     desc: "Coordinates northern outreach, route mapping and community liaison across Nassarawa and Fagge.",
-    image: "/images/volunteer3.JPG",
+    image: "/images/volunteer-image2.jpg",
   },
   {
     name: "Nora Anucha",
@@ -114,7 +114,7 @@ export default function About() {
       {/* Hero */}
       <section className="pt-[140px] pb-[80px] md:pt-[180px] md:pb-[100px] px-4 md:px-8 xl:px-12 flex flex-col items-center text-center">
         <div className="flex items-center gap-2 mb-6 md:mb-8">
-          <div className="w-[16px] md:w-[20px] h-[1px] md:h-[2px] bg-[#FF4500]" />
+          
           <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.15em] uppercase text-[#FF4500]">
             ABOUT OUR FOUNDATION
           </span>
@@ -229,12 +229,12 @@ export default function About() {
       <section className="bg-[#FFFFFF] border-y border-[#E8E4E2] py-[90px] md:py-[120px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-[20px] h-[2px] bg-[#FF4500]" />
+            
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               OUR VALUES
             </span>
           </div>
-          <h2 className="font-heading font-bold text-[28px] md:text-[36px] leading-[1.1] tracking-tight text-[#171717] mb-12">
+          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-12 text-[19px]">
             Mission, vision and what we hold ourselves to.
           </h2>
 
@@ -276,12 +276,12 @@ export default function About() {
       <section className="bg-[#FFFFFF] py-[90px] md:py-[120px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-[20px] h-[2px] bg-[#FF4500]" />
+            
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               OUR JOURNEY
             </span>
           </div>
-          <h2 className="font-heading font-bold text-[28px] md:text-[36px] leading-[1.1] tracking-tight text-[#171717] mb-4">
+          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-4 text-[19px]">
             2020 – 2026, year by year
           </h2>
           <p className="font-body text-[14px] text-[#777777] mb-12">
@@ -340,7 +340,7 @@ export default function About() {
           {/* Right: Text */}
           <div className="relative z-10 w-full lg:w-[55%] flex flex-col">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-[20px] h-[2px] bg-[#FF4500]" />
+              
               <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
                 A WORD FROM OUR FOUNDER
               </span>
@@ -410,12 +410,12 @@ export default function About() {
       <section className="bg-[#FFFFFF] py-[90px] md:py-[120px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-[20px] h-[2px] bg-[#FF4500]" />
+            
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               Board & leadership
             </span>
           </div>
-          <h2 className="font-heading font-bold text-[28px] md:text-[36px] leading-[1.1] tracking-tight text-[#171717] mb-[60px]">
+          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-[60px] text-[19px]">
             The people accountable for the work.
           </h2>
 
@@ -430,7 +430,7 @@ export default function About() {
                     src={person.image}
                     alt={person.name}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover object-[center_15%]"
                   />
                 </div>
                 <div className="p-6 md:p-8 flex flex-col flex-1">
@@ -440,7 +440,7 @@ export default function About() {
                   <span className="font-heading font-bold text-[9px] tracking-[0.1em] text-[#FF4500] uppercase mb-4">
                     {person.role}
                   </span>
-                  <div className="w-[12px] h-[1px] bg-[#FF4500] mb-4" />
+                  
                   <p className="font-body text-[12px] leading-[1.6] text-[#777777]">
                     {person.desc}
                   </p>
@@ -455,12 +455,12 @@ export default function About() {
       <section className="bg-[#FFFFFF] pb-[100px] md:pb-[140px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-[20px] h-[2px] bg-[#FF4500]" />
+            
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               Volunteers gallery
             </span>
           </div>
-          <h2 className="font-heading font-bold text-[28px] md:text-[36px] leading-[1.1] tracking-tight text-[#171717] mb-4">
+          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-4 text-[19px]">
             Outreach in Lagos and Kano.
           </h2>
           <p className="font-body text-[14px] text-[#777777] mb-[50px]">

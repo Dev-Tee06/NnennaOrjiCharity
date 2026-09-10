@@ -80,7 +80,7 @@ export default function Partner() {
       <section className="py-20 lg:py-[100px] bg-white border-y border-border-subtle">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <SectionLabel text="PARTNERSHIP AVENUES" />
-          <h2 className="font-heading font-bold text-3xl md:text-[36px] lg:text-[38px] text-blackKnight mb-12">
+          <h2 className="font-heading font-bold md: lg: text-blackKnight mb-12 text-[19px]">
             Four ways to work with us.
           </h2>
           
@@ -109,7 +109,7 @@ export default function Partner() {
           {/* Left Column: Info */}
           <div className="flex flex-col items-start w-full">
             <SectionLabel text="ENQUIRY" />
-            <h2 className="font-heading font-bold text-3xl md:text-[38px] leading-[1.1] text-blackKnight mb-6 max-w-[500px]">
+            <h2 className="font-heading font-bold md: leading-[1.1] text-blackKnight mb-6 max-w-[500px] text-[19px]">
               Tell us what you have in mind.
             </h2>
             <p className="font-body text-[16px] lg:text-[17px] text-text-secondary leading-[1.6] mb-10 max-w-[500px]">

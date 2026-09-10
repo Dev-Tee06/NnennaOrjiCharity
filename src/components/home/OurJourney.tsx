@@ -89,13 +89,13 @@ export function OurJourney() {
         {/* Header */}
         <div className="flex flex-col items-start gap-4 mb-[50px] md:mb-[60px]">
           <div className="flex items-center gap-3">
-            <div className="w-[20px] h-[1px] bg-[#FF4500]" />
+            
             <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               OUR JOURNEY
             </span>
           </div>
 
-          <h2 className="font-heading font-bold text-[36px] md:text-[42px] leading-[1.1] text-[#171717] tracking-tight">
+          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight text-[19px]">
             2020 – 2026
           </h2>
 

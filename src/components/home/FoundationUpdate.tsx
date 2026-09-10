@@ -16,7 +16,7 @@ export function FoundationUpdate() {
               <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.08em] uppercase text-[#FF4500] mb-[10px] md:mb-[12px] block">
                 FOUNDATION UPDATE
               </span>
-              <h2 className="font-heading font-bold text-[23px] md:text-[27px] leading-[1.1] md:leading-[1.2] tracking-[-0.025em] text-[#171717] mb-[10px] md:mb-[12px] truncate">
+              <h2 className="font-heading font-bold md: leading-[1.1] md:leading-[1.2] tracking-[-0.025em] mb-[10px] md:mb-[12px] truncate text-[19px]">
                 Stay close to the work.
               </h2>
               <p className="font-body font-normal text-[10px] md:text-[12px] leading-[1.5] md:leading-[1.6] text-[#777777] max-w-[390px] md:max-w-[420px]">
@@ -42,7 +42,7 @@ export function FoundationUpdate() {
                 className="group w-full sm:w-[30%] md:w-[25%] flex items-center justify-center gap-[4px] md:gap-[6px] bg-[#FF4500] text-[#FFFFFF] rounded-[7px] h-[43px] md:h-[46px] px-[18px] md:px-[22px] font-heading font-semibold md:font-bold text-[10px] md:text-[11px] transition-all hover:bg-[#E63E00]"
               >
                 Subscribe
-                <span className="transition-transform duration-300 group-hover:translate-x-[3px] text-[10px]">→</span>
+                
               </button>
             </form>
             <span className="font-body font-normal text-[9px] md:text-[10px] leading-[1.4] text-[#999999]">

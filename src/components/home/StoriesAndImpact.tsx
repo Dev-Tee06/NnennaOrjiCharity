@@ -30,21 +30,19 @@ export function StoriesAndImpact() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-[20px] h-[1px] md:h-[2px] bg-[#FF4500]" />
+              
               <span className="font-heading font-bold text-[12px] md:text-[10px] tracking-[0.08em] uppercase text-[#FF4500]">
                 STORIES & IMPACT
               </span>
             </div>
-            <h2 className="font-heading font-bold text-[25px] md:text-[30px] leading-[1.15] md:leading-[1.25] tracking-[-0.025em] text-[#171717] max-w-[500px]">
+            <h2 className="font-heading font-bold md: leading-[1.15] md:leading-[1.25] tracking-[-0.025em] max-w-[500px] text-[19px]">
               What actually happened, written by the people who were there.
             </h2>
           </div>
 
           <button className="group flex items-center justify-center gap-2 bg-[#070D16] text-[#FFFFFF] rounded-[6px] h-[43px] md:h-[48px] px-[20px] md:px-[24px] font-body font-semibold text-[10px] md:text-[12px] transition-transform duration-300 hover:-translate-y-1">
             Read Our Stories
-            <span className="transition-transform duration-300 group-hover:translate-x-1">
-              →
-            </span>
+            
           </button>
         </div>
 

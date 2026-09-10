@@ -21,13 +21,13 @@ export function OurImpact() {
           {/* Left Column */}
           <div className="w-full lg:w-[40%] flex flex-col items-start">
             <div className="flex items-center gap-3 mb-8 md:mb-10">
-              <div className="w-[20px] h-[1px] bg-[#FF4500]" />
+              
               <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
                 OUR IMPACT
               </span>
             </div>
 
-            <h2 className="font-heading font-bold text-[27px] md:text-[32px] leading-[1.1] text-[#FFFFFF] tracking-[-0.02em] whitespace-pre-line mb-10">
+            <h2 className="font-heading font-bold md: leading-[1.1] tracking-[-0.02em] whitespace-pre-line mb-10 text-[19px]">
               {"Numbers we publish, not\nnumbers we estimate."}
             </h2>
 
@@ -47,9 +47,7 @@ export function OurImpact() {
               className="inline-flex items-center gap-2 border border-[#3B424A] rounded-[6px] px-5 py-[11px] font-body text-[11px] md:text-[12px] font-semibold text-[#FFFFFF] hover:border-[#FF4500] hover:text-[#FF4500] transition-colors duration-300 group"
             >
               Read the full report
-              <span className="transition-transform duration-300 group-hover:translate-x-1">
-                →
-              </span>
+              
             </Link>
           </div>
 

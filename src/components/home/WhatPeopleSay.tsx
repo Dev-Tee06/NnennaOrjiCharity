@@ -34,7 +34,7 @@ export function WhatPeopleSay() {
         {/* Top Header Row */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-[55px] md:mb-[70px]">
           <div className="flex items-center gap-3">
-            <div className="w-[20px] h-[1px] md:h-[2px] bg-[#FF4500]" />
+            
             <span className="font-heading font-bold text-[12px] md:text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               WHAT PEOPLE SAY
             </span>
@@ -47,7 +47,7 @@ export function WhatPeopleSay() {
           <span className="absolute -top-[20px] -left-[10px] md:-top-[30px] md:-left-[15px] font-heading font-bold text-[75px] md:text-[100px] leading-[1] text-[#F6CFC5] -z-10 select-none">
             “
           </span>
-          <h2 className="font-heading font-bold text-[21px] md:text-[36px] leading-[1.25] tracking-[-0.03em] text-[#171717] z-10">
+          <h2 className="font-heading font-bold md: leading-[1.25] tracking-[-0.03em] z-10 text-[19px]">
             We have lived in this neighbourhood for eleven years. Nobody has
             ever come to our door with something for us. The volunteers came at
             seven in the morning, before the sun was hot. My husband did not
@@ -57,7 +57,7 @@ export function WhatPeopleSay() {
 
         {/* Attribution */}
         <div className="flex items-center gap-3 mb-[35px] md:mb-[45px]">
-          <div className="w-[22px] h-[1px] md:h-[2px] bg-[#FF4500]" />
+          
           <span className="font-body font-medium text-[9px] md:text-[11px] text-[#777777]">
             Rashidah, Community, Kano
           </span>

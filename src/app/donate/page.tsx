@@ -43,7 +43,8 @@ export default function Donate() {
   const handleCashSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isCashValid) {
-      alert("Redirecting to checkout...");
+      const amount = selectedAmount !== null ? selectedAmount : Number(customAmount);
+      window.location.href = `https://checkout.korapay.com/pay/fZYXkT4JpY1Z1j7?amount=${amount}`;
     }
   };
 
@@ -113,7 +114,7 @@ export default function Donate() {
             {activeTab === 'cash' && (
               <form onSubmit={handleCashSubmit} className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
-                  <h2 className="font-heading font-bold text-2xl lg:text-[28px] text-blackKnight">Give cash</h2>
+                  <h2 className="font-heading font-bold lg: text-blackKnight text-[19px]">Give cash</h2>
                   <p className="font-body text-[15px] text-text-secondary leading-relaxed">
                     Cash gifts are pooled into procurement at market rates — the most efficient way to fill a box.
                   </p>
@@ -162,7 +163,7 @@ export default function Donate() {
                     disabled={!isCashValid}
                     className="w-full sm:w-auto"
                   >
-                    Proceed to Checkout →
+                    Proceed to Checkout
                   </Button>
                 </div>
               </form>
@@ -171,7 +172,7 @@ export default function Donate() {
             {activeTab !== 'cash' && (
               <form onSubmit={handlePledgeSubmit} className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
-                  <h2 className="font-heading font-bold text-2xl lg:text-[28px] text-blackKnight">
+                  <h2 className="font-heading font-bold lg: text-blackKnight text-[19px]">
                     {activeTab === 'food' && "Pledge food items"}
                     {activeTab === 'clothing' && "Pledge clothing"}
                     {activeTab === 'medical' && "Donate medical supplies"}
@@ -245,7 +246,7 @@ export default function Donate() {
                     disabled={!isPledgeValid}
                     className="w-full md:w-auto"
                   >
-                    Submit Pledge →
+                    Submit Pledge
                   </Button>
                 </div>
               </form>

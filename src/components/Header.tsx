@@ -58,7 +58,7 @@ export function Header() {
                 )}
               >
                 {link.label}
-                {link.externalIcon && <span className="text-[10px]">↗</span>}
+                
                 {isActive && (
                   <span className="absolute -bottom-[4px] left-0 right-0 h-[2px] bg-orangeRed1 rounded-full" />
                 )}
@@ -119,9 +119,7 @@ export function Header() {
                 >
                   <span className="flex items-center gap-1">
                     {link.label}
-                    {link.externalIcon && (
-                      <span className="text-[10px]">↗</span>
-                    )}
+                    
                   </span>
                   {isActive && (
                     <div className="h-2 w-2 rounded-full bg-orangeRed1" />

@@ -144,7 +144,7 @@ export default function Contact() {
 
           {/* Right Column: Form */}
           <div className="w-full bg-white border border-border rounded-[12px] lg:rounded-[14px] p-6 lg:p-[32px] shadow-sm flex flex-col">
-            <h2 className="font-heading font-bold text-[20px] md:text-[24px] text-blackKnight mb-8">
+            <h2 className="font-heading font-bold md: text-blackKnight mb-8 text-[19px]">
               Send us a message
             </h2>
             
