@@ -17,7 +17,7 @@ import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nocf.org"),
+  metadataBase: new URL("https://nnennaorjicharityfoundation.org"),
   title: {
     template: "%s | Nnenna Orji Charity Foundation",
     default: "Nnenna Orji Charity Foundation | A Box Full of Hope",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Nnenna Orji Charity Foundation",
     description:
       "Sharing Love Everywhere With A Box Full of Hope. Join our mission to deliver essential resources across Nigeria.",
-    url: "https://nocf.org",
+    url: "https://nnennaorjicharityfoundation.org",
     siteName: "Nnenna Orji Charity Foundation",
     images: [
       {
@@ -57,11 +57,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Nnenna Orji Charity Foundation",
     description: "Sharing Love Everywhere With A Box Full of Hope.",
-    images: ["/images/hero2.JPG"],
+    images: ["/images/brand-logo.png"],
   },
   robots: {
     index: true,
     follow: true,
+  },
+  alternates: {
+    canonical: "/",
   },
 };
 
@@ -76,6 +79,41 @@ export default function RootLayout({
       className={`${archivo.variable} ${productSansFallback.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col font-body bg-offWhite text-blackKnight selection:bg-orangeRed1/20 selection:text-blackKnight">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "NGO",
+              name: "Nnenna Orji Charity Foundation",
+              url: "https://nnennaorjicharityfoundation.org",
+              logo: "https://nnennaorjicharityfoundation.org/images/brand-logo.png",
+              description: "A Nigerian foundation built on one simple December tradition: packing a box, and handing it to someone who did not expect to be remembered. Sharing love everywhere.",
+              address: [
+                {
+                  "@type": "PostalAddress",
+                  streetAddress: "12 Adeniyi Jones Avenue",
+                  addressLocality: "Ikeja",
+                  addressRegion: "Lagos State",
+                  addressCountry: "Nigeria"
+                },
+                {
+                  "@type": "PostalAddress",
+                  streetAddress: "8 Zoo Road, Nassarawa",
+                  addressLocality: "Kano",
+                  addressRegion: "Kano State",
+                  addressCountry: "Nigeria"
+                }
+              ],
+              contactPoint: {
+                "@type": "ContactPoint",
+                email: "eniobadeji@gmail.com",
+                telephone: "+2348030000000",
+                contactType: "customer support"
+              }
+            })
+          }}
+        />
         <Header />
         <main className="flex-1 flex flex-col">{children}</main>
         <Footer />

@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import type { Metadata } from "next";
 import { Button } from "@/components/Button";
 import { SectionLabel } from "@/components/SectionLabel";
 import Link from "next/link";
@@ -59,6 +61,14 @@ const DISPATCHES = [
     href: "https://medium.com/@nnennaorjicharityfoundation",
   },
 ];
+
+export const metadata: Metadata = {
+  title: "Impact Stories",
+  description: "Read inspiring stories of families and individuals whose lives have been touched by the Nnenna Orji Charity Foundation.",
+  alternates: {
+    canonical: "/stories",
+  },
+};
 
 export default function Stories() {
   return (

@@ -2,9 +2,11 @@ import { SectionLabel } from "@/components/SectionLabel";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | NOCF",
-  description:
-    "Privacy Policy for the Nnenna Oriji Charity Foundation website.",
+  title: "Privacy Policy",
+  description: "Privacy Policy for the Nnenna Oriji Charity Foundation website.",
+  alternates: {
+    canonical: "/privacy-policy",
+  },
 };
 
 const policies = [

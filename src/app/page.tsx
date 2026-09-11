@@ -16,6 +16,15 @@ const OurJourney = dynamic(() => import("@/components/home/OurJourney").then(mod
 });
 
 import { AnimatedCounter } from "@/components/AnimatedCounter";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Welcome to Nnenna Orji Charity Foundation. Sharing Love Everywhere With A Box Full of Hope across Lagos and Kano, Nigeria.",
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default function Home() {
   return (

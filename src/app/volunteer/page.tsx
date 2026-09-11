@@ -3,6 +3,15 @@ import { Button } from "@/components/Button";
 import { SectionLabel } from "@/components/SectionLabel";
 import { ClipboardList, CalendarDays, Truck } from "lucide-react";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Volunteer",
+  description: "Join the Nnenna Orji Charity Foundation as a volunteer. Help us sort, pack, cook, and deliver boxes of hope in Lagos and Kano.",
+  alternates: {
+    canonical: "/volunteer",
+  },
+};
 
 const VOLUNTEER_STEPS = [
   {

@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "About Us",
   description:
     "Learn about the history, mission, and people behind the Nnenna Orji Charity Foundation.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 const TIMELINE = [

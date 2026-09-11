@@ -60,6 +60,7 @@ export function OurJourney() {
   const [isHovered, setIsHovered] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const exactScrollRef = useRef(0);
 
   const duplicatedTimeline = [...timeline, ...timeline, ...timeline]; // Triple to ensure smooth infinite loop
 
@@ -68,9 +69,13 @@ export function OurJourney() {
     const container = containerRef.current;
     if (!container) return;
 
+    // Initialize exact float tracker
+    exactScrollRef.current = container.scrollLeft;
+
     const scroll = () => {
       if (!isDragging && !isHovered) {
-        container.scrollLeft += 0.5; // adjust speed here
+        exactScrollRef.current += 0.5; // adjust speed here
+        container.scrollLeft = Math.floor(exactScrollRef.current);
         
         // Calculate the width of one original set of items
         const itemWidth = container.scrollWidth / 3;
@@ -78,7 +83,11 @@ export function OurJourney() {
         // Loop back when we've scrolled past one full set
         if (container.scrollLeft >= itemWidth) {
           container.scrollLeft -= itemWidth;
+          exactScrollRef.current -= itemWidth;
         }
+      } else {
+        // If user drags, sync exact tracker
+        exactScrollRef.current = container.scrollLeft;
       }
       animationFrameId = requestAnimationFrame(scroll);
     };
@@ -110,6 +119,7 @@ export function OurJourney() {
     const x = e.pageX - containerRef.current.offsetLeft;
     const walk = (x - startX) * 2;
     containerRef.current.scrollLeft = scrollLeft - walk;
+    exactScrollRef.current = scrollLeft - walk;
   };
 
   return (

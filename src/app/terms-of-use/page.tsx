@@ -2,8 +2,11 @@ import { SectionLabel } from "@/components/SectionLabel";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Use | NOCF",
+  title: "Terms of Use",
   description: "Terms of Use for the Nnenna Oriji Charity Foundation website.",
+  alternates: {
+    canonical: "/terms-of-use",
+  },
 };
 
 const terms = [
