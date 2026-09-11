@@ -221,6 +221,15 @@ export function Footer() {
           <p className="font-body text-[13px] text-white/50 text-center md:text-left">
             © 2026 Nnenna Oriji Charity Foundation. All rights reserved.
           </p>
+          <div className="flex items-center gap-4 text-[13px] font-body text-white/50">
+            <Link href="/privacy-policy" className="hover:text-white transition-colors">
+              Privacy Policy
+            </Link>
+            <span className="text-white/20">|</span>
+            <Link href="/terms-of-use" className="hover:text-white transition-colors">
+              Terms of Use
+            </Link>
+          </div>
           <p className="font-body text-[13px] text-white/50 text-center md:text-right">
             Registered in Nigeria — Lagos & Kano.
           </p>

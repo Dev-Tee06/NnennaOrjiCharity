@@ -35,7 +35,7 @@ export function StoriesAndImpact() {
                 STORIES & IMPACT
               </span>
             </div>
-            <h2 className="font-heading font-bold md: leading-[1.15] md:leading-[1.25] tracking-[-0.025em] max-w-[500px] text-[19px]">
+            <h2 className="font-heading font-bold md: leading-[1.15] md:leading-[1.25] tracking-[-0.025em] max-w-[500px] text-[24px]">
               What actually happened, written by the people who were there.
             </h2>
           </div>

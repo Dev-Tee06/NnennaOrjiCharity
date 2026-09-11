@@ -60,13 +60,13 @@ export default function Volunteer() {
             <p className="font-body text-base lg:text-[17px] text-text-secondary mt-6 max-w-[520px] leading-[1.6]">
               NOCF has no permanent warehouse staff. Every box that leaves Lagos
               or Kano was packed by someone who volunteered a Saturday. It is
-              glamorous work — folding clothes, counting tins, checking
-              addresses — and it is the entire reason the outreach lands.
+              glamorous work folding clothes, counting tins, checking addresses
+              and it is the entire reason the outreach lands.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-8 w-full sm:w-auto">
               <Button
-                href="#apply"
+                href="https://forms.gle/YYcou9RJT8vYA4uQ8"
                 variant="primary"
                 className="w-full sm:w-auto px-6"
               >
@@ -100,7 +100,7 @@ export default function Volunteer() {
       <section className="py-20 lg:py-[120px] bg-white border-y border-border-subtle">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <SectionLabel text="WHAT TO EXPECT" />
-          <h2 className="font-heading font-bold md: lg: text-blackKnight mb-12 text-[19px]">
+          <h2 className="font-heading font-bold md: lg: text-blackKnight mb-12 text-[24px]">
             Three steps from application to outreach day.
           </h2>
 
@@ -136,7 +136,7 @@ export default function Volunteer() {
       <section className="py-20 lg:py-[120px] bg-offWhite">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <SectionLabel text="VOLUNTEERS GALLERY" />
-          <h2 className="font-heading font-bold md: lg: text-blackKnight mb-4 text-[19px]">
+          <h2 className="font-heading font-bold md: lg: text-blackKnight mb-4 text-[24px]">
             Outreach in Lagos and Kano.
           </h2>
           <p className="font-body text-text-secondary max-w-[600px] mb-12 text-[16px] lg:text-[17px]">
@@ -161,7 +161,10 @@ export default function Volunteer() {
           </div>
 
           <div className="flex justify-start">
-            <Button href="#apply" variant="primary">
+            <Button
+              href="https://forms.gle/YYcou9RJT8vYA4uQ8"
+              variant="primary"
+            >
               Join our volunteers
             </Button>
           </div>
@@ -198,7 +201,7 @@ export default function Volunteer() {
 
           <div className="flex flex-col items-start w-full order-1 lg:order-2">
             <SectionLabel text="VOLUNTEER CULTURE" />
-            <h2 className="font-heading font-bold sm: lg: leading-[1.2] text-blackKnight mb-6 text-[19px]">
+            <h2 className="font-heading font-bold sm: lg: leading-[1.2] text-blackKnight mb-6 text-[24px]">
               Show up, be counted, sign your name.
             </h2>
             <p className="font-body text-base lg:text-[17px] text-text-secondary leading-[1.6] mb-8">
@@ -243,14 +246,12 @@ export default function Volunteer() {
 
             <div className="relative z-10 w-full flex flex-col lg:items-center">
               <div className="flex items-center gap-3 mb-6">
-                
                 <span className="font-heading font-bold text-[11px] sm:text-[12px] tracking-[0.16em] uppercase text-orangeRed1">
                   VOLUNTEER APPLICATION
                 </span>
-                
               </div>
 
-              <h2 className="font-heading font-bold md: lg: text-white leading-[1.1] mb-6 tracking-tight text-[19px]">
+              <h2 className="font-heading font-bold md: lg: text-white leading-[1.1] mb-6 tracking-tight text-[24px]">
                 The form takes about four minutes.
               </h2>
 
@@ -262,7 +263,7 @@ export default function Volunteer() {
 
               <div className="flex flex-col items-start lg:items-center gap-3 w-full sm:w-auto">
                 <Button
-                  href="https://forms.google.com"
+                  href="https://forms.gle/YYcou9RJT8vYA4uQ8"
                   variant="primary"
                   className="w-full sm:w-auto px-8 py-3.5"
                 >

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 const timeline = [
   {
@@ -57,8 +57,36 @@ const timeline = [
 export function OurJourney() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+  const duplicatedTimeline = [...timeline, ...timeline, ...timeline]; // Triple to ensure smooth infinite loop
+
+  useEffect(() => {
+    let animationFrameId: number;
+    const container = containerRef.current;
+    if (!container) return;
+
+    const scroll = () => {
+      if (!isDragging && !isHovered) {
+        container.scrollLeft += 0.5; // adjust speed here
+        
+        // Calculate the width of one original set of items
+        const itemWidth = container.scrollWidth / 3;
+        
+        // Loop back when we've scrolled past one full set
+        if (container.scrollLeft >= itemWidth) {
+          container.scrollLeft -= itemWidth;
+        }
+      }
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isDragging, isHovered]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!containerRef.current) return;
@@ -69,6 +97,7 @@ export function OurJourney() {
 
   const handleMouseLeave = () => {
     setIsDragging(false);
+    setIsHovered(false);
   };
 
   const handleMouseUp = () => {
@@ -95,7 +124,7 @@ export function OurJourney() {
             </span>
           </div>
 
-          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight text-[19px]">
+          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight text-[24px]">
             2020 – 2026
           </h2>
 
@@ -109,17 +138,20 @@ export function OurJourney() {
       {/* Cards Track */}
       <div
         ref={containerRef}
-        className="flex overflow-x-auto gap-5 md:gap-6 px-4 md:px-8 xl:px-[calc((100vw-1320px)/2+48px)] hide-scrollbar cursor-grab active:cursor-grabbing snap-x md:snap-none pb-4"
+        className="flex overflow-x-hidden gap-5 md:gap-6 px-4 md:px-8 xl:px-[calc((100vw-1320px)/2+48px)] cursor-grab active:cursor-grabbing pb-4"
         style={{ paddingRight: "24px" }}
         onMouseDown={handleMouseDown}
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onTouchStart={() => setIsHovered(true)}
+        onTouchEnd={() => setIsHovered(false)}
       >
-        {timeline.map((item, i) => (
+        {duplicatedTimeline.map((item, i) => (
           <div
             key={i}
-            className={`flex-shrink-0 w-[240px] md:w-[280px] min-h-[155px] rounded-[8px] p-6 relative transition-transform duration-300 hover:-translate-y-1 snap-start ${
+            className={`flex-shrink-0 w-[240px] md:w-[280px] min-h-[155px] rounded-[8px] p-6 relative transition-transform duration-300 hover:-translate-y-1 ${
               item.active
                 ? "shadow-md text-[#FFFFFF]"
                 : "bg-[#FFFFFF] border border-[#E8E4E2] text-[#171717]"

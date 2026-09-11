@@ -56,10 +56,10 @@ const PEOPLE = [
     image: "/images/volunteer-image1.jpg",
   },
   {
-    name: "Bethel Ezemah",
+    name: "Bethel Ugwu",
     role: "HEAD OF FINANCE",
     desc: "Runs day-to-day operations across both hubs, including procurement and the December logistics chain.",
-    image: "/images/volunteer2.jpg",
+    image: "/images/volunteer-image3.jpg",
   },
   {
     name: "David Orji",
@@ -77,13 +77,13 @@ const PEOPLE = [
     name: "Genevieve Atanmoh",
     role: "LEAD, INVENTORY",
     desc: "Started Project 26 in 2020 with six friends and a rented pot. Leads strategy and partner relationships.",
-    image: "/images/ceo.JPG",
+    image: "/images/volunteer-image4.jpg",
   },
   {
     name: "Maxwell Jedeofor",
     role: "HEAD OF FINANCE",
     desc: "Runs day-to-day operations across both hubs, including procurement and the December logistics chain.",
-    image: "/images/volunteer4.JPG",
+    image: "/images/volunteer-image5.jpeg",
   },
   {
     name: "",
@@ -114,7 +114,6 @@ export default function About() {
       {/* Hero */}
       <section className="pt-[140px] pb-[80px] md:pt-[180px] md:pb-[100px] px-4 md:px-8 xl:px-12 flex flex-col items-center text-center">
         <div className="flex items-center gap-2 mb-6 md:mb-8">
-          
           <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.15em] uppercase text-[#FF4500]">
             ABOUT OUR FOUNDATION
           </span>
@@ -229,12 +228,11 @@ export default function About() {
       <section className="bg-[#FFFFFF] border-y border-[#E8E4E2] py-[90px] md:py-[120px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
-            
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               OUR VALUES
             </span>
           </div>
-          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-12 text-[19px]">
+          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-12 text-[24px]">
             Mission, vision and what we hold ourselves to.
           </h2>
 
@@ -276,12 +274,11 @@ export default function About() {
       <section className="bg-[#FFFFFF] py-[90px] md:py-[120px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
-            
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               OUR JOURNEY
             </span>
           </div>
-          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-4 text-[19px]">
+          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-4 text-[24px]">
             2020 – 2026, year by year
           </h2>
           <p className="font-body text-[14px] text-[#777777] mb-12">
@@ -340,7 +337,6 @@ export default function About() {
           {/* Right: Text */}
           <div className="relative z-10 w-full lg:w-[55%] flex flex-col">
             <div className="flex items-center gap-3 mb-8">
-              
               <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
                 A WORD FROM OUR FOUNDER
               </span>
@@ -358,15 +354,15 @@ export default function About() {
               quickly transformed into something far bigger than we ever
               imagined.Living by our motto, "A Box of Hope," our mission is to
               ensure that no individual or family feels forgotten. Through every
-              distribution—whether filled with food essentials, warm clothing,
-              or vital medical care—we deliver practical relief, dignity, and a
+              distribution whether filled with food essentials, warm clothing,
+              or vital medical care, we deliver practical relief, dignity, and a
               reminder that help is always within reach.What started in a single
               neighborhood has now expanded across states, powered entirely by
               the overwhelming generosity of donors and supporters like you
               across social media. Every single contribution turns empathy into
               action, transforming a simple box into a lifeline for those who
               need it most.Thank you for standing with us, sharing our vision,
-              and helping us deliver hope—one box, one family, and one community
+              and helping us deliver hope one box, one family, and one community
               at a time.With deep gratitude,
             </p>
 
@@ -410,12 +406,11 @@ export default function About() {
       <section className="bg-[#FFFFFF] py-[90px] md:py-[120px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
-            
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               Board & leadership
             </span>
           </div>
-          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-[60px] text-[19px]">
+          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-[60px] text-[24px]">
             The people accountable for the work.
           </h2>
 
@@ -440,7 +435,7 @@ export default function About() {
                   <span className="font-heading font-bold text-[9px] tracking-[0.1em] text-[#FF4500] uppercase mb-4">
                     {person.role}
                   </span>
-                  
+
                   <p className="font-body text-[12px] leading-[1.6] text-[#777777]">
                     {person.desc}
                   </p>
@@ -455,12 +450,11 @@ export default function About() {
       <section className="bg-[#FFFFFF] pb-[100px] md:pb-[140px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
-            
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               Volunteers gallery
             </span>
           </div>
-          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-4 text-[19px]">
+          <h2 className="font-heading font-bold md: leading-[1.1] tracking-tight mb-4 text-[24px]">
             Outreach in Lagos and Kano.
           </h2>
           <p className="font-body text-[14px] text-[#777777] mb-[50px]">

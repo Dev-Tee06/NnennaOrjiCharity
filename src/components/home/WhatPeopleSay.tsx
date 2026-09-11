@@ -47,7 +47,7 @@ export function WhatPeopleSay() {
           <span className="absolute -top-[20px] -left-[10px] md:-top-[30px] md:-left-[15px] font-heading font-bold text-[75px] md:text-[100px] leading-[1] text-[#F6CFC5] -z-10 select-none">
             “
           </span>
-          <h2 className="font-heading font-bold md: leading-[1.25] tracking-[-0.03em] z-10 text-[19px]">
+          <h2 className="font-heading font-bold md: leading-[1.25] tracking-[-0.03em] z-10 text-[24px]">
             We have lived in this neighbourhood for eleven years. Nobody has
             ever come to our door with something for us. The volunteers came at
             seven in the morning, before the sun was hot. My husband did not

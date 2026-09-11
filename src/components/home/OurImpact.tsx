@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { AnimatedCounter } from "../AnimatedCounter";
 
 export function OurImpact() {
   return (
@@ -21,13 +22,12 @@ export function OurImpact() {
           {/* Left Column */}
           <div className="w-full lg:w-[40%] flex flex-col items-start">
             <div className="flex items-center gap-3 mb-8 md:mb-10">
-              
               <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
                 OUR IMPACT
               </span>
             </div>
 
-            <h2 className="font-heading font-bold md: leading-[1.1] tracking-[-0.02em] whitespace-pre-line mb-10 text-[19px]">
+            <h2 className="font-heading font-bold md: leading-[1.1] tracking-[-0.02em] whitespace-pre-line mb-10 text-[24px]">
               {"Numbers we publish, not\nnumbers we estimate."}
             </h2>
 
@@ -38,8 +38,8 @@ export function OurImpact() {
             </p>
 
             <p className="font-body text-[12px] md:text-[13px] leading-[1.6] text-[#D0D3D6] max-w-[420px] mb-12">
-              We don't round up, and we don't count a box twice. If we deliver,
-              it's counted in the impact.
+              We don&apos;t round up, and we don&apos;t count a box twice. If we deliver,
+              it&apos;s counted in the impact.
             </p>
 
             <Link
@@ -47,7 +47,6 @@ export function OurImpact() {
               className="inline-flex items-center gap-2 border border-[#3B424A] rounded-[6px] px-5 py-[11px] font-body text-[11px] md:text-[12px] font-semibold text-[#FFFFFF] hover:border-[#FF4500] hover:text-[#FF4500] transition-colors duration-300 group"
             >
               Read the full report
-              
             </Link>
           </div>
 
@@ -57,7 +56,7 @@ export function OurImpact() {
               {
                 number: "10000+",
                 label: "Boxes and meals",
-                desc: "Distributed since Boxing Day 2020 — Lagos and Kano combined.",
+                desc: "Distributed since Boxing Day 2020 Lagos and Kano combined.",
               },
               {
                 number: "₦12,500",
@@ -67,7 +66,7 @@ export function OurImpact() {
               {
                 number: "6",
                 label: "consecutive years",
-                desc: "Same date. Same street. Same principle — hand it over yourself.",
+                desc: "Same date. Same street. Same principle  hand it over yourself.",
               },
               {
                 number: "100%",
@@ -78,9 +77,10 @@ export function OurImpact() {
               <React.Fragment key={i}>
                 <div className="flex flex-row items-center py-[45px] md:py-[55px] first:pt-0 last:pb-0">
                   <div className="w-[60%] flex flex-col gap-1">
-                    <span className="font-heading font-bold text-[54px] md:text-[64px] leading-[1] text-[#FF4500] tracking-[-2px]">
-                      {stat.number}
-                    </span>
+                    <AnimatedCounter
+                      value={stat.number}
+                      className="font-heading font-bold text-[54px] md:text-[64px] leading-[1] text-[#FF4500] tracking-[-2px]"
+                    />
                     <span className="font-body font-semibold text-[10px] md:text-[12px] text-[#FFFFFF]">
                       {stat.label}
                     </span>
