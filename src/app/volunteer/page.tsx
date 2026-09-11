@@ -33,8 +33,8 @@ const VOLUNTEER_GALLERY = [
   "/images/volunteer2.jpg",
   "/images/volunteer3.JPG",
   "/images/volunteer4.JPG",
-  "/images/who-we-are.JPG",
-  "/images/volunteer-image.JPG",
+  "/images/who-we-are.jpg",
+  "/images/volunteer-image.jpg",
 ];
 
 export default function Volunteer() {
