@@ -32,6 +32,6 @@
     "typescript": "^5"
   },
   "allowScripts": {
-    "unrs-resolver": false
+    "unrs-resolver": true
   }
 }

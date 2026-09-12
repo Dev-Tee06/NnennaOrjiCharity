@@ -1,13 +1,31 @@
 'use client';
 
 import { Search, Bell, ChevronDown, CheckCircle2, ShieldAlert } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 
 import { TopHeader } from '@/components/dashboard/TopHeader';
 import { MobilePageTitle } from '@/components/dashboard/MobilePageTitle';
 export default function ProfilePage() {
   const [showSuccess, setShowSuccess] = useState(false);
+  const [user, setUser] = useState<{name: string, initial: string, email: string} | null>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Admin';
+        setUser({
+          name: name,
+          initial: name.charAt(0).toUpperCase(),
+          email: user.email || ''
+        });
+      } else {
+        setUser({ name: 'Admin', initial: 'A', email: '' });
+      }
+    });
+  }, []);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();

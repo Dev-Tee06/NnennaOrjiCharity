@@ -65,6 +65,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: "/images/Icon.jpg",
+    apple: "/images/Icon.jpg",
+  },
 };
 
 export const viewport = {
