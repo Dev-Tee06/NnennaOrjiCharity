@@ -83,7 +83,7 @@ const PEOPLE = [
     image: "/images/volunteer-image4.jpg",
   },
   {
-    name: "Maxwell Jedeofor",
+    name: "Maxwell Jideofor Esq",
     role: "HEAD OF FINANCE",
     desc: "Runs day-to-day operations across both hubs, including procurement and the December logistics chain.",
     image: "/images/volunteer-image5.jpeg",

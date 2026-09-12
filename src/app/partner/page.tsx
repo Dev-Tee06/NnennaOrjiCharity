@@ -11,6 +11,9 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+import { createClient } from '@/lib/supabase/client';
+import { useRouter } from 'next/navigation';
+
 const PARTNERSHIP_AVENUES = [
   {
     title: "Corporate Support",
@@ -43,6 +46,10 @@ export default function Partner() {
     message: "",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const supabase = createClient();
+  const router = useRouter();
+
   const isValid =
     formData.organisationName.trim() !== "" &&
     formData.representative.trim() !== "" &&
@@ -50,19 +57,29 @@ export default function Partner() {
     formData.partnershipType !== "" &&
     formData.message.trim() !== "";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isValid) {
-      alert(
-        "Enquiry sent successfully. We'll get back to you within three working days.",
-      );
-      setFormData({
-        organisationName: "",
-        representative: "",
-        email: "",
-        partnershipType: "",
-        message: "",
+    if (!isValid) return;
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('company_requests').insert({
+        company_name: formData.organisationName,
+        contact_name: formData.representative,
+        email: formData.email,
+        subject: `Partnership: ${formData.partnershipType}`,
+        message: formData.message,
+        status: 'New'
       });
+
+      if (error) throw error;
+
+      router.push('/success');
+    } catch (error) {
+      console.error(error);
+      alert("Failed to send enquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -268,10 +285,10 @@ export default function Partner() {
               <div className="mt-2 pt-6 border-t border-border">
                 <Button
                   type="submit"
-                  disabled={!isValid}
+                  disabled={!isValid || isSubmitting}
                   className="w-full md:w-auto flex justify-center items-center gap-2"
                 >
-                  <span>Send Enquiry</span>
+                  <span>{isSubmitting ? 'Sending...' : 'Send Enquiry'}</span>
                   <ArrowRight size={18} />
                 </Button>
               </div>

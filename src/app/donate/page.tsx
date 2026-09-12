@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Button } from "@/components/Button";
 import { ShieldCheck, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 type DonationType = "cash" | "food" | "clothing" | "medical";
 
@@ -11,6 +13,9 @@ const PRESET_AMOUNTS = [5000, 10000, 25000, 50000];
 
 export default function Donate() {
   const [activeTab, setActiveTab] = useState<DonationType>("cash");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const supabase = createClient();
+  const router = useRouter();
 
   // State for cash
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
@@ -19,7 +24,8 @@ export default function Donate() {
   // State for other forms
   const [formData, setFormData] = useState({
     name: "",
-    contact: "",
+    email: "",
+    phone: "",
     location: "",
     description: "",
   });
@@ -36,15 +42,56 @@ export default function Donate() {
       Number(customAmount) > 0);
   const isPledgeValid =
     formData.name.trim() !== "" &&
-    formData.contact.trim() !== "" &&
+    (formData.email.trim() !== "" || formData.phone.trim() !== "") &&
     formData.location !== "" &&
     formData.description.trim() !== "";
 
-  const handlePledgeSubmit = (e: React.FormEvent) => {
+  const handlePledgeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isPledgeValid) {
-      alert("Pledge submitted successfully!");
-      setFormData({ name: "", contact: "", location: "", description: "" });
+    if (!isPledgeValid) return;
+    
+    setIsSubmitting(true);
+    try {
+      // 1. Insert Donor
+      const [firstName, ...lastNameParts] = formData.name.split(' ');
+      const lastName = lastNameParts.join(' ');
+      const donorId = crypto.randomUUID();
+      
+      const { error: donorError } = await supabase
+        .from('donors')
+        .insert({
+          id: donorId,
+          first_name: firstName,
+          last_name: lastName || null,
+          email: formData.email || null,
+          phone: formData.phone || null,
+          address: formData.location
+        });
+        
+      if (donorError) throw donorError;
+
+      // 2. Insert Donation
+      const dbDonationType = activeTab === 'clothing' ? 'cloth' : 
+                             activeTab === 'medical' ? 'medical_supply' : 'food';
+
+      const { error: donationError } = await supabase
+        .from('donations')
+        .insert({
+          donor_id: donorId,
+          donation_type: dbDonationType,
+          quantity: 1, // Defaulting to 1 as it's unquantified in the form text
+          notes: formData.description,
+          status: 'Pending'
+        });
+
+      if (donationError) throw donationError;
+
+      router.push('/success');
+    } catch (error) {
+      console.error(error);
+      alert("Failed to submit pledge. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -228,18 +275,33 @@ export default function Donate() {
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label className="font-body text-[13px] font-semibold text-blackKnight">
-                      Phone or email
+                      Email address
                     </label>
                     <input
-                      type="text"
-                      placeholder="+234 ... or you@email.com"
-                      value={formData.contact}
+                      type="email"
+                      placeholder="you@email.com"
+                      value={formData.email}
                       onChange={(e) =>
-                        setFormData({ ...formData, contact: e.target.value })
+                        setFormData({ ...formData, email: e.target.value })
                       }
                       className="w-full bg-white border border-border rounded-[10px] px-4 py-3 font-body text-sm focus:outline-none focus:border-orangeRed1 focus:ring-1 focus:ring-orangeRed1/20 transition-all"
                     />
                   </div>
+                </div>
+                
+                <div className="flex flex-col gap-1.5">
+                  <label className="font-body text-[13px] font-semibold text-blackKnight">
+                    Phone number
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="+234 ..."
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
+                    className="w-full bg-white border border-border rounded-[10px] px-4 py-3 font-body text-sm focus:outline-none focus:border-orangeRed1 focus:ring-1 focus:ring-orangeRed1/20 transition-all"
+                  />
                 </div>
 
                 <div className="flex flex-col gap-1.5">

@@ -12,8 +12,7 @@ const productSansFallback = DM_Sans({
   subsets: ["latin"],
 });
 
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import { GlobalLayoutWrapper } from "@/components/GlobalLayoutWrapper";
 import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
@@ -68,6 +67,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -114,9 +119,7 @@ export default function RootLayout({
             })
           }}
         />
-        <Header />
-        <main className="flex-1 flex flex-col">{children}</main>
-        <Footer />
+        <GlobalLayoutWrapper>{children}</GlobalLayoutWrapper>
         <Analytics />
       </body>
     </html>

@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/Button";
 import { Mail, Phone, MapPin, Clock, ArrowRight } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 const CONTACT_INFO = {
   email: "eniobadeji@gmail.com",
@@ -29,6 +31,9 @@ export default function Contact() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const supabase = createClient();
+  const router = useRouter();
 
   const isValid =
     formData.firstName.trim() !== "" &&
@@ -37,18 +42,29 @@ export default function Contact() {
     formData.subject !== "" &&
     formData.message.trim() !== "";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isValid) {
-      setSubmitted(true);
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        subject: "",
-        message: "",
+    if (!isValid) return;
+    
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('company_requests').insert({
+        company_name: formData.firstName + " " + formData.lastName, // Fallback if no company name field exists
+        contact_name: formData.firstName + " " + formData.lastName,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        status: 'New'
       });
-      setTimeout(() => setSubmitted(false), 5000);
+
+      if (error) throw error;
+
+      router.push('/success');
+    } catch (error) {
+      console.error(error);
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
