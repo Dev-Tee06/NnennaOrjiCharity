@@ -3,27 +3,27 @@ import React from "react";
 const testimonials = [
   {
     quote:
-      "I did not expect someone to knock on my door that morning. My children had never seen them before. If my husband had the box, so we say thank you and mean it.",
-    category: "RESIDENT",
-    location: "Kano Hub",
+      "I did not expect someone to knock on my door that morning. My daughter was there when they handed her the box. She is still talking about the note inside it.",
+    category: "Beneficiary",
+    location: "Ikeja Lagos",
   },
   {
     quote:
-      "People think giving is easy. It is not. It requires logistics, patience, and money. NOCF has found a way to standardize love. That is the only way I can describe what happens here.",
-    category: "VOLUNTEER",
+      "I have sorted hundreds of boxes. What keeps me coming back is that we sign our names on the sheet. You are not anonymous. You are responsible. That feels right.",
+    category: "VOLUNTEER, 3RD YEAR",
     location: "Lagos Hub",
   },
   {
     quote:
-      "I have supplied the medical kits for three years. They don't just ask for a discount, they ask for the expiration dates. They care about what goes in.",
-    category: "PARTNER",
-    location: "Logistics Partner",
+      "We have given to other foundations and received a certificate. NOCF sent us the delivery manifest, itemised, with the route and the volunteer names. That is accountability.",
+    category: "CORPORATE DONOR",
+    location: "Victoria Island",
   },
   {
     quote:
-      "There are no cameras in our faces when they come. They give us the box, they ask how we are doing, and they leave. It is respectful.",
-    category: "RESIDENT",
-    location: "Lagos Hub",
+      "Working alongside NOCF in Kano taught us how a small team with a clear checklist outperforms a large one with goodwill and no system.",
+    category: "PARTNER ORGANIZATION",
+    location: "Kano",
   },
 ];
 
@@ -34,7 +34,6 @@ export function WhatPeopleSay() {
         {/* Top Header Row */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-[55px] md:mb-[70px]">
           <div className="flex items-center gap-3">
-            
             <span className="font-heading font-bold text-[12px] md:text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               WHAT PEOPLE SAY
             </span>
@@ -57,7 +56,6 @@ export function WhatPeopleSay() {
 
         {/* Attribution */}
         <div className="flex items-center gap-3 mb-[35px] md:mb-[45px]">
-          
           <span className="font-body font-medium text-[9px] md:text-[11px] text-[#777777]">
             Rashidah, Community, Kano
           </span>

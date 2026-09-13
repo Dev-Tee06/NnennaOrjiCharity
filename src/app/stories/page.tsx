@@ -12,7 +12,7 @@ const DISPATCHES = [
     title: "The morning the van left at 5am",
     excerpt:
       "A Kano loading run that turned into 600 boxes delivered before noon, and the three things that nearly went wrong.",
-    image: "/images/hero3.JPG",
+    image: "/images/stories1.jpg",
     href: "https://medium.com/@nnennaorjicharityfoundation",
   },
   {
@@ -21,7 +21,7 @@ const DISPATCHES = [
     title: "Cooking for a street you don't know",
     excerpt:
       "Notes from the community kitchen that feeds the Ikeja outreach every December — 40 pots, 11 hours.",
-    image: "/images/about-us-1.jpg",
+    image: "/images/stories2.jpg",
     href: "https://medium.com/@nnennaorjicharityfoundation",
   },
   {
@@ -30,7 +30,7 @@ const DISPATCHES = [
     title: "What families actually ask for",
     excerpt:
       "Three years of listening changed what we put inside the box. Soap ranked higher than we expected.",
-    image: "/images/volunteer4.JPG",
+    image: "/images/stories3.jpg",
     href: "https://medium.com/@nnennaorjicharityfoundation",
   },
   {
@@ -39,7 +39,7 @@ const DISPATCHES = [
     title: "Where ₦50 million went",
     excerpt:
       "A line-by-line breakdown of aid delivered since 2020, and how we price a box at market rate.",
-    image: "/images/hero2.JPG",
+    image: "/images/stories4.jpg",
     href: "https://medium.com/@nnennaorjicharityfoundation",
   },
   {
@@ -48,7 +48,7 @@ const DISPATCHES = [
     title: "Sorting day is the hardest day",
     excerpt:
       "Why the clothing table is the most demanding shift in the calendar, and who keeps showing up for it.",
-    image: "/images/volunteer1.JPG",
+    image: "/images/stories5.jpg",
     href: "https://medium.com/@nnennaorjicharityfoundation",
   },
   {
@@ -57,14 +57,15 @@ const DISPATCHES = [
     title: "Project 26, five years on",
     excerpt:
       "The founder revisits the street where the first 120 meals were served, with the people who served them.",
-    image: "/images/who-we-are.jpg",
+    image: "/images/stories6.jpg",
     href: "https://medium.com/@nnennaorjicharityfoundation",
   },
 ];
 
 export const metadata: Metadata = {
   title: "Impact Stories",
-  description: "Read inspiring stories of families and individuals whose lives have been touched by the Nnenna Orji Charity Foundation.",
+  description:
+    "Read inspiring stories of families and individuals whose lives have been touched by the Nnenna Orji Charity Foundation.",
   alternates: {
     canonical: "/stories",
   },

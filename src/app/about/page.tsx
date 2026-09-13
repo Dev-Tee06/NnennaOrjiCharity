@@ -197,10 +197,10 @@ export default function About() {
 
               <div className="flex flex-col border-t border-[#E8E4E2]">
                 {[
-                  { label: "Founded", value: "December 2020, Ikeja, Lagos" },
+                  { label: "Founded", value: "December 2020, Ajah, Lagos" },
                   {
                     label: "Registered",
-                    value: "2024 - Federal Republic of Nigeria",
+                    value: "2024, Federal Republic of Nigeria",
                   },
                   { label: "Hubs", value: "Lagos & Kano" },
                   {

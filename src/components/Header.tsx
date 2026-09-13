@@ -34,7 +34,7 @@ export function Header() {
           <div className="relative h-10 w-[140px] md:h-12 md:w-[180px]">
             <Image
               src="/images/brand-logo.png"
-              alt="NOCF Logo"
+              alt="Nnenna Orji Charity Foundation"
               fill
               className="object-contain object-left"
               priority

@@ -5,20 +5,20 @@ const stories = [
   {
     category: "LAGOS",
     title: "The morning the van left at 5am",
-    desc: "Before the sun comes up, over thirty volunteers assemble at our staging ground. This field note details the logistics, energy, and unexpected moments that happen before the first box is even loaded.",
-    image: "/images/hero3.JPG",
+    desc: "How a Kano loading run turned into 600 boxes delivered before noon.",
+    image: "/images/stories1.jpg",
   },
   {
     category: "LAGOS",
     title: "Cooking for a street you don’t know",
-    desc: "When we receive requests from community leaders, we have to scale our operations rapidly. Here is how our kitchen team handles the pressure of cooking hundreds of meals while maintaining quality and warmth.",
-    image: "/images/about-us-1.jpg",
+    desc: "Notes from the community kitchen that feeds the Ikeja outreach every December.",
+    image: "/images/stories2.jpg",
   },
   {
-    category: "FIELD NOTE",
+    category: "FIELD NOTEs",
     title: "What families actually ask for",
-    desc: "We spend time listening. Often, what we assume people need isn't what they want most. This note explores the real conversations happening on the ground and how they shape our annual delivery lists.",
-    image: "/images/volunteer4.JPG",
+    desc: "Three years of listening changed what we put inside the box.",
+    image: "/images/stories3.jpg",
   },
 ];
 
@@ -30,7 +30,6 @@ export function StoriesAndImpact() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
-              
               <span className="font-heading font-bold text-[12px] md:text-[10px] tracking-[0.08em] uppercase text-[#FF4500]">
                 STORIES & IMPACT
               </span>
@@ -42,7 +41,6 @@ export function StoriesAndImpact() {
 
           <button className="group flex items-center justify-center gap-2 bg-[#070D16] text-[#FFFFFF] rounded-[6px] h-[43px] md:h-[48px] px-[20px] md:px-[24px] font-body font-semibold text-[10px] md:text-[12px] transition-transform duration-300 hover:-translate-y-1">
             Read Our Stories
-            
           </button>
         </div>
 

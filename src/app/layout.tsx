@@ -21,6 +21,10 @@ export const metadata: Metadata = {
     template: "%s | Nnenna Orji Charity Foundation",
     default: "Nnenna Orji Charity Foundation | A Box Full of Hope",
   },
+  applicationName: "Nnenna Orji Charity Foundation",
+  appleWebApp: {
+    title: "Nnenna Orji Charity Foundation",
+  },
   description:
     "A Nigerian foundation built on one simple December tradition: packing a box, and handing it to someone who did not expect to be remembered. Sharing love everywhere.",
   keywords: [
@@ -46,7 +50,7 @@ export const metadata: Metadata = {
         url: "/images/brand-logo.png",
         width: 1200,
         height: 630,
-        alt: "NOCF Box of Hope",
+        alt: "Nnenna Orji Charity Foundation Box of Hope",
       },
     ],
     locale: "en_NG",
@@ -66,8 +70,8 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: "/images/Icon.jpg",
-    apple: "/images/Icon.jpg",
+    icon: "/images/icon.jpg",
+    apple: "/images/icon.jpg",
   },
 };
 
@@ -91,36 +95,44 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "NGO",
-              name: "Nnenna Orji Charity Foundation",
-              url: "https://nnennaorjicharityfoundation.org",
-              logo: "https://nnennaorjicharityfoundation.org/images/brand-logo.png",
-              description: "A Nigerian foundation built on one simple December tradition: packing a box, and handing it to someone who did not expect to be remembered. Sharing love everywhere.",
-              address: [
-                {
-                  "@type": "PostalAddress",
-                  streetAddress: "12 Adeniyi Jones Avenue",
-                  addressLocality: "Ikeja",
-                  addressRegion: "Lagos State",
-                  addressCountry: "Nigeria"
-                },
-                {
-                  "@type": "PostalAddress",
-                  streetAddress: "8 Zoo Road, Nassarawa",
-                  addressLocality: "Kano",
-                  addressRegion: "Kano State",
-                  addressCountry: "Nigeria"
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "Nnenna Orji Charity Foundation",
+                url: "https://nnennaorjicharityfoundation.org",
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "NGO",
+                name: "Nnenna Orji Charity Foundation",
+                url: "https://nnennaorjicharityfoundation.org",
+                logo: "https://nnennaorjicharityfoundation.org/images/brand-logo.png",
+                description: "A Nigerian foundation built on one simple December tradition: packing a box, and handing it to someone who did not expect to be remembered. Sharing love everywhere.",
+                address: [
+                  {
+                    "@type": "PostalAddress",
+                    streetAddress: "12 Adeniyi Jones Avenue",
+                    addressLocality: "Ikeja",
+                    addressRegion: "Lagos State",
+                    addressCountry: "Nigeria"
+                  },
+                  {
+                    "@type": "PostalAddress",
+                    streetAddress: "8 Zoo Road, Nassarawa",
+                    addressLocality: "Kano",
+                    addressRegion: "Kano State",
+                    addressCountry: "Nigeria"
+                  }
+                ],
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  email: "eniobadeji@gmail.com",
+                  telephone: "+2348030000000",
+                  contactType: "customer support"
                 }
-              ],
-              contactPoint: {
-                "@type": "ContactPoint",
-                email: "eniobadeji@gmail.com",
-                telephone: "+2348030000000",
-                contactType: "customer support"
               }
-            })
+            ])
           }}
         />
         <GlobalLayoutWrapper>{children}</GlobalLayoutWrapper>

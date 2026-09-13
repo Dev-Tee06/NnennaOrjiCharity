@@ -53,7 +53,7 @@ export default function RegisterPage() {
         <div className="relative h-12 w-[180px]">
           <Image
             src="/images/brand-logo.png"
-            alt="NOCF Logo"
+            alt="Nnenna Orji Charity Foundation"
             fill
             className="object-contain"
             priority
