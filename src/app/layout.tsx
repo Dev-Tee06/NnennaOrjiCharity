@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     siteName: "Nnenna Orji Charity Foundation",
     images: [
       {
-        url: "/images/brand-logo.png",
+        url: "/images/footer-logo.png",
         width: 1200,
         height: 630,
         alt: "Nnenna Orji Charity Foundation Box of Hope",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Nnenna Orji Charity Foundation",
     description: "Sharing Love Everywhere With A Box Full of Hope.",
-    images: ["/images/brand-logo.png"],
+    images: ["/images/footer-logo.png"],
   },
   robots: {
     index: true,
@@ -70,8 +70,8 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: "/images/icon.jpg",
-    apple: "/images/icon.jpg",
+    icon: "/images/footer-logo.png",
+    apple: "/images/footer-logo.png",
   },
 };
 

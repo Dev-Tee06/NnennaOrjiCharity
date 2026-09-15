@@ -48,7 +48,7 @@ export default function LoginPage() {
         </div>
 
         <div className="text-center mb-8">
-          <h2 className="text-xl font-heading font-bold text-blackKnight">NOCF Super Admin Portal</h2>
+          <h2 className="text-xl font-heading font-bold text-blackKnight">Nnenna Orji Charity Foundation Super Admin Portal</h2>
           <p className="text-sm text-text-secondary mt-1">Please enter your details to access the dashboard.</p>
         </div>
 

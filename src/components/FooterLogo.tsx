@@ -54,8 +54,10 @@ export function FooterLogo() {
       <Image
         src={src}
         alt="Nnenna Orji Charity Foundation"
-        fill
-        className="object-contain object-left"
+        title="Nnenna Orji Charity Foundation"
+        width={180}
+        height={48}
+        className="h-full w-auto object-contain object-left"
         unoptimized // Prevent Next.js from trying to optimize the base64 data URL
       />
     </>

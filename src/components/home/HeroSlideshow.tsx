@@ -97,7 +97,7 @@ export function HeroSlideshow() {
             </Button>
             <Button
               href="/volunteer"
-              className="flex-1 sm:flex-none sm:w-auto px-4 sm:px-8 bg-white/10 text-white hover:bg-white/20 border border-white/10"
+              className="flex-1 sm:flex-none sm:w-auto px-4 sm:px-8 bg-white/20 text-white hover:bg-white/30 border border-white/20"
             >
               Become a volunteer
             </Button>

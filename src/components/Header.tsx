@@ -31,12 +31,14 @@ export function Header() {
           className="flex-shrink-0"
           onClick={() => setMobileMenuOpen(false)}
         >
-          <div className="relative h-10 w-[140px] md:h-12 md:w-[180px]">
+          <div className="relative flex items-center h-10 md:h-12">
             <Image
               src="/images/brand-logo.png"
               alt="Nnenna Orji Charity Foundation"
-              fill
-              className="object-contain object-left"
+              title="Nnenna Orji Charity Foundation"
+              width={180}
+              height={48}
+              className="h-full w-auto object-contain"
               priority
             />
           </div>

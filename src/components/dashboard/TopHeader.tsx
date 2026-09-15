@@ -51,7 +51,7 @@ export function TopHeader({ title }: { title: string }) {
       {/* Desktop Title (hidden on mobile) */}
       <div className="hidden md:flex flex-col justify-center">
         <span className="text-[10px] font-bold text-text-secondary uppercase tracking-wider mb-1">
-          NOCF / ADMIN PORTAL
+          Nnenna Orji Charity Foundation / ADMIN PORTAL
         </span>
         <h1 className="text-xl font-heading font-bold text-blackKnight">{title}</h1>
       </div>
