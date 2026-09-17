@@ -3,7 +3,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy Policy for the Nnenna Oriji Charity Foundation website.",
+  description:
+    "Privacy Policy for the Nnenna Oriji Charity Foundation website.",
   alternates: {
     canonical: "/privacy-policy",
   },
@@ -13,7 +14,7 @@ const policies = [
   {
     title: "1. Who we are",
     content:
-      "The Nnenna Oriji Charity Foundation is a registered Nigerian charity operating outreach hubs in Lagos and Kano. Our registered contact address is 12 Adeniyi Jones Avenue, Ikeja, Lagos State, Nigeria. You can reach our data contact at eniobadeji@gmail.com.",
+      "The Nnenna Oriji Charity Foundation is a registered Nigerian charity operating outreach hubs in Lagos and Kano. Our registered contact address is Solomade Estate, Ikorodu, Lagos, Nigeria., Nigeria. You can reach our data contact at contactus@nnennaorjicharityfoundation.org",
   },
   {
     title: "2. What information we collect",
@@ -58,7 +59,7 @@ const policies = [
   {
     title: "10. Contact",
     content:
-      "For privacy-related questions, contact us at: eniobadeji@gmail.com Nnenna Oriji Charity Foundation 12 Adeniyi Jones Avenue, Ikeja, Lagos State, Nigeria",
+      "For privacy-related questions, contact us at: contactus@nnennaorjicharityfoundation.org Nnenna Oriji Charity Foundation Solomade Estate, Ikorodu, Lagos, Nigeria",
   },
 ];
 
@@ -164,10 +165,10 @@ export default function PrivacyPolicy() {
               <p className="font-body text-[12px] text-gray-500 mt-12">
                 Questions? Email{" "}
                 <a
-                  href="mailto:NOCF@gmail.com"
+                  href="mailto:contactus@nnennaorjicharityfoundation.org"
                   className="text-[#FF4500] hover:underline"
                 >
-                  NOCF@gmail.com
+                  contactus@nnennaorjicharityfoundation.org
                 </a>
               </p>
             </div>

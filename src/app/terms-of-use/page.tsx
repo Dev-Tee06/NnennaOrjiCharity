@@ -18,7 +18,7 @@ const terms = [
   {
     title: "2. About the foundation",
     content:
-      "The Nnenna Oriji Charity Foundation is a registered Nigerian charity. Our principal place of operation is 12 Adeniyi Jones Avenue, Ikeja, Lagos State, Nigeria, with a second hub at 8 Zoo Road, Nassarawa, Kano State. We operate outreach programmes delivering food, clothing, medical supplies and other essentials to households in need.",
+      "The Nnenna Oriji Charity Foundation is a registered Nigerian charity. Our principal place of operation is Solomade Estate, Ikorodu, Lagos, Nigeria., with a second hub at Church Road, Sabon Gari, Kano, Nigeria. We operate outreach programmes delivering food, clothing, medical supplies and other essentials to households in need.",
   },
   {
     title: "3. Use of this website",
@@ -43,7 +43,7 @@ const terms = [
   {
     title: "7. Third-party links",
     content:
-      "This Site contains links to external websites, including our Substack newsletter, Google Forms, and social media profiles. These links are provided for convenience only. NOCF has no control over the content or privacy practices of third-party sites and accepts no responsibility for them.",
+      "This Site contains links to external websites, including our Medium newsletter, Google Forms, and social media profiles. These links are provided for convenience only. NOCF has no control over the content or privacy practices of third-party sites and accepts no responsibility for them.",
   },
   {
     title: "8. Limitation of liability",
@@ -58,7 +58,7 @@ const terms = [
   {
     title: "10. Contact",
     content:
-      "If you have questions about these terms, contact us at: eniobadeji@gmail.com Nnenna Oriji Charity Foundation 12 Adeniyi Jones Avenue, Ikeja, Lagos State, Nigeria",
+      "If you have questions about these terms, contact us at: contactus@nnennaorjicharityfoundation.org Nnenna Oriji Charity Foundation Solomade Estate, Ikorodu, Lagos, Nigeria",
   },
 ];
 
@@ -162,10 +162,10 @@ export default function TermsOfUse() {
               <p className="font-body text-[12px] text-gray-500 mt-12">
                 Questions? Email{" "}
                 <a
-                  href="mailto:NOCF@gmail.com"
+                  href="mailto:contactus@nnennaorjicharityfoundation.org"
                   className="text-[#FF4500] hover:underline"
                 >
-                  NOCF@gmail.com
+                  contactus@nnennaorjicharityfoundation.org
                 </a>
               </p>
             </div>

@@ -98,13 +98,36 @@ export function Footer() {
                 href="https://x.com/nocfhq"
                 className="flex items-center justify-center w-10 h-10 rounded-[8px] border border-white/20 hover:border-orangeRed1 hover:bg-orangeRed1 hover:text-white transition-colors text-white/80"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z" /><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" /></svg>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
+                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+                </svg>
               </a>
               <a
                 href="https://www.tiktok.com/@nocfhq"
                 className="flex items-center justify-center w-10 h-10 rounded-[8px] border border-white/20 hover:border-orangeRed1 hover:bg-orangeRed1 hover:text-white transition-colors text-white/80"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4v-12a5 5 0 0 0 5 5" /></svg>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M9 12a4 4 0 1 0 4 4v-12a5 5 0 0 0 5 5" />
+                </svg>
               </a>
               <a
                 href="https://www.instagram.com/nnennaorjicharityfoundation"
@@ -152,7 +175,7 @@ export function Footer() {
                   Lagos Hub
                 </span>
                 <p className="font-body text-[14px] text-white/60 leading-relaxed">
-                  12 Adeniyi Jones Avenue, Ikeja, Lagos State, Nigeria
+                  Solomade Estate, Ikorodu, Lagos, Nigeria.
                 </p>
               </div>
 
@@ -161,7 +184,7 @@ export function Footer() {
                   Kano Hub
                 </span>
                 <p className="font-body text-[14px] text-white/60 leading-relaxed">
-                  8 Zoo Road, Nassarawa, Kano State, Nigeria
+                  Church Road, Sabon Gari, Kano, Nigeria.
                 </p>
               </div>
 
@@ -173,7 +196,7 @@ export function Footer() {
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 group-hover:bg-orangeRed1/10 transition-colors">
                     <Mail size={14} className="text-orangeRed1" />
                   </div>
-                  eniobadeji@gmail.com
+                  contactus@nnennaorjicharityfoundation.org
                 </a>
                 <a
                   href="tel:+2348030000000"
@@ -222,11 +245,17 @@ export function Footer() {
             © 2026 Nnenna Oriji Charity Foundation. All rights reserved.
           </p>
           <div className="flex items-center gap-4 text-[13px] font-body text-white/50">
-            <Link href="/privacy-policy" className="hover:text-white transition-colors">
+            <Link
+              href="/privacy-policy"
+              className="hover:text-white transition-colors"
+            >
               Privacy Policy
             </Link>
             <span className="text-white/20">|</span>
-            <Link href="/terms-of-use" className="hover:text-white transition-colors">
+            <Link
+              href="/terms-of-use"
+              className="hover:text-white transition-colors"
+            >
               Terms of Use
             </Link>
           </div>

@@ -7,16 +7,16 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 const CONTACT_INFO = {
-  email: "eniobadeji@gmail.com",
+  email: "contactus@nnennaorjicharityfoundation.org",
   phone: "+234 803 000 0000",
   lagos: {
     name: "LAGOS HUB",
-    address: "12 Adeniyi Jones Avenue, Ikeja, Lagos State, Nigeria",
+    address: "Solomade Estate, Ikorodu, Lagos, Nigeria.",
     hours: "Mon – Fri, 9:00 – 17:00 WAT",
   },
   kano: {
     name: "KANO HUB",
-    address: "8 Zoo Road, Nassarawa, Kano State, Nigeria",
+    address: "Church Road, Sabon Gari, Kano, Nigeria.",
     hours: "Mon – Fri, 9:00 – 16:00 WAT",
   },
 };
@@ -45,21 +45,21 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isValid) return;
-    
+
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('company_requests').insert({
+      const { error } = await supabase.from("company_requests").insert({
         company_name: formData.firstName + " " + formData.lastName, // Fallback if no company name field exists
         contact_name: formData.firstName + " " + formData.lastName,
         email: formData.email,
         subject: formData.subject,
         message: formData.message,
-        status: 'New'
+        status: "New",
       });
 
       if (error) throw error;
 
-      router.push('/success');
+      router.push("/success");
     } catch (error) {
       console.error(error);
       alert("Failed to send message. Please try again.");
