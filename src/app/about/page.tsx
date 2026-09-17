@@ -84,7 +84,7 @@ const PEOPLE = [
   },
   {
     name: "Maxwell Jideofor Esq",
-    role: "HEAD OF FINANCE",
+    role: "LEGAL",
     desc: "Provides legal guidance and ensures NOCF’s activities, partnerships and documentation remain compliant.",
     image: "/images/volunteer-image5.jpeg",
   },
