@@ -95,20 +95,20 @@ const PEOPLE = [
     image: "/images/hero3.JPG",
   },
   {
-    name: "",
+    name: "Theresa D Adeyele",
     role: "MEDICAL LEAD",
     desc: "Leads the medical and health-support component of NOCF’s outreaches, including healthcare volunteers and services.",
-    image: "/images/hero2.JPG",
+    image: "/images/volunteer-image7.jpg",
   },
 ];
 
 const GALLERY = [
-  "/images/hero1.JPG",
-  "/images/hero2.JPG",
-  "/images/hero3.JPG",
-  "/images/volunteer4.JPG",
+  "/images/about-volunteer2.jpg",
+  "/images/about-volunteer3.jpg",
+  "/images/hero4.jpg",
+  "/images/about.JPG",
+  "/images/about-volunteer.jpg",
   "/images/about-us-1.jpg",
-  "/images/about-us.jpg",
 ];
 
 export default function About() {
