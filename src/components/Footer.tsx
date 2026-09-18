@@ -60,6 +60,67 @@ function Linkedin({ size = 18 }) {
   );
 }
 
+function NewsletterForm() {
+  const [email, setEmail] = React.useState("");
+  const [status, setStatus] = React.useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Failed to subscribe: ${errText}`);
+      }
+      setStatus("success");
+      setEmail("");
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <div className="mt-2 p-4 rounded-[8px] bg-white/10 border border-white/20 text-white font-body text-sm">
+        Successfully subscribed to the newsletter.
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3 mt-2">
+      <input
+        type="email"
+        placeholder="you@email.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        className="w-full bg-white/5 border border-white/15 rounded-[8px] px-4 py-3.5 font-body text-sm text-white placeholder-white/40 focus:outline-none focus:border-orangeRed1 focus:ring-1 focus:ring-orangeRed1 transition-all"
+      />
+      <Button
+        type="submit"
+        disabled={status === "loading"}
+        variant="primary"
+        className="w-full flex justify-between items-center px-4"
+      >
+        <span>{status === "loading" ? "Subscribing..." : "Subscribe"}</span>
+        <ArrowRight size={16} />
+      </Button>
+      {status === "error" && (
+        <span className="text-red-400 text-xs font-body mt-1">Something went wrong. Please try again.</span>
+      )}
+    </form>
+  );
+}
+
 export function Footer() {
   return (
     <footer className="relative overflow-hidden bg-blackKnight text-white">
@@ -220,22 +281,7 @@ export function Footer() {
               Field notes from Lagos and Kano, sent when there is something real
               to report.
             </p>
-            <form className="flex flex-col gap-3 mt-2">
-              <input
-                type="email"
-                placeholder="you@email.com"
-                required
-                className="w-full bg-white/5 border border-white/15 rounded-[8px] px-4 py-3.5 font-body text-sm text-white placeholder-white/40 focus:outline-none focus:border-orangeRed1 focus:ring-1 focus:ring-orangeRed1 transition-all"
-              />
-              <Button
-                type="button"
-                variant="primary"
-                className="w-full flex justify-between items-center px-4"
-              >
-                <span>Subscribe</span>
-                <ArrowRight size={16} />
-              </Button>
-            </form>
+            <NewsletterForm />
           </div>
         </div>
 

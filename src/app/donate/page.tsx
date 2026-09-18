@@ -52,39 +52,27 @@ export default function Donate() {
     
     setIsSubmitting(true);
     try {
-      // 1. Insert Donor
       const [firstName, ...lastNameParts] = formData.name.split(' ');
       const lastName = lastNameParts.join(' ');
-      const donorId = crypto.randomUUID();
       
-      const { error: donorError } = await supabase
-        .from('donors')
-        .insert({
-          id: donorId,
-          first_name: firstName,
-          last_name: lastName || null,
-          email: formData.email || null,
-          phone: formData.phone || null,
-          address: formData.location
-        });
-        
-      if (donorError) throw donorError;
+      const payload = {
+        firstName,
+        lastName,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.description
+      };
 
-      // 2. Insert Donation
-      const dbDonationType = activeTab === 'clothing' ? 'cloth' : 
-                             activeTab === 'medical' ? 'medical_supply' : 'food';
+      const res = await fetch("/api/donations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
 
-      const { error: donationError } = await supabase
-        .from('donations')
-        .insert({
-          donor_id: donorId,
-          donation_type: dbDonationType,
-          quantity: 1, // Defaulting to 1 as it's unquantified in the form text
-          notes: formData.description,
-          status: 'Pending'
-        });
-
-      if (donationError) throw donationError;
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Failed to process donation: ${errText}`);
+      }
 
       router.push('/success');
     } catch (error) {

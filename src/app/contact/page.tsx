@@ -48,17 +48,25 @@ export default function Contact() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from("company_requests").insert({
-        company_name: formData.firstName + " " + formData.lastName, // Fallback if no company name field exists
-        contact_name: formData.firstName + " " + formData.lastName,
+      const payload = {
+        companyName: "",
+        contactName: `${formData.firstName} ${formData.lastName}`.trim(),
         email: formData.email,
-        subject: formData.subject,
-        message: formData.message,
-        status: "New",
+        phone: "", // No phone field here
+        message: `${formData.subject}\n\n${formData.message}`
+      };
+
+      const res = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       });
 
-      if (error) throw error;
+      if (!res.ok) {
+        throw new Error("Failed to process enquiry");
+      }
 
+      setSubmitted(true);
       router.push("/success");
     } catch (error) {
       console.error(error);

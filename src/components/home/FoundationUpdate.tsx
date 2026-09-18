@@ -1,6 +1,33 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 
 export function FoundationUpdate() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Failed to subscribe: ${errText}`);
+      }
+      setStatus("success");
+      setEmail("");
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    }
+  };
+
   return (
     <section className="bg-[#FDF8F6] pt-[50px] pb-[50px] md:pt-[60px] md:pb-[60px] border-t border-[#E9E5E3] border-b">
       <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
@@ -28,26 +55,42 @@ export function FoundationUpdate() {
 
           {/* Right Column */}
           <div className="w-full md:w-1/2 flex flex-col justify-center md:pl-[40px] lg:pl-[60px]">
-            <label className="font-heading font-semibold md:font-bold text-[9px] md:text-[10px] text-[#171717] mb-[8px] md:mb-[10px] block">
-              Your email address
-            </label>
-            <form className="flex flex-col sm:flex-row gap-[8px] md:gap-[10px] mb-[9px] md:mb-[12px]">
-              <input
-                type="email"
-                placeholder="you@email.com"
-                required
-                className="w-full sm:w-[70%] md:w-[75%] bg-[#FFFFFF] border border-[#E4DFDD] rounded-[7px] h-[43px] md:h-[46px] px-[15px] font-body text-[10px] md:text-[12px] text-[#777777] outline-none placeholder:text-[#9A9A9A] focus:border-[#FF4500] focus:ring-1 focus:ring-[#FF4500] transition-all"
-              />
-              <button
-                type="submit"
-                className="group w-full sm:w-[30%] md:w-[25%] flex items-center justify-center gap-[4px] md:gap-[6px] bg-[#FF4500] text-[#FFFFFF] rounded-[7px] h-[43px] md:h-[46px] px-[18px] md:px-[22px] font-heading font-semibold md:font-bold text-[10px] md:text-[11px] transition-all hover:bg-[#E63E00]"
-              >
-                Subscribe
-              </button>
-            </form>
-            <span className="font-body font-normal text-[9px] md:text-[10px] leading-[1.4] text-[#999999]">
-              Get occasional updates. Unsubscribe anytime.
-            </span>
+            {status === "success" ? (
+              <div className="p-4 rounded-[8px] bg-green-50 border border-green-100 text-green-800 font-body text-sm">
+                Successfully subscribed to the newsletter.
+              </div>
+            ) : (
+              <>
+                <label className="font-heading font-semibold md:font-bold text-[9px] md:text-[10px] text-[#171717] mb-[8px] md:mb-[10px] block">
+                  Your email address
+                </label>
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-[8px] md:gap-[10px] mb-[9px] md:mb-[12px]">
+                  <input
+                    type="email"
+                    placeholder="you@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full sm:w-[70%] md:w-[75%] bg-[#FFFFFF] border border-[#E4DFDD] rounded-[7px] h-[43px] md:h-[46px] px-[15px] font-body text-[10px] md:text-[12px] text-[#777777] outline-none placeholder:text-[#9A9A9A] focus:border-[#FF4500] focus:ring-1 focus:ring-[#FF4500] transition-all"
+                  />
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="group w-full sm:w-[30%] md:w-[25%] flex items-center justify-center gap-[4px] md:gap-[6px] bg-[#FF4500] text-[#FFFFFF] rounded-[7px] h-[43px] md:h-[46px] px-[18px] md:px-[22px] font-heading font-semibold md:font-bold text-[10px] md:text-[11px] transition-all hover:bg-[#E63E00] disabled:opacity-50"
+                  >
+                    {status === "loading" ? "..." : "Subscribe"}
+                  </button>
+                </form>
+                {status === "error" && (
+                  <span className="text-red-500 font-body text-[10px] mb-2 block">
+                    Failed to subscribe. Please try again.
+                  </span>
+                )}
+                <span className="font-body font-normal text-[9px] md:text-[10px] leading-[1.4] text-[#999999]">
+                  Get occasional updates. Unsubscribe anytime.
+                </span>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -13,28 +13,42 @@ export default function PartnershipInquiriesPage() {
 
   useEffect(() => {
     fetchInquiries();
-    const channel = supabase
-      .channel('requests-table')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'company_requests' }, fetchInquiries)
+    const channel1 = supabase
+      .channel('partnerships-table')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'partnerships' }, fetchInquiries)
       .subscribe();
-    return () => { supabase.removeChannel(channel); };
+    const channel2 = supabase
+      .channel('enquiries-table')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'company_enquiries' }, fetchInquiries)
+      .subscribe();
+    return () => { supabase.removeChannel(channel1); supabase.removeChannel(channel2); };
   }, []);
 
   const fetchInquiries = async () => {
-    const { data } = await supabase.from('company_requests').select('*').order('created_at', { ascending: false });
-    if (data) {
-      const formatted = data.map((r: any) => ({
-        id: r.id,
-        org: r.company_name || 'N/A',
-        contact: r.contact_name || 'N/A',
-        email: r.email || 'N/A',
-        phone: r.phone || 'N/A',
-        date: new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        status: r.status || 'New',
-        statusColor: r.status === 'Resolved' ? 'bg-green-50 text-green-700' : 'bg-blue-50 text-blue-700'
-      }));
-      setInquiries(formatted);
-    }
+    // Fetch from both PRD tables
+    const [partnershipsRes, enquiriesRes] = await Promise.all([
+      supabase.from('partnerships').select('*'),
+      supabase.from('company_enquiries').select('*')
+    ]);
+
+    const partnerships = partnershipsRes.data || [];
+    const enquiries = enquiriesRes.data || [];
+
+    const allData = [...partnerships, ...enquiries].sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+
+    const formatted = allData.map((r: any) => ({
+      id: r.id,
+      org: r.organisation || r.company_name || 'N/A',
+      contact: r.contact_name ? r.contact_name : `${r.first_name || ''} ${r.last_name || ''}`.trim() || 'N/A',
+      email: r.email || 'N/A',
+      phone: r.phone || 'N/A',
+      date: new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      status: r.status || 'New',
+      statusColor: r.status === 'Resolved' ? 'bg-green-50 text-green-700' : 'bg-blue-50 text-blue-700'
+    }));
+    setInquiries(formatted);
   };
 
   const handleDownload = () => {

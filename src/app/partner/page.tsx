@@ -63,16 +63,28 @@ export default function Partner() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('company_requests').insert({
-        company_name: formData.organisationName,
-        contact_name: formData.representative,
+      const [firstName, ...lastNameParts] = formData.representative.split(' ');
+      const lastName = lastNameParts.join(' ');
+
+      const payload = {
+        firstName,
+        lastName,
         email: formData.email,
-        subject: `Partnership: ${formData.partnershipType}`,
-        message: formData.message,
-        status: 'New'
+        phone: "", // no phone field in this form right now
+        organisation: formData.organisationName,
+        message: `${formData.partnershipType}\n\n${formData.message}`
+      };
+
+      const res = await fetch("/api/partnerships", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       });
 
-      if (error) throw error;
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Failed to process partnership request: ${errText}`);
+      }
 
       router.push('/success');
     } catch (error) {

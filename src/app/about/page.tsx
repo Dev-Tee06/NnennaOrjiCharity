@@ -100,6 +100,12 @@ const PEOPLE = [
     desc: "Leads the medical and health-support component of NOCF’s outreaches, including healthcare volunteers and services.",
     image: "/images/volunteer-image7.jpg",
   },
+  {
+    name: "James Olawale ",
+    role: "LEAD, LOGISTICS",
+    desc: "",
+    image: "/images/volunteer-image8.jpg",
+  },
 ];
 
 const GALLERY = [

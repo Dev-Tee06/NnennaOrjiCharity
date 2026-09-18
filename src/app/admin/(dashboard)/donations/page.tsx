@@ -23,25 +23,23 @@ export default function PledgesDonationsPage() {
   const fetchPledges = async () => {
     const { data } = await supabase.from('donations').select(`
       id,
+      first_name,
+      last_name,
+      email,
+      phone,
       donation_type,
       quantity,
       status,
-      created_at,
-      donors (
-        first_name,
-        last_name,
-        email,
-        phone
-      )
+      created_at
     `).order('created_at', { ascending: false });
     
     if (data) {
       const formatted = data.map((d: any) => ({
         id: `PLG-${d.id.substring(0,4)}`,
-        donor: `${d.donors?.first_name || ''} ${d.donors?.last_name || ''}`,
-        email: d.donors?.email || '',
-        phone: d.donors?.phone || '',
-        category: d.donation_type,
+        donor: `${d.first_name || ''} ${d.last_name || ''}`.trim(),
+        email: d.email || '',
+        phone: d.phone || '',
+        category: d.donation_type || 'General',
         categoryColor: 'text-green-600 bg-green-50',
         items: `${d.quantity || 1} items`,
         status: d.status || 'Pending',
