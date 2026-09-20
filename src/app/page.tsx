@@ -11,16 +11,20 @@ import { WhatPeopleSay } from "@/components/home/WhatPeopleSay";
 import { StoriesAndImpact } from "@/components/home/StoriesAndImpact";
 import { FoundationUpdate } from "@/components/home/FoundationUpdate";
 
-const OurJourney = dynamic(() => import("@/components/home/OurJourney").then(mod => mod.OurJourney), {
-  ssr: true,
-});
+const OurJourney = dynamic(
+  () => import("@/components/home/OurJourney").then((mod) => mod.OurJourney),
+  {
+    ssr: true,
+  },
+);
 
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Home",
-  description: "Welcome to Nnenna Orji Charity Foundation. Sharing Love Everywhere With A Box Full of Hope across Lagos and Kano, Nigeria.",
+  description:
+    "Welcome to Nnenna Orji Charity Foundation. Sharing Love Everywhere With A Box Full of Hope across Lagos and Kano, Nigeria.",
   alternates: {
     canonical: "/",
   },
@@ -36,25 +40,37 @@ export default function Home() {
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x divide-border-subtle">
             <div className="flex flex-col gap-2 lg:px-8 first:pl-0 last:pr-0">
-              <AnimatedCounter value="813+" className="font-heading font-bold text-4xl text-orangeRed1" />
+              <AnimatedCounter
+                value="813+"
+                className="font-heading font-bold text-4xl text-orangeRed1"
+              />
               <span className="font-body text-sm text-text-secondary">
                 Gift Boxes Distributed
               </span>
             </div>
             <div className="flex flex-col gap-2 lg:px-8 first:pl-0 last:pr-0">
-              <AnimatedCounter value="₦7M+" className="font-heading font-bold text-4xl text-orangeRed1" />
+              <AnimatedCounter
+                value="₦7M+"
+                className="font-heading font-bold text-4xl text-orangeRed1"
+              />
               <span className="font-body text-sm text-text-secondary">
                 Estimated Aid Value
               </span>
             </div>
             <div className="flex flex-col gap-2 lg:px-8 first:pl-0 last:pr-0">
-              <AnimatedCounter value="2 Hubs" className="font-heading font-bold text-4xl text-orangeRed1" />
+              <AnimatedCounter
+                value="2 Hubs"
+                className="font-heading font-bold text-4xl text-orangeRed1"
+              />
               <span className="font-body text-sm text-text-secondary">
                 Outreach Locations
               </span>
             </div>
             <div className="flex flex-col gap-2 lg:px-8 first:pl-0 last:pr-0">
-              <AnimatedCounter value="500+" className="font-heading font-bold text-4xl text-orangeRed1" />
+              <AnimatedCounter
+                value="500+"
+                className="font-heading font-bold text-4xl text-orangeRed1"
+              />
               <span className="font-body text-sm text-text-secondary">
                 Activities & Donors
               </span>
@@ -101,7 +117,7 @@ export default function Home() {
       </section>
 
       {/* Box of Hope */}
-      <section className="relative py-20 lg:py-[120px] bg-blackKnight overflow-hidden">
+      <section className="relative py-10 md:py-20 lg:py-[120px] bg-blackKnight overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay"
           style={{
@@ -115,7 +131,7 @@ export default function Home() {
             <div className="flex flex-col items-start gap-6">
               <SectionLabel text="A BOX FULL OF HOPE" />
               <h2 className="font-heading font-bold leading-[31.92px] tracking-[-0.57px] text-white text-[24px]">
-                It began with one December, one street, and 120 plates of food.
+                Every 26th of December, we load the vans before sunrise.
               </h2>
               <div className="font-body text-[17px] leading-[28.05px] text-white/70 flex flex-col gap-4">
                 <p>
@@ -170,10 +186,12 @@ export default function Home() {
       </section>
 
       {/* Five Ways to Put Something in the Box */}
-      <section className="py-20 lg:py-[120px] bg-offWhite">
+      <section className="py-10 md:py-20 lg:py-[120px] bg-offWhite">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 flex flex-col gap-12">
           <div className="flex flex-col gap-4">
-            <span className="font-heading font-semibold text-[12px] leading-[18.6px] tracking-[1.68px] uppercase text-[#F82C00]">Ways to help</span>
+            <span className="font-heading font-semibold text-[12px] leading-[18.6px] tracking-[1.68px] uppercase text-[#F82C00]">
+              Ways to help
+            </span>
             <h2 className="font-heading font-bold leading-[31.92px] tracking-[-0.57px] text-blackKnight text-[24px]">
               Five ways to put something in the box.
             </h2>
@@ -186,28 +204,28 @@ export default function Home() {
                 desc: "Fund box contents, transport and cooking at scale. Every naira is reported against a delivery run.",
                 icon: <span className="text-xl">₦</span>,
                 cta: "Give now",
-                href: "/donate/cash",
+                href: "/donate?tab=cash",
               },
               {
                 title: "Donate Food",
                 desc: "Rice, oil, garri, beans, tomatoes; staples that carry a household through the season.",
                 icon: <Box size={24} />,
                 cta: "Pledge now",
-                href: "/donate/food",
+                href: "/donate?tab=food",
               },
               {
                 title: "Donate Medical Supply",
                 desc: "Bandages, gloves, basic diagnostic kits, and over-the-counter medicines go directly to our outreach clinics in Lagos and Kano.",
                 icon: <ShieldCheck size={24} />,
                 cta: "Pledge Medical supplies",
-                href: "/donate/medicals",
+                href: "/donate?tab=medical",
               },
               {
                 title: "Donate Clothing",
                 desc: "Clean, wearable clothing for children and adults, sorted by our volunteers before delivery.",
                 icon: <HeartHandshake size={24} />,
                 cta: "Pledge Clothing",
-                href: "/donate/clothing",
+                href: "/donate?tab=clothing",
               },
               {
                 title: "Volunteer",

@@ -4,7 +4,7 @@ import { AnimatedCounter } from "../AnimatedCounter";
 
 export function OurImpact() {
   return (
-    <section className="relative bg-[#070D16] py-[90px] md:py-[120px] overflow-hidden">
+    <section className="relative bg-[#070D16] py-[40px] md:py-[120px] overflow-hidden">
       {/* Background Pattern */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.06] mix-blend-overlay"
@@ -27,8 +27,8 @@ export function OurImpact() {
               </span>
             </div>
 
-            <h2 className="font-heading font-bold md: leading-[1.1] tracking-[-0.02em] whitespace-pre-line mb-10 text-[24px]">
-              {"Numbers we publish, not\nnumbers we estimate."}
+            <h2 className="font-heading font-bold text-white whitespace-pre-line mb-10 text-[24px]">
+              Numbers we publish, not numbers we estimate.
             </h2>
 
             <p className="font-body text-[12px] md:text-[13px] leading-[1.6] text-[#D0D3D6] max-w-[420px] mb-8">
@@ -38,8 +38,8 @@ export function OurImpact() {
             </p>
 
             <p className="font-body text-[12px] md:text-[13px] leading-[1.6] text-[#D0D3D6] max-w-[420px] mb-12">
-              We don&apos;t round up, and we don&apos;t count a box twice. If we deliver,
-              it&apos;s counted in the impact.
+              We don&apos;t round up, and we don&apos;t count a box twice. If we
+              deliver, it&apos;s counted in the impact.
             </p>
 
             <Link
@@ -54,7 +54,7 @@ export function OurImpact() {
           <div className="w-full lg:w-[60%] flex flex-col">
             {[
               {
-                number: "10000+",
+                number: "813+",
                 label: "Boxes and meals",
                 desc: "Distributed since Boxing Day 2020 Lagos and Kano combined.",
               },

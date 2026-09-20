@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { Button } from "@/components/Button";
 import { ShieldCheck, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type DonationType = "cash" | "food" | "clothing" | "medical";
 
 const PRESET_AMOUNTS = [5000, 10000, 25000, 50000];
 
-export default function Donate() {
-  const [activeTab, setActiveTab] = useState<DonationType>("cash");
+function DonateContent() {
+  const searchParams = useSearchParams();
+  const initialTab = (searchParams.get("tab") as DonationType) || "cash";
+  const [activeTab, setActiveTab] = useState<DonationType>(initialTab);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const supabase = createClient();
   const router = useRouter();
@@ -49,24 +51,31 @@ export default function Donate() {
   const handlePledgeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isPledgeValid) return;
-    
+
     setIsSubmitting(true);
     try {
-      const [firstName, ...lastNameParts] = formData.name.split(' ');
-      const lastName = lastNameParts.join(' ');
-      
+      const [firstName, ...lastNameParts] = formData.name.split(" ");
+      const lastName = lastNameParts.join(" ");
+
       const payload = {
         firstName,
         lastName,
         email: formData.email,
         phone: formData.phone,
-        message: formData.description
+        message: formData.description,
+        location: formData.location,
+        donationType:
+          activeTab === "food"
+            ? "food"
+            : activeTab === "clothing"
+              ? "cloth"
+              : "medical_supply",
       };
 
       const res = await fetch("/api/donations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -74,7 +83,7 @@ export default function Donate() {
         throw new Error(`Failed to process donation: ${errText}`);
       }
 
-      router.push('/success');
+      router.push("/success");
     } catch (error) {
       console.error(error);
       alert("Failed to submit pledge. Please try again.");
@@ -167,7 +176,7 @@ export default function Donate() {
                     Give cash
                   </h2>
                   <p className="font-body text-[15px] text-text-secondary leading-relaxed">
-                    Cash gifts are pooled into procurement at market rates — the
+                    Cash gifts are pooled into procurement at market rates the
                     most efficient way to fill a box.
                   </p>
                 </div>
@@ -276,7 +285,7 @@ export default function Donate() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex flex-col gap-1.5">
                   <label className="font-body text-[13px] font-semibold text-blackKnight">
                     Phone number
@@ -387,5 +396,13 @@ export default function Donate() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function Donate() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-offWhite flex items-center justify-center">Loading...</div>}>
+      <DonateContent />
+    </Suspense>
   );
 }

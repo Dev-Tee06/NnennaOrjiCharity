@@ -89,12 +89,6 @@ const PEOPLE = [
     image: "/images/volunteer-image5.jpeg",
   },
   {
-    name: "",
-    role: "Lead, People & Culture (Volunteers Advocate)",
-    desc: "Supports volunteer experience, coordination and welfare while helping volunteers feel informed, valued and heard.",
-    image: "/images/hero3.JPG",
-  },
-  {
     name: "Theresa D Adeyele",
     role: "MEDICAL LEAD",
     desc: "Leads the medical and health-support component of NOCF’s outreaches, including healthcare volunteers and services.",
@@ -103,7 +97,7 @@ const PEOPLE = [
   {
     name: "James Olawale ",
     role: "LEAD, LOGISTICS",
-    desc: "",
+    desc: "Coordinates the movement of people, materials and resources before, during and after NOCF outreaches, ensuring that everything gets where it needs to be, when it needs to be there.",
     image: "/images/volunteer-image8.jpg",
   },
 ];
@@ -121,7 +115,7 @@ export default function About() {
   return (
     <div className="bg-[#FAFAFA] pb-24">
       {/* Hero */}
-      <section className="pt-[140px] pb-[80px] md:pt-[180px] md:pb-[100px] px-4 md:px-8 xl:px-12 flex flex-col items-center text-center">
+      <section className="pt-[100px] pb-[80px] md:pt-[140px] md:pb-[100px] px-4 md:px-8 xl:px-12 flex flex-col items-center text-center">
         <div className="flex items-center gap-2 mb-6 md:mb-8">
           <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.15em] uppercase text-[#FF4500]">
             ABOUT OUR FOUNDATION
@@ -138,7 +132,7 @@ export default function About() {
       </section>
 
       {/* History Section */}
-      <section className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 pb-[100px] md:pb-[140px]">
+      <section className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 pb-[60px] md:pb-[140px]">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-[100px] items-start">
           {/* Left: Text */}
           <div className="flex flex-col gap-6 font-body text-[14px] md:text-[15px] text-[#171717] leading-[1.75]">
@@ -234,7 +228,7 @@ export default function About() {
       </section>
 
       {/* Mission / Vision / Values */}
-      <section className="bg-[#FFFFFF] border-y border-[#E8E4E2] py-[90px] md:py-[120px]">
+      <section className="bg-[#FFFFFF] border-y border-[#E8E4E2] py-[40px] md:py-[120px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
@@ -280,7 +274,7 @@ export default function About() {
       </section>
 
       {/* Timeline Section */}
-      <section className="bg-[#FFFFFF] py-[90px] md:py-[120px]">
+      <section className="bg-[#FFFFFF] py-[40px] md:py-[120px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
@@ -317,7 +311,7 @@ export default function About() {
       </section>
 
       {/* Founder Testimonial */}
-      <section className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 py-[50px] md:py-[80px]">
+      <section className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 py-[20px] md:py-[80px]">
         <div className="bg-[#010D19] rounded-[24px] p-6 md:p-12 lg:p-[70px] relative overflow-hidden flex flex-col lg:flex-row gap-12 lg:gap-[80px] items-center">
           {/* Subtle Pattern Background */}
           <div
@@ -412,7 +406,7 @@ export default function About() {
       </section>
 
       {/* The People */}
-      <section className="bg-[#FFFFFF] py-[90px] md:py-[120px]">
+      <section className="bg-[#FFFFFF] py-[40px] md:py-[120px]">
         <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="flex items-center gap-3 mb-6">
             <span className="font-heading font-bold text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">

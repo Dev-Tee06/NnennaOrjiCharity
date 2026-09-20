@@ -23,7 +23,7 @@ async function getAdminSupabase() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { firstName, lastName, email, phone, message } = body;
+    const { firstName, lastName, email, phone, message, location, donationType } = body;
 
     // Validate
     if (!firstName || !email) {
@@ -41,6 +41,8 @@ export async function POST(request: Request) {
         email: email,
         phone: phone || null,
         message: message || null,
+        donation_type: donationType || null,
+        notes: location ? `Location: ${location}` : null,
         status: 'Pending'
       });
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, Gift, Package, Shirt, DollarSign, CheckCircle2, Truck, Clock, Search, Bell, ChevronDown } from 'lucide-react';
+import { Calendar, Gift, Package, Shirt, HeartPulse, CheckCircle2, Truck, Clock, Search, Bell, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { TopHeader } from '@/components/dashboard/TopHeader';
@@ -9,11 +9,9 @@ import { MobilePageTitle } from '@/components/dashboard/MobilePageTitle';
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
     totalPledges: 0,
-    totalValue: 0,
     foodCount: 0,
     clothCount: 0,
     medicalCount: 0,
-    cashCount: 0,
     collected: 0,
     inProgress: 0,
     pending: 0,
@@ -51,30 +49,28 @@ export default function AdminDashboard() {
     const { data: rData } = await supabase.from('company_requests').select('*').order('created_at', { ascending: false }).limit(5);
     
     if (dData) {
-      const food = dData.filter(d => d.donation_type === 'food').length;
-      const cloth = dData.filter(d => d.donation_type === 'cloth').length;
-      const medical = dData.filter(d => d.donation_type === 'medical_supply').length;
-      const cash = dData.filter(d => d.donation_type === 'cash').length;
+      // Exclude any legacy cash donations from total stats since we removed them
+      const validPledges = dData.filter(d => d.donation_type !== 'cash');
+
+      const food = validPledges.filter(d => d.donation_type === 'food').length;
+      const cloth = validPledges.filter(d => d.donation_type === 'cloth').length;
+      const medical = validPledges.filter(d => d.donation_type === 'medical_supply').length;
       
-      const collected = dData.filter(d => d.status === 'Handed Over' || d.status === 'Resolved').length;
-      const inProgress = dData.filter(d => d.status === 'In Transit').length;
-      const pending = dData.filter(d => d.status === 'Pending').length;
-      
-      const totalValue = dData.filter(d => d.donation_type === 'cash').reduce((sum, d) => sum + (Number(d.quantity) || 0), 0);
+      const collected = validPledges.filter(d => ['Handed Over', 'Resolved', 'Completed'].includes(d.status)).length;
+      const inProgress = validPledges.filter(d => d.status === 'In Transit' || d.status === 'Processing').length;
+      const pending = validPledges.filter(d => d.status === 'Pending').length;
       
       setStats({
-        totalPledges: dData.length,
-        totalValue,
+        totalPledges: validPledges.length,
         foodCount: food,
         clothCount: cloth,
         medicalCount: medical,
-        cashCount: cash,
         collected,
         inProgress,
         pending
       });
       
-      setRecentDonors(dData.slice(0, 5));
+      setRecentDonors(validPledges.slice(0, 5));
     }
     
     if (rData) {
@@ -113,7 +109,7 @@ export default function AdminDashboard() {
                 <Gift className="h-4 w-4 text-orangeRed1" />
               </div>
               <div className="text-4xl font-heading font-bold text-orangeRed1 mb-2">{stats.totalPledges}</div>
-              <div className="text-sm font-medium text-blackKnight">Value: ₦{stats.totalValue.toLocaleString()}</div>
+              <div className="text-sm font-medium text-blackKnight">Active pledges tracked</div>
             </div>
             <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
               <div className="flex justify-between items-start mb-4">
@@ -133,10 +129,10 @@ export default function AdminDashboard() {
             </div>
             <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
               <div className="flex justify-between items-start mb-4">
-                <span className="text-xs font-bold text-text-secondary tracking-wider">MEDICAL & CASH</span>
-                <DollarSign className="h-4 w-4 text-gray-400" />
+                <span className="text-xs font-bold text-text-secondary tracking-wider">MEDICAL SUPPLIES</span>
+                <HeartPulse className="h-4 w-4 text-gray-400" />
               </div>
-              <div className="text-4xl font-heading font-bold text-blackKnight mb-2">{stats.medicalCount + stats.cashCount}</div>
+              <div className="text-4xl font-heading font-bold text-blackKnight mb-2">{stats.medicalCount}</div>
               <div className="text-sm font-medium text-text-secondary">Special requests processed</div>
             </div>
           </div>
@@ -169,16 +165,7 @@ export default function AdminDashboard() {
                     <span className="text-text-secondary">{stats.medicalCount} Pledges</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
-                    <div className="bg-slate-700 h-2 rounded-full transition-all duration-500" style={{ width: `${getPercent(stats.medicalCount)}%` }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm font-semibold mb-2 text-blackKnight">
-                    <span>Cash Support ({getPercent(stats.cashCount)}%)</span>
-                    <span className="text-text-secondary">{stats.cashCount} Pledges</span>
-                  </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2">
-                    <div className="bg-gray-300 h-2 rounded-full transition-all duration-500" style={{ width: `${getPercent(stats.cashCount)}%` }}></div>
+                    <div className="bg-gray-400 h-2 rounded-full transition-all duration-500" style={{ width: `${getPercent(stats.medicalCount)}%` }}></div>
                   </div>
                 </div>
               </div>
@@ -242,8 +229,13 @@ export default function AdminDashboard() {
                     {recentDonors.map((d) => (
                       <div key={d.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
                         <div className="flex flex-col">
-                          <span className="text-sm font-bold text-blackKnight">{d.donors?.first_name || 'Anonymous'} {d.donors?.last_name || ''}</span>
-                          <span className="text-xs text-text-secondary capitalize">{d.donation_type}</span>
+                          <span className="text-sm font-bold text-blackKnight">{d.first_name || d.donors?.first_name || 'Anonymous'} {d.last_name || d.donors?.last_name || ''}</span>
+                          <span className="text-xs text-text-secondary">
+                            {d.donation_type === 'food' ? 'Food Donation' : 
+                             d.donation_type === 'cloth' ? 'Clothing Donation' : 
+                             d.donation_type === 'medical_supply' ? 'Medical Supplies' : 
+                             'Uncategorized'}
+                          </span>
                         </div>
                         <span className="text-xs font-bold text-orangeRed1">{new Date(d.created_at).toLocaleDateString()}</span>
                       </div>
@@ -266,12 +258,16 @@ export default function AdminDashboard() {
                 ) : (
                   <div className="divide-y divide-border">
                     {recentRequests.map((r) => (
-                      <div key={r.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
-                        <div className="flex flex-col">
+                      <div key={r.id} className="p-4 flex flex-col gap-2 hover:bg-gray-50">
+                        <div className="flex items-center justify-between">
                           <span className="text-sm font-bold text-blackKnight">{r.company_name}</span>
-                          <span className="text-xs text-text-secondary truncate max-w-[200px]">{r.subject}</span>
+                          <span className="text-xs font-bold bg-blue-50 text-blue-700 px-2 py-1 rounded-md">{r.status}</span>
                         </div>
-                        <span className="text-xs font-bold bg-blue-50 text-blue-700 px-2 py-1 rounded-md">{r.status}</span>
+                        <div className="flex flex-col gap-1">
+                          <span className="text-xs font-medium text-blackKnight">Contact: {r.contact_name} ({r.email} {r.phone ? `- ${r.phone}` : ''})</span>
+                          <span className="text-xs font-semibold text-blackKnight">Subject: {r.subject}</span>
+                          <p className="text-xs text-text-secondary whitespace-pre-wrap">{r.message}</p>
+                        </div>
                       </div>
                     ))}
                   </div>
