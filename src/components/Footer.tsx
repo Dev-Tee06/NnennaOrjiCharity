@@ -62,7 +62,9 @@ function Linkedin({ size = 18 }) {
 
 function NewsletterForm() {
   const [email, setEmail] = React.useState("");
-  const [status, setStatus] = React.useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = React.useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,7 +117,9 @@ function NewsletterForm() {
         <ArrowRight size={16} />
       </Button>
       {status === "error" && (
-        <span className="text-red-400 text-xs font-body mt-1">Something went wrong. Please try again.</span>
+        <span className="text-red-400 text-xs font-body mt-1">
+          Something went wrong. Please try again.
+        </span>
       )}
     </form>
   );
@@ -306,7 +310,7 @@ export function Footer() {
             </Link>
           </div>
           <p className="font-body text-[13px] text-white/50 text-center md:text-right">
-            Registered in Nigeria — Lagos & Kano.
+            Registered in Nigeria Lagos & Kano.
           </p>
         </div>
       </div>

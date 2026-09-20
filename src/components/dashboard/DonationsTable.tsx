@@ -41,19 +41,6 @@ export function DonationsTable({ filterType }: { filterType?: 'food' | 'cloth' |
 
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchDonations();
-    
-    const channel = supabase
-      .channel('donations-table')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'donations' }, fetchDonations)
-      .subscribe();
-      
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [filterType]);
-
   const fetchDonations = async () => {
     setIsLoading(true);
     let query = supabase.from('donations').select(`
@@ -82,10 +69,24 @@ export function DonationsTable({ filterType }: { filterType?: 'food' | 'cloth' |
 
     const { data, error } = await query;
     if (!error && data) {
-      setDonations(data as any);
+      setDonations(data as unknown as Donation[]);
     }
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    fetchDonations();
+    
+    const channel = supabase
+      .channel('donations-table')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'donations' }, fetchDonations)
+      .subscribe();
+      
+    return () => {
+      supabase.removeChannel(channel);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterType]);
 
   const filteredDonations = donations.filter((d) => {
     const fName = d.first_name || d.donors?.first_name || '';

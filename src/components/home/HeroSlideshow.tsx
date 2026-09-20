@@ -6,9 +6,9 @@ import { Button } from "@/components/Button";
 import { cn } from "@/lib/utils";
 
 const IMAGES = [
-  "/images/hero1.JPG",
-  "/images/hero2.JPG",
-  "/images/hero3.JPG",
+  "/images/hero1.png",
+  "/images/hero5.png",
+  "/images/hero3.png",
   "/images/hero4.jpg",
 ];
 
@@ -45,6 +45,8 @@ export function HeroSlideshow() {
                 alt="NOCF Hero"
                 fill
                 priority={index === 0}
+                quality={100}
+                unoptimized={true}
                 className="object-cover"
               />
             </div>
@@ -54,7 +56,7 @@ export function HeroSlideshow() {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(90deg, rgba(1, 13, 25, 0.78), rgba(1, 13, 25, 0.35), rgba(1, 13, 25, 0.10))",
+                "linear-gradient(90deg, rgba(1, 13, 25, 0.98) 0%, rgba(1, 13, 25, 0.85) 30%, rgba(1, 13, 25, 0.4) 70%, rgba(1, 13, 25, 0.1) 100%)",
             }}
           />
         </div>
@@ -97,7 +99,7 @@ export function HeroSlideshow() {
             </Button>
             <Button
               href="/volunteer"
-              className="flex-1 sm:flex-none sm:w-auto px-4 sm:px-8 bg-white/20 text-white hover:bg-white/30 border border-white/20"
+              className="flex-1 sm:flex-none sm:w-auto px-4 sm:px-8 bg-white/20 text-white hover:bg-[#F82C00] hover:border-[#F82C00] border border-white/20 transition-colors"
             >
               Become a volunteer
             </Button>

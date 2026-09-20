@@ -20,7 +20,7 @@ const DISPATCHES = [
     date: "December 2025",
     title: "Cooking for a street you don't know",
     excerpt:
-      "Notes from the community kitchen that feeds the Ikeja outreach every December — 40 pots, 11 hours.",
+      "Notes from the community kitchen that feeds the Ikeja outreach every December  40 pots, 11 hours.",
     image: "/images/stories2.jpg",
     href: "https://medium.com/@nnennaorjicharityfoundation",
   },

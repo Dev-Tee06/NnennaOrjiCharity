@@ -65,12 +65,12 @@ export default function PledgesDonationsPage() {
           donor: `${fName} ${lName}`.trim(),
           email: email,
           phone: phone,
-          category: d.donation_type === 'food' ? 'Food Donation' : 
-                    d.donation_type === 'cloth' ? 'Clothing Donation' : 
-                    d.donation_type === 'medical_supply' ? 'Medical Supplies' : 'Uncategorized',
-          categoryColor: d.donation_type === 'food' ? 'text-orange-600 bg-orange-50' :
-                         d.donation_type === 'cloth' ? 'text-blue-600 bg-blue-50' :
-                         d.donation_type === 'medical_supply' ? 'text-red-600 bg-red-50' :
+          category: (d.donation_type === 'food' || d.donation_type === 'Food') ? 'Food' : 
+                    (d.donation_type === 'cloth' || d.donation_type === 'Clothing') ? 'Clothing' : 
+                    (d.donation_type === 'medical_supply' || d.donation_type === 'Medical Supply') ? 'Medical Supply' : 'Uncategorized',
+          categoryColor: (d.donation_type === 'food' || d.donation_type === 'Food') ? 'text-orange-600 bg-orange-50' :
+                         (d.donation_type === 'cloth' || d.donation_type === 'Clothing') ? 'text-blue-600 bg-blue-50' :
+                         (d.donation_type === 'medical_supply' || d.donation_type === 'Medical Supply') ? 'text-red-600 bg-red-50' :
                          'text-gray-600 bg-gray-50',
           quantity: d.quantity || 1,
           items: `${d.quantity || 1} items`,
@@ -137,7 +137,7 @@ export default function PledgesDonationsPage() {
       <TopHeader title="Pledges & Donations" />
       <MobilePageTitle title="Pledges & Donations" />
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-8">
+      <div className="flex-1 overflow-y-auto p-4 md:p-4">
         
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-6 w-full">
           <div>
@@ -154,7 +154,7 @@ export default function PledgesDonationsPage() {
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-white border border-border rounded-lg p-4 shadow-sm flex flex-col justify-center">
             <span className="text-2xl font-heading font-bold text-blackKnight">{pledges.length}</span>
             <span className="text-xs font-bold text-text-secondary uppercase tracking-wider mt-1">Total Pledges</span>
@@ -166,16 +166,10 @@ export default function PledgesDonationsPage() {
             <span className="text-xs font-bold text-text-secondary uppercase tracking-wider mt-1">Items Collected</span>
           </div>
           <div className="bg-white border border-border rounded-lg p-4 shadow-sm flex flex-col justify-center">
-            <span className="text-2xl font-heading font-bold text-blue-600">
-                {pledges.filter(p => p.status === 'In Transit').length}
-              </span>
-            <span className="text-xs font-bold text-text-secondary uppercase tracking-wider mt-1">Active Deliveries</span>
-          </div>
-          <div className="bg-white border border-border rounded-lg p-4 shadow-sm flex flex-col justify-center">
             <span className="text-2xl font-heading font-bold text-orangeRed1">
                 {pledges.filter(p => p.status === 'Pending').length}
               </span>
-            <span className="text-xs font-bold text-text-secondary uppercase tracking-wider mt-1">Outstanding Pickups</span>
+            <span className="text-xs font-bold text-text-secondary uppercase tracking-wider mt-1">Pending</span>
           </div>
         </div>
 

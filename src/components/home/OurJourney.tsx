@@ -123,7 +123,7 @@ export function OurJourney() {
   };
 
   return (
-    <section className="bg-[#FDF8F6] pt-[40px] pb-[60px] md:pt-[100px] md:pb-[120px] overflow-hidden">
+    <section className="bg-[#FDF8F6] pt-[40px] pb-[60px] md:pt-[40px] md:pb-[60px] overflow-hidden">
       <div className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 flex flex-col">
         {/* Header */}
         <div className="flex flex-col items-start gap-4 mb-[50px] md:mb-[60px]">

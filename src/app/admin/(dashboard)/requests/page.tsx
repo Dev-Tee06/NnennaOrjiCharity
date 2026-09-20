@@ -101,7 +101,7 @@ export default function PartnershipInquiriesPage() {
       <TopHeader title="Corporate & Strategic Partnership Inquiries" />
       <MobilePageTitle title="Corporate & Strategic Partnership Inquiries" />
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-8">
+      <div className="flex-1 overflow-y-auto p-4 md:p-4">
         <div className="bg-white border border-border rounded-xl shadow-sm overflow-hidden flex flex-col min-h-[400px] w-full min-w-0">
           
           <div className="p-4 border-b border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">

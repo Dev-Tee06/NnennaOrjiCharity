@@ -39,9 +39,14 @@ export function StoriesAndImpact() {
             </h2>
           </div>
 
-          <button className="group flex items-center justify-center gap-2 bg-[#070D16] text-[#FFFFFF] rounded-[6px] h-[43px] md:h-[48px] px-[20px] md:px-[24px] font-body font-semibold text-[10px] md:text-[12px] transition-transform duration-300 hover:-translate-y-1">
-            Read Our Stories
-          </button>
+          <a
+            href="https://medium.com/@nnennaorjicharityfoundation"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center justify-center gap-2 bg-[#070D16] text-[#FFFFFF] rounded-[6px] h-[43px] md:h-[48px] px-[20px] md:px-[24px] font-body font-semibold text-[10px] md:text-[12px] transition-transform duration-300 hover:-translate-y-1"
+          >
+            Read Our Stories on Medium
+          </a>
         </div>
 
         {/* Story Grid */}
@@ -66,9 +71,21 @@ export function StoriesAndImpact() {
                 <h3 className="font-heading font-bold text-[16px] md:text-[18px] leading-[1.25] text-[#171717] mt-[12px] md:mt-[15px]">
                   {story.title}
                 </h3>
-                <p className="font-body font-normal text-[11px] md:text-[12px] leading-[1.5] text-[#777777] mt-[10px] md:mt-[12px]">
+                <p className="font-body font-normal text-[11px] md:text-[12px] leading-[1.5] text-[#777777] mt-[10px] md:mt-[12px] mb-4">
                   {story.desc}
                 </p>
+                <a
+                  href="https://medium.com/@nnennaorjicharityfoundation"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto font-body font-bold text-[11px] md:text-[12px] text-[#FF4500] hover:text-[#D13800] transition-colors flex items-center gap-1 w-fit"
+                >
+                  Read on Medium
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
               </div>
             </div>
           ))}

@@ -38,7 +38,6 @@ export function WhatPeopleSay() {
               WHAT PEOPLE SAY
             </span>
           </div>
-          ''{" "}
         </div>
 
         {/* Featured Testimonial */}

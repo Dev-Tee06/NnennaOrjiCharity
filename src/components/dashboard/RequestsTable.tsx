@@ -21,19 +21,6 @@ export function RequestsTable() {
   const [searchTerm, setSearchTerm] = useState('');
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchRequests();
-    
-    const channel = supabase
-      .channel('requests-table')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'company_requests' }, fetchRequests)
-      .subscribe();
-      
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
   const fetchRequests = async () => {
     setIsLoading(true);
     const { data, error } = await supabase
@@ -46,6 +33,20 @@ export function RequestsTable() {
     }
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    fetchRequests();
+    
+    const channel = supabase
+      .channel('requests-table')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'company_requests' }, fetchRequests)
+      .subscribe();
+      
+    return () => {
+      supabase.removeChannel(channel);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const filteredRequests = requests.filter((r) => {
     const searchLower = searchTerm.toLowerCase();

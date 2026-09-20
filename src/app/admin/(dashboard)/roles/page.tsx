@@ -56,7 +56,7 @@ export default function AdminRolesPage() {
       <TopHeader title="Admin Portal Users & Permissions" />
       <MobilePageTitle title="Admin Portal Users & Permissions" />
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-8 relative">
+      <div className="flex-1 overflow-y-auto p-4 md:p-4 relative">
         
         {showSuccessBanner && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 flex justify-between items-center shadow-sm">

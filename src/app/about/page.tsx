@@ -116,7 +116,7 @@ export default function About() {
     <div className="bg-[#FAFAFA] pb-24">
       {/* Hero */}
       <section className="pt-[100px] pb-[80px] md:pt-[140px] md:pb-[100px] px-4 md:px-8 xl:px-12 flex flex-col items-center text-center">
-        <div className="flex items-center gap-2 mb-6 md:mb-8">
+        <div className="flex items-center gap-2 mb-3 md:mb-4">
           <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.15em] uppercase text-[#FF4500]">
             ABOUT OUR FOUNDATION
           </span>
@@ -124,7 +124,7 @@ export default function About() {
         <h1 className="font-heading font-bold text-[32px] md:text-[45px] lg:text-[56px] leading-[1.05] tracking-tight text-[#171717] max-w-[800px]">
           From Project 26 to the Nnenna Orji Charity Foundation.
         </h1>
-        <p className="font-body text-[14px] md:text-[16px] text-[#777777] mt-6 md:mt-8 max-w-[650px] leading-[1.6]">
+        <p className="font-body text-[14px] md:text-[16px] text-[#777777] mt-4 md:mt-5 max-w-[650px] leading-[1.6]">
           We are not a large organisation. We are a disciplined one. What
           follows is the honest record of how a one-street meal drive became a
           two-city foundation.
@@ -135,7 +135,7 @@ export default function About() {
       <section className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 pb-[60px] md:pb-[140px]">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-[100px] items-start">
           {/* Left: Text */}
-          <div className="flex flex-col gap-6 font-body text-[14px] md:text-[15px] text-[#171717] leading-[1.75]">
+          <div className="flex flex-col gap-4 font-body text-[14px] md:text-[15px] text-[#171717] leading-[1.75]">
             <p>We are not a large organisation. We are a disciplined one.</p>
             <p>
               What follows is the story of how one vision, a group of friends
@@ -145,35 +145,35 @@ export default function About() {
             <p>
               On 26 December 2020, one visioner and her group of friends came
               together with a simple desire: to bring food and a little joy to
-              people in their community during the Christmas season.They
+              people in their community during the Christmas season. They
               prepared 120 plates of jollof rice and took them to Ajah Under
               Bridge, Lagos, where they shared the meals with people in the
-              community.There was no elaborate organisation behind it.Just a
+              community. There was no elaborate organisation behind it. Just a
               vision, willing hands and the belief that something good could
-              begin with what they had.They called it Project 26, after the date
-              of the outreach.What began as a single Boxing Day meal would
-              eventually become something much bigger.The following year, they
-              discovered a limitation of the hot meal:It ends.So they began
-              thinking beyond the meal.They added the box.Food staples,
+              begin with what they had. They called it Project 26, after the date
+              of the outreach. What began as a single Boxing Day meal would
+              eventually become something much bigger. The following year, they
+              discovered a limitation of the hot meal: It ends. So they began
+              thinking beyond the meal. They added the box. Food staples,
               essential items and clothing contributed and prepared by
               volunteers became part of what would eventually become A Box of
-              Hope.The idea was simple: if a meal could provide nourishment for
+              Hope. The idea was simple: if a meal could provide nourishment for
               a moment, a box could provide something that lasted a little
-              longer.And so, Project 26 began to evolve.
+              longer. And so, Project 26 began to evolve.
             </p>
             <p>
-              By 2022, the operation had outgrown goodwill.A volunteer roster
+              By 2022, the operation had outgrown goodwill. A volunteer roster
               was written down. A sorting protocol replaced the pile on the
               floor. Procurement became more deliberate, moving from individual
-              retail purchases towards bulk buying.The work was becoming more
-              organised.Not because the heart behind it had changed, but because
-              the vision had grown.In 2023, the work extended to Kano, creating
-              a second outreach hub.In 2024, Project 26 formally became the
+              retail purchases towards bulk buying. The work was becoming more
+              organised. Not because the heart behind it had changed, but because
+              the vision had grown. In 2023, the work extended to Kano, creating
+              a second outreach hub. In 2024, Project 26 formally became the
               Nnenna Orji Charity Foundation, giving the work a formal
-              organisational structure.And by 2026, the cumulative number of
-              boxes and meals distributed had passed 800.Today, NOCF continues
+              organisational structure. And by 2026, the cumulative number of
+              boxes and meals distributed had passed 800. Today, NOCF continues
               to grow while holding on to the principle that started
-              everything:Give what you can. Show up. And make sure people know
+              everything: Give what you can. Show up. And make sure people know
               they have not been forgotten.
             </p>
           </div>

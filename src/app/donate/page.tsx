@@ -148,8 +148,8 @@ function DonateContent() {
           <div className="bg-white border border-border rounded-[10px] p-1.5 flex overflow-x-auto hide-scrollbar snap-x">
             {[
               { id: "cash", label: "Cash" },
-              { id: "food", label: "Food Items" },
-              { id: "clothing", label: "Clothing" },
+              { id: "food", label: "Food" },
+              { id: "clothing", label: "Clothes" },
               { id: "medical", label: "Medical Supplies" },
             ].map((tab) => (
               <button

@@ -108,31 +108,32 @@ export default function RootLayout({
                 name: "Nnenna Orji Charity Foundation",
                 url: "https://nnennaorjicharityfoundation.org",
                 logo: "https://nnennaorjicharityfoundation.org/images/brand-logo.png",
-                description: "A Nigerian foundation built on one simple December tradition: packing a box, and handing it to someone who did not expect to be remembered. Sharing love everywhere.",
+                description:
+                  "A Nigerian foundation built on one simple December tradition: packing a box, and handing it to someone who did not expect to be remembered. Sharing love everywhere.",
                 address: [
                   {
                     "@type": "PostalAddress",
-                    streetAddress: "12 Adeniyi Jones Avenue",
-                    addressLocality: "Ikeja",
+                    streetAddress: "Solomade Estate, Ikorodu, Lagos",
+                    addressLocality: "Ikorodu",
                     addressRegion: "Lagos State",
-                    addressCountry: "Nigeria"
+                    addressCountry: "Nigeria",
                   },
                   {
                     "@type": "PostalAddress",
-                    streetAddress: "8 Zoo Road, Nassarawa",
+                    streetAddress: "Church Road, Sabon Gari, Kano, Nigeria.",
                     addressLocality: "Kano",
                     addressRegion: "Kano State",
-                    addressCountry: "Nigeria"
-                  }
+                    addressCountry: "Nigeria",
+                  },
                 ],
                 contactPoint: {
                   "@type": "ContactPoint",
-                  email: "eniobadeji@gmail.com",
+                  email: "contactus@nnennaorjicharityfoundation.org",
                   telephone: "+2348030000000",
-                  contactType: "customer support"
-                }
-              }
-            ])
+                  contactType: "customer support",
+                },
+              },
+            ]),
           }}
         />
         <GlobalLayoutWrapper>{children}</GlobalLayoutWrapper>

@@ -4,7 +4,7 @@ import { AnimatedCounter } from "../AnimatedCounter";
 
 export function OurImpact() {
   return (
-    <section className="relative bg-[#070D16] py-[40px] md:py-[120px] overflow-hidden">
+    <section className="relative bg-[#070D16] py-[40px] md:py-[40px] overflow-hidden">
       {/* Background Pattern */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.06] mix-blend-overlay"

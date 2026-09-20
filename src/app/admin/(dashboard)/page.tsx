@@ -49,12 +49,11 @@ export default function AdminDashboard() {
     const { data: rData } = await supabase.from('company_requests').select('*').order('created_at', { ascending: false }).limit(5);
     
     if (dData) {
-      // Exclude any legacy cash donations from total stats since we removed them
       const validPledges = dData.filter(d => d.donation_type !== 'cash');
 
-      const food = validPledges.filter(d => d.donation_type === 'food').length;
-      const cloth = validPledges.filter(d => d.donation_type === 'cloth').length;
-      const medical = validPledges.filter(d => d.donation_type === 'medical_supply').length;
+      const food = validPledges.filter(d => d.donation_type === 'food' || d.donation_type === 'Food').length;
+      const cloth = validPledges.filter(d => d.donation_type === 'cloth' || d.donation_type === 'Clothing').length;
+      const medical = validPledges.filter(d => d.donation_type === 'medical_supply' || d.donation_type === 'Medical Supply').length;
       
       const collected = validPledges.filter(d => ['Handed Over', 'Resolved', 'Completed'].includes(d.status)).length;
       const inProgress = validPledges.filter(d => d.status === 'In Transit' || d.status === 'Processing').length;
@@ -88,7 +87,7 @@ export default function AdminDashboard() {
       <TopHeader title="Dashboard Overview" />
       <MobilePageTitle title="Dashboard Overview" />
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-8">
+      <div className="flex-1 overflow-y-auto p-4 md:p-4">
         <div className="space-y-6 max-w-[1200px] mx-auto pb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full">
             <div>
@@ -231,9 +230,9 @@ export default function AdminDashboard() {
                         <div className="flex flex-col">
                           <span className="text-sm font-bold text-blackKnight">{d.first_name || d.donors?.first_name || 'Anonymous'} {d.last_name || d.donors?.last_name || ''}</span>
                           <span className="text-xs text-text-secondary">
-                            {d.donation_type === 'food' ? 'Food Donation' : 
-                             d.donation_type === 'cloth' ? 'Clothing Donation' : 
-                             d.donation_type === 'medical_supply' ? 'Medical Supplies' : 
+                            {(d.donation_type === 'food' || d.donation_type === 'Food') ? 'Food' : 
+                             (d.donation_type === 'cloth' || d.donation_type === 'Clothing') ? 'Clothing' : 
+                             (d.donation_type === 'medical_supply' || d.donation_type === 'Medical Supply') ? 'Medical Supply' : 
                              'Uncategorized'}
                           </span>
                         </div>

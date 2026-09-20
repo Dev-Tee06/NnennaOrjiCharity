@@ -39,7 +39,7 @@ export default function ProfilePage() {
       <TopHeader title="Edit Admin Profile" />
       <MobilePageTitle title="Edit Admin Profile" />
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-8">
+      <div className="flex-1 overflow-y-auto p-4 md:p-4">
         
         {showSuccess && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex justify-between items-center shadow-sm">
