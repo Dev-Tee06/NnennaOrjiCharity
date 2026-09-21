@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Button } from "@/components/Button";
 import { Metadata } from "next";
+import { AboutGallery } from "./AboutGallery";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -109,6 +110,12 @@ const GALLERY = [
   "/images/about.JPG",
   "/images/about-volunteer.jpg",
   "/images/about-us-1.jpg",
+  "/images/about-volunteer5.jpg",
+  "/images/about-volunteer6.jpg",
+  "/images/about-volunteer7.jpg",
+  "/images/about-volunteer8.jpg",
+  "/images/about-image9.jpg",
+  "/images/volunteer2.jpg",
 ];
 
 export default function About() {
@@ -150,8 +157,8 @@ export default function About() {
               Bridge, Lagos, where they shared the meals with people in the
               community. There was no elaborate organisation behind it. Just a
               vision, willing hands and the belief that something good could
-              begin with what they had. They called it Project 26, after the date
-              of the outreach. What began as a single Boxing Day meal would
+              begin with what they had. They called it Project 26, after the
+              date of the outreach. What began as a single Boxing Day meal would
               eventually become something much bigger. The following year, they
               discovered a limitation of the hot meal: It ends. So they began
               thinking beyond the meal. They added the box. Food staples,
@@ -166,13 +173,13 @@ export default function About() {
               was written down. A sorting protocol replaced the pile on the
               floor. Procurement became more deliberate, moving from individual
               retail purchases towards bulk buying. The work was becoming more
-              organised. Not because the heart behind it had changed, but because
-              the vision had grown. In 2023, the work extended to Kano, creating
-              a second outreach hub. In 2024, Project 26 formally became the
-              Nnenna Orji Charity Foundation, giving the work a formal
-              organisational structure. And by 2026, the cumulative number of
-              boxes and meals distributed had passed 800. Today, NOCF continues
-              to grow while holding on to the principle that started
+              organised. Not because the heart behind it had changed, but
+              because the vision had grown. In 2023, the work extended to Kano,
+              creating a second outreach hub. In 2024, Project 26 formally
+              became the Nnenna Orji Charity Foundation, giving the work a
+              formal organisational structure. And by 2026, the cumulative
+              number of boxes and meals distributed had passed 800. Today, NOCF
+              continues to grow while holding on to the principle that started
               everything: Give what you can. Show up. And make sure people know
               they have not been forgotten.
             </p>
@@ -312,11 +319,12 @@ export default function About() {
 
       {/* Founder Testimonial */}
       <section className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 py-[20px] md:py-[80px]">
-        <div 
-          className="rounded-[24px] p-6 md:p-12 lg:p-[70px] relative overflow-hidden flex flex-col lg:flex-row gap-12 lg:gap-[80px] items-center bg-[url('/images/bg-drop.png')] bg-cover bg-center bg-no-repeat md:bg-fixed"
-        >
+        <div className="rounded-[24px] p-6 md:p-12 lg:p-[70px] relative overflow-hidden flex flex-col lg:flex-row gap-12 lg:gap-[80px] items-center bg-[url('/images/bg-drop.png')] bg-cover bg-center bg-no-repeat md:bg-fixed">
           {/* Background Overlay */}
-          <div className="absolute inset-0 bg-[#080E18] opacity-[0.98] pointer-events-none" aria-hidden="true" />
+          <div
+            className="absolute inset-0 bg-[#080E18] opacity-[0.98] pointer-events-none"
+            aria-hidden="true"
+          />
 
           {/* Left: Image */}
           <div className="relative z-10 w-full lg:w-[45%] flex-shrink-0">
@@ -458,29 +466,7 @@ export default function About() {
             delivery mornings.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {GALLERY.map((src, i) => (
-              <div
-                key={i}
-                className="relative aspect-[4/3] w-full overflow-hidden bg-[#F5F5F5]"
-              >
-                <Image
-                  src={src}
-                  alt={`Outreach Image ${i + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-start">
-            <Button
-              href="/volunteer"
-              className="bg-[#FF4500] hover:bg-[#E63E00] text-white font-heading font-bold text-[11px] px-8 h-[48px] rounded-[6px] tracking-wide"
-            >
-              Join Our Volunteers
-            </Button>
-          </div>
+          <AboutGallery images={GALLERY} />
         </div>
       </section>
     </div>

@@ -7,7 +7,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Volunteer",
-  description: "Join the Nnenna Orji Charity Foundation as a volunteer. Help us sort, pack, cook, and deliver boxes of hope in Lagos and Kano.",
+  description:
+    "Join the Nnenna Orji Charity Foundation as a volunteer. Help us sort, pack, cook, and deliver boxes of hope in Lagos and Kano.",
   alternates: {
     canonical: "/volunteer",
   },
@@ -42,8 +43,8 @@ const VOLUNTEER_GALLERY = [
   "/images/volunteer2.jpg",
   "/images/volunteer3.JPG",
   "/images/volunteer4.JPG",
-  "/images/who-we-are.jpg",
-  "/images/volunteer-image.jpg",
+  "/images/volunteer-image9.jpg",
+  "/images/volunteer-image10.jpg",
 ];
 
 export default function Volunteer() {
