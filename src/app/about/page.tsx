@@ -313,16 +313,10 @@ export default function About() {
       {/* Founder Testimonial */}
       <section className="max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 py-[20px] md:py-[80px]">
         <div 
-          className="rounded-[24px] p-6 md:p-12 lg:p-[70px] relative overflow-hidden flex flex-col lg:flex-row gap-12 lg:gap-[80px] items-center"
-          style={{
-            backgroundImage: "url('/images/bg-drop.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundAttachment: "fixed",
-          }}
+          className="rounded-[24px] p-6 md:p-12 lg:p-[70px] relative overflow-hidden flex flex-col lg:flex-row gap-12 lg:gap-[80px] items-center bg-[url('/images/bg-drop.png')] bg-cover bg-center bg-no-repeat md:bg-fixed"
         >
           {/* Background Overlay */}
-          <div className="absolute inset-0 bg-[#080E18] opacity-[0.99] pointer-events-none" aria-hidden="true" />
+          <div className="absolute inset-0 bg-[#080E18] opacity-[0.98] pointer-events-none" aria-hidden="true" />
 
           {/* Left: Image */}
           <div className="relative z-10 w-full lg:w-[45%] flex-shrink-0">

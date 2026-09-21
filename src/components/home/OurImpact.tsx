@@ -5,16 +5,10 @@ import { AnimatedCounter } from "../AnimatedCounter";
 export function OurImpact() {
   return (
     <section
-      className="relative py-[40px] md:py-[40px] overflow-hidden"
-      style={{
-        backgroundImage: "url('/images/bg-drop.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
+      className="relative py-[40px] md:py-[40px] overflow-hidden bg-[url('/images/bg-drop.png')] bg-cover bg-center bg-no-repeat md:bg-fixed"
     >
       {/* Background Overlay */}
-      <div className="absolute inset-0 bg-[#080E18] opacity-[0.99] pointer-events-none" />
+      <div className="absolute inset-0 bg-[#080E18] opacity-[0.98] pointer-events-none" />
       <div className="absolute inset-0 bg-[#FF4500] opacity-5 mix-blend-color pointer-events-none" />
 
       <div className="relative z-10 max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">

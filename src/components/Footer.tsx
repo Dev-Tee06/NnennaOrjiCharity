@@ -128,16 +128,10 @@ function NewsletterForm() {
 export function Footer() {
   return (
     <footer 
-      className="relative overflow-hidden text-white"
-      style={{
-        backgroundImage: "url('/images/bg-drop.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
+      className="relative overflow-hidden text-white bg-[url('/images/bg-drop.png')] bg-cover bg-center bg-no-repeat md:bg-fixed"
     >
       {/* Background Overlay */}
-      <div className="absolute inset-0 bg-[#080E18] opacity-[0.99] pointer-events-none" aria-hidden="true" />
+      <div className="absolute inset-0 bg-[#080E18] opacity-[0.98] pointer-events-none" aria-hidden="true" />
 
       <div className="relative z-10 max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12 pt-20 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">

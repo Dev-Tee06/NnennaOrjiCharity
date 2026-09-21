@@ -118,15 +118,9 @@ export default function Home() {
 
       {/* Box of Hope */}
       <section
-        className="relative py-10 md:py-20 lg:py-[120px] overflow-hidden"
-        style={{
-          backgroundImage: "url('/images/bg-drop.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-        }}
+        className="relative py-10 md:py-20 lg:py-[120px] overflow-hidden bg-[url('/images/bg-drop.png')] bg-cover bg-center bg-no-repeat md:bg-fixed"
       >
-        <div className="absolute inset-0 bg-[#080E18] opacity-[0.99] pointer-events-none" />
+        <div className="absolute inset-0 bg-[#080E18] opacity-[0.98] pointer-events-none" />
         <div className="relative z-10 max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
             <div className="flex flex-col items-start gap-6">
