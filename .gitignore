@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Temporary utility scripts with hardcoded credentials
+fix.mjs
+get_donations.mjs
+get_enum.mjs
+get_requests.mjs
+get_schema.mjs
+get_tables.mjs
+map_data.mjs
+get_*.js
+patch_*.js
+refactor_headers.js
+revert_hidden_text.js

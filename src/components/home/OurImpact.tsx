@@ -4,18 +4,18 @@ import { AnimatedCounter } from "../AnimatedCounter";
 
 export function OurImpact() {
   return (
-    <section className="relative bg-[#070D16] py-[40px] md:py-[40px] overflow-hidden">
-      {/* Background Pattern */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.06] mix-blend-overlay"
-        style={{
-          backgroundImage: "url('/images/bg-drop.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundColor: "#FF4500", // Just to add the tint mentioned
-        }}
-      />
-      <div className="absolute inset-0 pointer-events-none bg-[#FF4500]/5 mix-blend-color" />
+    <section
+      className="relative py-[40px] md:py-[40px] overflow-hidden"
+      style={{
+        backgroundImage: "url('/images/bg-drop.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      {/* Background Overlay */}
+      <div className="absolute inset-0 bg-[#080E18] opacity-[0.99] pointer-events-none" />
+      <div className="absolute inset-0 bg-[#FF4500] opacity-5 mix-blend-color pointer-events-none" />
 
       <div className="relative z-10 max-w-[1320px] mx-auto px-4 md:px-8 xl:px-12">
         <div className="flex flex-col lg:flex-row justify-between gap-16 lg:gap-8">
