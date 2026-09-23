@@ -36,7 +36,7 @@ const DISPATCHES = [
   {
     category: "TRANSPARENCY",
     date: "March 2025",
-    title: "Where ₦50 million went",
+    title: "Where ₦7 million went",
     excerpt:
       "A line-by-line breakdown of aid delivered since 2020, and how we price a box at market rate.",
     image: "/images/stories4.jpg",

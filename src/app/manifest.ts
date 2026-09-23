@@ -2,10 +2,10 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Nnenna Orji Charity Foundation",
-    short_name: "Nnenna Orji Charity Foundation",
+    name: "Nnenna Charity Oji Foundation",
+    short_name: "Nnenna Charity Oji Foundation",
     description:
-      "A Nigerian foundation built on one simple December tradition: packing a box, and handing it to someone who did not expect to be remembered.",
+      "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
     start_url: "/",
     display: "standalone",
     background_color: "#fff",

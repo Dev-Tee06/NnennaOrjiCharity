@@ -17,17 +17,17 @@ import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nnennaorjicharityfoundation.org"),
+  metadataBase: new URL("https://www.nnennaorjicharityfoundation.org"),
   title: {
-    template: "%s | Nnenna Orji Charity Foundation",
-    default: "Nnenna Orji Charity Foundation",
+    template: "%s | Nnenna Charity Oji Foundation",
+    default: "Nnenna Charity Oji Foundation",
   },
-  applicationName: "Nnenna Orji Charity Foundation",
+  applicationName: "Nnenna Charity Oji Foundation",
   appleWebApp: {
-    title: "Nnenna Orji Charity Foundation",
+    title: "Nnenna Charity Oji Foundation",
   },
   description:
-    "A Nigerian foundation built on one simple December tradition: packing a box, and handing it to someone who did not expect to be remembered. Sharing love everywhere.",
+    "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
   keywords: [
     "Charity",
     "Foundation",
@@ -40,12 +40,16 @@ export const metadata: Metadata = {
     "Project 26",
     "Nnenna Orji Charity Foundation",
   ],
+  icons: {
+    icon: "/images/favicon.jpg",
+    apple: "/images/favicon.jpg",
+  },
   openGraph: {
-    title: "Nnenna Orji Charity Foundation",
+    title: "Nnenna Charity Oji Foundation",
     description:
-      "Sharing Love Everywhere With A Box Full of Hope. Join our mission to deliver essential resources across Nigeria.",
-    url: "https://nnennaorjicharityfoundation.org",
-    siteName: "Nnenna Orji Charity Foundation",
+      "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
+    url: "https://www.nnennaorjicharityfoundation.org",
+    siteName: "Nnenna Charity Oji Foundation",
     images: [
       {
         url: "/images/footer-logo.png",
@@ -59,8 +63,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nnenna Orji Charity Foundation",
-    description: "Sharing Love Everywhere With A Box Full of Hope.",
+    title: "Nnenna Charity Oji Foundation",
+    description: "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
     images: ["/images/footer-logo.png"],
   },
   robots: {
@@ -96,17 +100,19 @@ export default function RootLayout({
               {
                 "@context": "https://schema.org",
                 "@type": "WebSite",
-                name: "Nnenna Orji Charity Foundation",
-                url: "https://nnennaorjicharityfoundation.org",
+                name: "Nnenna Charity Oji Foundation",
+                alternateName: "Nnenna Orji Charity Foundation",
+                url: "https://www.nnennaorjicharityfoundation.org",
               },
               {
                 "@context": "https://schema.org",
                 "@type": "NGO",
-                name: "Nnenna Orji Charity Foundation",
-                url: "https://nnennaorjicharityfoundation.org",
-                logo: "https://nnennaorjicharityfoundation.org/images/brand-logo.png",
+                name: "Nnenna Charity Oji Foundation",
+                alternateName: "Nnenna Orji Charity Foundation",
+                url: "https://www.nnennaorjicharityfoundation.org",
+                logo: "https://www.nnennaorjicharityfoundation.org/images/favicon.jpg",
                 description:
-                  "A Nigerian foundation built on one simple December tradition: packing a box, and handing it to someone who did not expect to be remembered. Sharing love everywhere.",
+                  "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
                 address: [
                   {
                     "@type": "PostalAddress",

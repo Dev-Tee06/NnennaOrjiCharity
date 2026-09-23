@@ -201,7 +201,7 @@ export default function Volunteer() {
           <div className="w-full order-2 lg:order-1">
             <div className="relative aspect-[1/0.95] w-full rounded-[7px] overflow-hidden bg-border">
               <Image
-                src="/images/who-we-are.jpg"
+                src="/images/volunteers.jpg"
                 alt="Volunteer Culture"
                 fill
                 className="object-cover"

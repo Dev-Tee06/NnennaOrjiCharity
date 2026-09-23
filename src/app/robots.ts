@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/admin/"],
     },
-    sitemap: "https://nnennaorjicharityfoundation.org/sitemap.xml",
+    sitemap: "https://www.nnennaorjicharityfoundation.org/sitemap.xml",
   };
 }
