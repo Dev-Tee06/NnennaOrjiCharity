@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Mail, Phone, ArrowRight } from "lucide-react";
 import { Button } from "./Button";
 import { FooterLogo } from "./FooterLogo";
+import { sendGAEvent } from "@next/third-parties/google";
 
 function Facebook({ size = 18 }) {
   return (
@@ -81,6 +82,7 @@ function NewsletterForm() {
         const errText = await res.text();
         throw new Error(`Failed to subscribe: ${errText}`);
       }
+      sendGAEvent({ event: "newsletter_signup" });
       setStatus("success");
       setEmail("");
     } catch (error) {
@@ -149,12 +151,14 @@ export function Footer() {
               <a
                 href="https://www.linkedin.com/company/nnennaorjicharityorganization"
                 className="flex items-center justify-center w-10 h-10 rounded-[8px] border border-white/20 hover:border-orangeRed1 hover:bg-orangeRed1 hover:text-white transition-colors text-white/80"
+                onClick={() => sendGAEvent({ event: "social_media_click" })}
               >
                 <Linkedin size={18} />
               </a>
               <a
                 href="https://x.com/nocfhq"
                 className="flex items-center justify-center w-10 h-10 rounded-[8px] border border-white/20 hover:border-orangeRed1 hover:bg-orangeRed1 hover:text-white transition-colors text-white/80"
+                onClick={() => sendGAEvent({ event: "social_media_click" })}
               >
                 <svg
                   width="18"
@@ -173,6 +177,7 @@ export function Footer() {
               <a
                 href="https://www.tiktok.com/@nocfhq"
                 className="flex items-center justify-center w-10 h-10 rounded-[8px] border border-white/20 hover:border-orangeRed1 hover:bg-orangeRed1 hover:text-white transition-colors text-white/80"
+                onClick={() => sendGAEvent({ event: "social_media_click" })}
               >
                 <svg
                   width="18"
@@ -190,6 +195,7 @@ export function Footer() {
               <a
                 href="https://www.instagram.com/nnennaorjicharityfoundation"
                 className="flex items-center justify-center w-10 h-10 rounded-[8px] border border-white/20 hover:border-orangeRed1 hover:bg-orangeRed1 hover:text-white transition-colors text-white/80"
+                onClick={() => sendGAEvent({ event: "social_media_click" })}
               >
                 <Instagram size={18} />
               </a>
@@ -259,6 +265,7 @@ export function Footer() {
                 <a
                   href="tel:+2348030000000"
                   className="flex items-center gap-3 font-body text-[14px] text-white/80 hover:text-orangeRed1 transition-colors group"
+                  onClick={() => sendGAEvent({ event: "phone_click" })}
                 >
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 group-hover:bg-orangeRed1/10 transition-colors">
                     <Phone size={14} className="text-orangeRed1" />

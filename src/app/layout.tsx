@@ -14,12 +14,13 @@ const productSansFallback = DM_Sans({
 
 import { GlobalLayoutWrapper } from "@/components/GlobalLayoutWrapper";
 import { Analytics } from "@vercel/analytics/react";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nnennaorjicharityfoundation.org"),
   title: {
     template: "%s | Nnenna Orji Charity Foundation",
-    default: "Nnenna Orji Charity Foundation | A Box Full of Hope",
+    default: "Nnenna Orji Charity Foundation",
   },
   applicationName: "Nnenna Orji Charity Foundation",
   appleWebApp: {
@@ -65,14 +66,6 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-  },
-  icons: {
-    icon: [
-      { url: "/icon-48.png", sizes: "48x48", type: "image/png" },
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: "/icon-192.png",
   },
   alternates: {
     canonical: "/",
@@ -142,6 +135,7 @@ export default function RootLayout({
         />
         <GlobalLayoutWrapper>{children}</GlobalLayoutWrapper>
         <Analytics />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || "G-XXXXXXXXXX"} />
       </body>
     </html>
   );

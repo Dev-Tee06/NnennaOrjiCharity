@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import { Button } from "@/components/Button";
 import { ShieldCheck, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
+import { sendGAEvent } from "@next/third-parties/google";
 
 type DonationType = "cash" | "food" | "clothing" | "medical";
 
@@ -18,6 +19,10 @@ function DonateContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const supabase = createClient();
   const router = useRouter();
+
+  useEffect(() => {
+    sendGAEvent({ event: "donation_page_view" });
+  }, []);
 
   // State for cash
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
@@ -83,6 +88,7 @@ function DonateContent() {
         throw new Error(`Failed to process donation: ${errText}`);
       }
 
+      sendGAEvent({ event: "donation_complete" });
       router.push("/success");
     } catch (error) {
       console.error(error);

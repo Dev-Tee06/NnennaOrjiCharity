@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { sendGAEvent } from "@next/third-parties/google";
 
 export function FoundationUpdate() {
   const [email, setEmail] = useState("");
@@ -20,6 +21,7 @@ export function FoundationUpdate() {
         const errText = await res.text();
         throw new Error(`Failed to subscribe: ${errText}`);
       }
+      sendGAEvent({ event: "newsletter_signup" });
       setStatus("success");
       setEmail("");
     } catch (error) {

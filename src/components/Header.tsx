@@ -8,6 +8,8 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./Button";
 
+import { sendGAEvent } from "@next/third-parties/google";
+
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
@@ -75,6 +77,7 @@ export function Header() {
             href="/donate"
             variant="primary"
             className="px-5 py-2.5 rounded-[8px]"
+            onClick={() => sendGAEvent({ event: "donation_click" })}
           >
             Donate Now
           </Button>
@@ -135,7 +138,10 @@ export function Header() {
               href="/donate"
               variant="primary"
               className="w-full"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                sendGAEvent({ event: "donation_click" });
+              }}
             >
               Donate Now
             </Button>

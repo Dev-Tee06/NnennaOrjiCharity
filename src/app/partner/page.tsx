@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Button } from "@/components/Button";
 import {
@@ -13,6 +13,7 @@ import {
 
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
+import { sendGAEvent } from "@next/third-parties/google";
 
 const PARTNERSHIP_AVENUES = [
   {
@@ -50,6 +51,10 @@ export default function Partner() {
   const supabase = createClient();
   const router = useRouter();
 
+  useEffect(() => {
+    sendGAEvent({ event: "partnership_page_view" });
+  }, []);
+
   const isValid =
     formData.organisationName.trim() !== "" &&
     formData.representative.trim() !== "" &&
@@ -86,6 +91,8 @@ export default function Partner() {
         throw new Error(`Failed to process partnership request: ${errText}`);
       }
 
+      sendGAEvent({ event: "partnership_submit" });
+      sendGAEvent({ event: "company_enquiry_submit" });
       router.push('/success');
     } catch (error) {
       console.error(error);

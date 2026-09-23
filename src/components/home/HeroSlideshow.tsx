@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/Button";
 import { cn } from "@/lib/utils";
+import { sendGAEvent } from "@next/third-parties/google";
 
 const IMAGES = [
   "/images/hero1.png",
@@ -94,6 +95,7 @@ export function HeroSlideshow() {
               href="/donate"
               variant="primary"
               className="flex-1 sm:flex-none sm:w-auto px-4 sm:px-8"
+              onClick={() => sendGAEvent({ event: "donation_click" })}
             >
               Donate Now
             </Button>

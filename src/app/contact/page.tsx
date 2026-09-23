@@ -5,6 +5,7 @@ import { Button } from "@/components/Button";
 import { Mail, Phone, MapPin, Clock, ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { sendGAEvent } from "@next/third-parties/google";
 
 const CONTACT_INFO = {
   email: "contactus@nnennaorjicharityfoundation.org",
@@ -67,6 +68,7 @@ export default function Contact() {
       }
 
       setSubmitted(true);
+      sendGAEvent({ event: "contact_submit" });
       router.push("/success");
     } catch (error) {
       console.error(error);
@@ -122,6 +124,7 @@ export default function Contact() {
                   <a
                     href={`tel:${CONTACT_INFO.phone}`}
                     className="font-body text-[15px] font-medium text-blackKnight hover:text-orangeRed1 transition-colors"
+                    onClick={() => sendGAEvent({ event: "phone_click" })}
                   >
                     {CONTACT_INFO.phone}
                   </a>

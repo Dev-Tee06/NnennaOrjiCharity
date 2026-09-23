@@ -24,7 +24,7 @@ export function Button({ variant = 'primary', href, className, children, ...prop
 
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} {...(props as any)}>
         {children}
       </Link>
     );
