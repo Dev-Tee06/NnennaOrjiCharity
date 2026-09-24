@@ -138,8 +138,8 @@ export function OurJourney() {
           </h2>
 
           <p className="font-body font-normal text-[16px] leading-[24.8px] text-[#171717] mt-2">
-            From a single street in Ajah Under Bridge to a two-city operation
-            with year-round giving channels.
+            From Ajah under bridge to a two-city operation with year-round
+            giving channels
           </p>
         </div>
       </div>
