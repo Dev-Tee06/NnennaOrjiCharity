@@ -5,8 +5,8 @@ import { CheckCircle2 } from 'lucide-react';
 
 export default function CheckEmailPage() {
   return (
-    <div className="min-h-screen bg-offWhite flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
-      <div className="bg-white py-10 px-8 shadow-sm rounded-xl border border-border sm:w-full sm:max-w-[440px] text-center">
+    <div className="min-h-screen bg-offWhite flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-[440px] bg-white py-10 px-6 sm:px-8 shadow-sm rounded-xl border border-border text-center">
         
         <div className="flex justify-center mb-6">
           <div className="h-12 w-12 rounded-full bg-green-50 flex items-center justify-center">

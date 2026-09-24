@@ -9,8 +9,8 @@ export default function CreatePasswordPage() {
   const [showConfirm, setShowConfirm] = useState(false);
 
   return (
-    <div className="min-h-screen bg-offWhite flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
-      <div className="bg-white py-10 px-8 shadow-sm rounded-xl border border-border sm:w-full sm:max-w-[440px]">
+    <div className="min-h-screen bg-offWhite flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-[440px] bg-white py-10 px-6 sm:px-8 shadow-sm rounded-xl border border-border">
         
         {/* Logo Area */}
         <div className="flex items-center justify-center gap-2 mb-8">

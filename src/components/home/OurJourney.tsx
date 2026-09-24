@@ -76,10 +76,10 @@ export function OurJourney() {
       if (!isDragging && !isHovered) {
         exactScrollRef.current += 0.5; // adjust speed here
         container.scrollLeft = Math.floor(exactScrollRef.current);
-        
+
         // Calculate the width of one original set of items
         const itemWidth = container.scrollWidth / 3;
-        
+
         // Loop back when we've scrolled past one full set
         if (container.scrollLeft >= itemWidth) {
           container.scrollLeft -= itemWidth;
@@ -128,7 +128,6 @@ export function OurJourney() {
         {/* Header */}
         <div className="flex flex-col items-start gap-4 mb-[50px] md:mb-[60px]">
           <div className="flex items-center gap-3">
-            
             <span className="font-heading font-bold text-[9px] md:text-[10px] tracking-[0.1em] uppercase text-[#FF4500]">
               OUR JOURNEY
             </span>
@@ -139,8 +138,8 @@ export function OurJourney() {
           </h2>
 
           <p className="font-body font-normal text-[16px] leading-[24.8px] text-[#171717] mt-2">
-            From a single street in Ikeja to a two-city operation with
-            year-round giving channels.
+            From a single street in Ajah Under Bridge to a two-city operation
+            with year-round giving channels.
           </p>
         </div>
       </div>

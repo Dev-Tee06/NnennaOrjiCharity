@@ -48,8 +48,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-offWhite flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md flex justify-center">
+    <div className="min-h-screen bg-offWhite flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md flex justify-center">
         <div className="relative h-12 w-[180px]">
           <Image
             src="/images/brand-logo.png"
@@ -61,7 +61,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-8 w-full max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-border">
           <form className="space-y-6" onSubmit={handleRegister}>
             <div>
