@@ -19,7 +19,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.nnennaorjicharityfoundation.org"),
   title: {
-    template: "%s | Nnenna Orji Charity Foundation",
+    template: "%s - Nnenna Orji Charity Foundation",
     default: "Nnenna Orji Charity Foundation",
   },
   applicationName: "Nnenna Orji Charity Foundation",
@@ -45,7 +45,10 @@ export const metadata: Metadata = {
     apple: "/images/favicon.jpg",
   },
   openGraph: {
-    title: "Nnenna Orji Charity Foundation",
+    title: {
+      template: "%s - Nnenna Orji Charity Foundation",
+      default: "Nnenna Orji Charity Foundation",
+    },
     description:
       "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
     url: "https://www.nnennaorjicharityfoundation.org",
@@ -63,7 +66,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nnenna Orji Charity Foundation",
+    title: {
+      template: "%s - Nnenna Orji Charity Foundation",
+      default: "Nnenna Orji Charity Foundation",
+    },
     description: "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
     images: ["/images/footer-logo.png"],
   },
