@@ -2,8 +2,8 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Nnenna Charity Oji Foundation",
-    short_name: "Nnenna Charity Oji Foundation",
+    name: "Nnenna Orji Charity Foundation",
+    short_name: "Nnenna Orji Charity Foundation",
     description:
       "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
     start_url: "/",

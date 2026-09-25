@@ -19,12 +19,12 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.nnennaorjicharityfoundation.org"),
   title: {
-    template: "%s | Nnenna Charity Oji Foundation",
-    default: "Nnenna Charity Oji Foundation",
+    template: "%s | Nnenna Orji Charity Foundation",
+    default: "Nnenna Orji Charity Foundation",
   },
-  applicationName: "Nnenna Charity Oji Foundation",
+  applicationName: "Nnenna Orji Charity Foundation",
   appleWebApp: {
-    title: "Nnenna Charity Oji Foundation",
+    title: "Nnenna Orji Charity Foundation",
   },
   description:
     "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
@@ -45,11 +45,11 @@ export const metadata: Metadata = {
     apple: "/images/favicon.jpg",
   },
   openGraph: {
-    title: "Nnenna Charity Oji Foundation",
+    title: "Nnenna Orji Charity Foundation",
     description:
       "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
     url: "https://www.nnennaorjicharityfoundation.org",
-    siteName: "Nnenna Charity Oji Foundation",
+    siteName: "Nnenna Orji Charity Foundation",
     images: [
       {
         url: "/images/footer-logo.png",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nnenna Charity Oji Foundation",
+    title: "Nnenna Orji Charity Foundation",
     description: "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
     images: ["/images/footer-logo.png"],
   },
@@ -100,14 +100,14 @@ export default function RootLayout({
               {
                 "@context": "https://schema.org",
                 "@type": "WebSite",
-                name: "Nnenna Charity Oji Foundation",
+                name: "Nnenna Orji Charity Foundation",
                 alternateName: "Nnenna Orji Charity Foundation",
                 url: "https://www.nnennaorjicharityfoundation.org",
               },
               {
                 "@context": "https://schema.org",
                 "@type": "NGO",
-                name: "Nnenna Charity Oji Foundation",
+                name: "Nnenna Orji Charity Foundation",
                 alternateName: "Nnenna Orji Charity Foundation",
                 url: "https://www.nnennaorjicharityfoundation.org",
                 logo: "https://www.nnennaorjicharityfoundation.org/images/favicon.jpg",

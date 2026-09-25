@@ -22,9 +22,9 @@ import { AnimatedCounter } from "@/components/AnimatedCounter";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: { absolute: "Nnenna Orji Charity Foundation" },
   description:
-    "Welcome to Nnenna Orji Charity Foundation. Sharing Love Everywhere With A Box Full of Hope across Lagos and Kano, Nigeria.",
+    "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
   alternates: {
     canonical: "/",
   },
