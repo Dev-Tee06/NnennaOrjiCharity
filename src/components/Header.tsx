@@ -62,7 +62,7 @@ export function Header() {
                 )}
               >
                 {link.label}
-                
+
                 {isActive && (
                   <span className="absolute -bottom-[4px] left-0 right-0 h-[2px] bg-orangeRed1 rounded-full" />
                 )}
@@ -100,7 +100,11 @@ export function Header() {
       {/* Alert Marquee */}
       <div className="bg-orangeRed1 text-white overflow-hidden py-1.5 flex whitespace-nowrap">
         <div className="animate-marquee text-[13px] md:text-sm font-medium tracking-wide">
-          Beware!!! Beware!!! This is the only Original and Official website of the Nnenna Orji Charity Foundation. Kindly refrain from and report any malicious website pretending to be the Nnenna Orji Charity Foundation and requesting your donations. Please report and avoid any dealings with the fake website &quot;https://nnenna.io.vn&quot;. Thank you and God bless you.
+          ⚠️ OFFICIAL WEBSITE NOTICE: This is the only official website of
+          Nnenna Orji Charity Foundation (NOCF). Any other website claiming to
+          represent NOCF, including https://nnenna.io.vn, is not affiliated with
+          us. Please refrain from using or engaging with such websites and
+          report them to us immediately.
         </div>
       </div>
 
@@ -129,10 +133,7 @@ export function Header() {
                     isActive ? "text-orangeRed1" : "text-text-primary",
                   )}
                 >
-                  <span className="flex items-center gap-1">
-                    {link.label}
-                    
-                  </span>
+                  <span className="flex items-center gap-1">{link.label}</span>
                   {isActive && (
                     <div className="h-2 w-2 rounded-full bg-orangeRed1" />
                   )}
