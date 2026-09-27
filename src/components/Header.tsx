@@ -97,10 +97,17 @@ export function Header() {
         </button>
       </div>
 
+      {/* Alert Marquee */}
+      <div className="bg-orangeRed1 text-white overflow-hidden py-1.5 flex whitespace-nowrap">
+        <div className="animate-marquee text-[13px] md:text-sm font-medium tracking-wide">
+          Beware!!! Beware!!! This is the only Original and Official website of the Nnenna Orji Charity Foundation. Kindly refrain from and report any malicious website pretending to be the Nnenna Orji Charity Foundation and requesting your donations. Please report and avoid any dealings with the fake website &quot;https://nnenna.io.vn&quot;. Thank you and God bless you.
+        </div>
+      </div>
+
       {/* Mobile Menu Dropdown */}
       <div
         className={cn(
-          "fixed inset-x-0 top-[72px] bg-white border-b border-border shadow-sm transition-all duration-300 ease-in-out lg:hidden overflow-hidden",
+          "absolute inset-x-0 top-full bg-white border-b border-border shadow-sm transition-all duration-300 ease-in-out lg:hidden overflow-hidden",
           mobileMenuOpen
             ? "max-h-[500px] opacity-100 visible"
             : "max-h-0 opacity-0 invisible",

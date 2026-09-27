@@ -250,7 +250,7 @@ export default function About() {
             {[
               {
                 title: "Our Mission",
-                desc: "To place practical, dignified support directly in the hands of vulnerable households in Nigeria — food, clothing and essentials, delivered in person, without bureaucracy.",
+                desc: "To place practical, dignified support directly in the hands of vulnerable households in Nigeria  food, clothing and essentials, delivered in person, without discrimination.",
               },
               {
                 title: "Our Vision",
