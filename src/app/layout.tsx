@@ -99,52 +99,7 @@ export default function RootLayout({
       className={`${archivo.variable} ${productSansFallback.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col font-body bg-offWhite text-blackKnight selection:bg-orangeRed1/20 selection:text-blackKnight">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify([
-              {
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                name: "Nnenna Orji Charity Foundation",
-                alternateName: "Nnenna Orji Charity Foundation",
-                url: "https://www.nnennaorjicharityfoundation.org",
-              },
-              {
-                "@context": "https://schema.org",
-                "@type": "NGO",
-                name: "Nnenna Orji Charity Foundation",
-                alternateName: "Nnenna Orji Charity Foundation",
-                url: "https://www.nnennaorjicharityfoundation.org",
-                logo: "https://www.nnennaorjicharityfoundation.org/images/favicon.jpg",
-                description:
-                  "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
-                address: [
-                  {
-                    "@type": "PostalAddress",
-                    streetAddress: "Solomade Estate, Ikorodu, Lagos",
-                    addressLocality: "Ikorodu",
-                    addressRegion: "Lagos State",
-                    addressCountry: "Nigeria",
-                  },
-                  {
-                    "@type": "PostalAddress",
-                    streetAddress: "Church Road, Sabon Gari, Kano, Nigeria.",
-                    addressLocality: "Kano",
-                    addressRegion: "Kano State",
-                    addressCountry: "Nigeria",
-                  },
-                ],
-                contactPoint: {
-                  "@type": "ContactPoint",
-                  email: "contactus@nnennaorjicharityfoundation.org",
-                  telephone: "+2348030000000",
-                  contactType: "customer support",
-                },
-              },
-            ]),
-          }}
-        />
+
         <GlobalLayoutWrapper>{children}</GlobalLayoutWrapper>
         <Analytics />
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || "G-XXXXXXXXXX"} />

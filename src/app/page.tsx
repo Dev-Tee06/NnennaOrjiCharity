@@ -26,13 +26,42 @@ export const metadata: Metadata = {
   description:
     "Nnenna Orji Charity Foundation provides practical support to vulnerable families through food, clothing, essential items, volunteers and community giving across Nigeria.",
   alternates: {
-    canonical: "/",
+    canonical: "https://www.nnennaorjicharityfoundation.org/",
+  },
+  openGraph: {
+    title: "Nnenna Orji Charity Foundation",
+    siteName: "Nnenna Orji Charity Foundation",
+    url: "https://www.nnennaorjicharityfoundation.org/",
   },
 };
 
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Nnenna Orji Charity Foundation",
+              alternateName: [
+                "Nnenna Orji Charity Foundation",
+                "Nnenna Orji Charity Foundation NGO"
+              ],
+              url: "https://www.nnennaorjicharityfoundation.org/"
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Nnenna Orji Charity Foundation",
+              url: "https://www.nnennaorjicharityfoundation.org/",
+              logo: "https://www.nnennaorjicharityfoundation.org/images/favicon.jpg"
+            }
+          ])
+        }}
+      />
       <HeroSlideshow />
 
       {/* Impact Statistics */}

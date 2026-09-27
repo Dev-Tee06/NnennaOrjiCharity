@@ -74,6 +74,9 @@ export function HeroSlideshow() {
           </div>
 
           <h1 className="font-heading font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[44px] leading-[1.05] text-white tracking-[-0.02em]">
+            <span className="block text-2xl sm:text-3xl lg:text-[32px] mb-3 text-white/95">
+              Nnenna Orji Charity Foundation
+            </span>
             Sharing Love Everywhere
             <br className="hidden md:block" /> With A{" "}
             <span className="text-[#F82C00] font-bold  px-2 leading-normal inline-block mt-1">
