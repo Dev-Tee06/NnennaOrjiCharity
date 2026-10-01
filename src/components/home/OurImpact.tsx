@@ -4,9 +4,7 @@ import { AnimatedCounter } from "../AnimatedCounter";
 
 export function OurImpact() {
   return (
-    <section
-      className="relative py-[40px] md:py-[40px] overflow-hidden bg-[url('/images/bg-drop.png')] bg-cover bg-center bg-no-repeat md:bg-fixed"
-    >
+    <section className="relative py-[40px] md:py-[40px] overflow-hidden bg-[url('/images/bg-drop.png')] bg-cover bg-center bg-no-repeat md:bg-fixed">
       {/* Background Overlay */}
       <div className="absolute inset-0 bg-[#080E18] opacity-[0.98] pointer-events-none" />
       <div className="absolute inset-0 bg-[#FF4500] opacity-5 mix-blend-color pointer-events-none" />
@@ -58,9 +56,9 @@ export function OurImpact() {
                 desc: "Average cost, fully itemised in every annual report we publish.",
               },
               {
-                number: "6",
+                number: "5",
                 label: "consecutive years",
-                desc: "Same date. Same street. Same principle  hand it over yourself.",
+                desc: "Same Vision packaged in with love to our beneficiaries.",
               },
               {
                 number: "100%",
