@@ -155,7 +155,7 @@ export default function AdminRolesPage() {
     setShowSuccessBanner('User access revoked successfully.');
     setTimeout(() => setShowSuccessBanner(''), 3000);
     fetchAdmins();
-    fetchDefaultCoordinator();
+    fetchDefaultCoordinators();
   };
 
   const handleEditPermissions = async (user: any) => {

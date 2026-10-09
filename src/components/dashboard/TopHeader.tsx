@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
 export function TopHeader({ title }: { title: string }) {
-  const [user, setUser] = useState<{name: string, initial: string} | null>(null);
+  const [user, setUser] = useState<{name: string, initial: string, id?: string} | null>(null);
   const [showMenu, setShowMenu] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
