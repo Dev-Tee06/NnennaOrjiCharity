@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { LayoutDashboard, Heart, Users, Shield, Settings, LayoutGrid } from 'lucide-react';
 import Image from 'next/image';
 
@@ -15,6 +16,40 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [userRole, setUserRole] = useState('Standard Admin');
+  const [permissions, setPermissions] = useState<any[]>([]);
+  
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { createClient } = await import('@/lib/supabase/client');
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+        if (profile) {
+          setUserRole(profile.role);
+          if (profile.role !== 'Super Admin') {
+            const { data: perms } = await supabase.from('admin_permissions').select('*').eq('profile_id', user.id);
+            if (perms) setPermissions(perms);
+          }
+        }
+      }
+    };
+    fetchUser();
+  }, []);
+
+  // Filter navigation items
+  const visibleNavigation = navigation.filter(item => {
+    if (userRole === 'Super Admin') return true;
+    
+    // Check specific module permissions
+    const perm = permissions.find(p => p.module === item.name);
+    if (perm) return perm.can_view;
+    
+    // Default to true if not explicitly denied, or false if you want default closed
+    // Since it's Standard Admin, we default to false if no permission record exists.
+    return false;
+  });
 
   return (
     <>
@@ -35,7 +70,7 @@ export function Sidebar() {
         </div>
         <div className="flex flex-1 flex-col overflow-y-auto pt-6 pb-4">
           <nav className="flex-1 space-y-2 px-4" aria-label="Sidebar">
-            {navigation.map((item) => {
+            {visibleNavigation.map((item) => {
               const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
               return (
                 <Link
@@ -64,7 +99,7 @@ export function Sidebar() {
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-border z-50 px-2 pb-safe pt-1">
         <div className="flex justify-around items-center h-16">
-          {navigation.map((item) => {
+          {visibleNavigation.map((item) => {
             const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
             return (
               <Link

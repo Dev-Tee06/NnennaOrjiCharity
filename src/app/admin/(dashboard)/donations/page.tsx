@@ -17,19 +17,27 @@ export default function PledgesDonationsPage() {
   const [editForm, setEditForm] = useState({
     status: '',
     quantity: 1,
-    notes: ''
+    notes: '',
+    coordinator_id: ''
   });
+  const [admins, setAdmins] = useState<any[]>([]);
 
   const supabase = createClient();
 
   useEffect(() => {
     fetchPledges();
+    fetchAdmins();
     const channel = supabase
       .channel('donations-table')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'donations' }, fetchPledges)
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, []);
+
+  const fetchAdmins = async () => {
+    const { data } = await supabase.from('profiles').select('id, full_name, email, role, status').eq('status', 'Active');
+    if (data) setAdmins(data);
+  };
 
   const fetchPledges = async () => {
     const { data } = await supabase.from('donations').select(`
@@ -44,11 +52,17 @@ export default function PledgesDonationsPage() {
       message,
       status,
       created_at,
+      coordinator_id,
+      assignment_status,
       donors (
         first_name,
         last_name,
         email,
         phone
+      ),
+      profiles!donations_coordinator_id_fkey (
+        full_name,
+        email
       )
     `).order('created_at', { ascending: false });
     
@@ -77,7 +91,10 @@ export default function PledgesDonationsPage() {
           notes: d.notes || '',
           message: d.message || '',
           status: d.status || 'Pending',
-          statusColor: ['Completed', 'Resolved', 'Handed Over', 'Received'].includes(d.status) ? 'bg-green-50 text-green-700' : 'bg-orange-50 text-orange-700'
+          statusColor: ['Completed', 'Resolved', 'Handed Over', 'Received'].includes(d.status) ? 'bg-green-50 text-green-700' : 'bg-orange-50 text-orange-700',
+          assignment_status: d.assignment_status || 'Unassigned',
+          coordinator_id: d.coordinator_id || '',
+          coordinator_name: d.profiles?.full_name || 'None'
         };
       });
       setPledges(formatted);
@@ -89,25 +106,51 @@ export default function PledgesDonationsPage() {
     setEditForm({
       status: pledge.status,
       quantity: pledge.quantity,
-      notes: pledge.notes
+      notes: pledge.notes,
+      coordinator_id: pledge.coordinator_id || ''
     });
     setIsEditModalOpen(true);
   };
 
   const saveEdit = async () => {
     if (!editingPledge) return;
+    
+    const isNewCoordinator = editForm.coordinator_id !== (editingPledge.coordinator_id || '');
+    const newAssignmentStatus = editForm.coordinator_id ? 'Assigned' : 'Pending Assignment';
+
     const { error } = await supabase
       .from('donations')
       .update({
         status: editForm.status,
         quantity: editForm.quantity,
-        notes: editForm.notes
+        notes: editForm.notes,
+        coordinator_id: editForm.coordinator_id || null,
+        assignment_status: newAssignmentStatus,
+        ...(isNewCoordinator ? { assigned_at: new Date().toISOString(), assignment_source: 'Manual' } : {})
       })
       .eq('id', editingPledge.raw_id);
       
     if (error) {
       alert('Failed to update: ' + error.message);
     } else {
+      if (isNewCoordinator && editForm.coordinator_id) {
+        // Send notification to the new coordinator
+        await supabase.from('notifications').insert({
+          user_id: editForm.coordinator_id,
+          title: 'Manual Pledge Assignment',
+          message: `Pledge ${editingPledge.id} has been manually assigned to you.`,
+          type: 'PledgeAssignment',
+          link_url: '/admin/donations'
+        });
+        
+        // Log the assignment
+        await supabase.from('pledge_assignments_audit').insert({
+          pledge_id: editingPledge.raw_id,
+          prev_coordinator_id: editingPledge.coordinator_id || null,
+          new_coordinator_id: editForm.coordinator_id,
+          reason: 'Manual reassignment'
+        });
+      }
       setIsEditModalOpen(false);
       setEditingPledge(null);
       fetchPledges();
@@ -154,7 +197,7 @@ export default function PledgesDonationsPage() {
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white border border-border rounded-lg p-4 shadow-sm flex flex-col justify-center">
             <span className="text-2xl font-heading font-bold text-blackKnight">{pledges.length}</span>
             <span className="text-xs font-bold text-text-secondary uppercase tracking-wider mt-1">Total Pledges</span>
@@ -170,6 +213,13 @@ export default function PledgesDonationsPage() {
                 {pledges.filter(p => p.status === 'Pending').length}
               </span>
             <span className="text-xs font-bold text-text-secondary uppercase tracking-wider mt-1">Pending</span>
+          </div>
+          <div className="bg-white border border-red-200 rounded-lg p-4 shadow-sm flex flex-col justify-center relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-2 h-full bg-red-500"></div>
+            <span className="text-2xl font-heading font-bold text-red-600">
+                {pledges.filter(p => p.assignment_status === 'Pending Assignment').length}
+              </span>
+            <span className="text-xs font-bold text-text-secondary uppercase tracking-wider mt-1">Pending Assignment</span>
           </div>
         </div>
 
@@ -206,6 +256,7 @@ export default function PledgesDonationsPage() {
                   <th scope="col" className="px-3 py-3.5 text-left text-[11px] font-bold text-text-secondary uppercase tracking-wider">Category</th>
                   <th scope="col" className="px-3 py-3.5 text-left text-[11px] font-bold text-text-secondary uppercase tracking-wider">Items Pledged</th>
                   <th scope="col" className="px-3 py-3.5 text-left text-[11px] font-bold text-text-secondary uppercase tracking-wider">Status</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-[11px] font-bold text-text-secondary uppercase tracking-wider">Assignment</th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-6 text-right">
                     <span className="sr-only">Actions</span>
                   </th>
@@ -214,7 +265,7 @@ export default function PledgesDonationsPage() {
               <tbody className="divide-y divide-border bg-white">
                 {pledges.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-12 text-center text-sm text-text-secondary">
+                    <td colSpan={7} className="py-12 text-center text-sm text-text-secondary">
                       No pledges found. Click "Record New Pledge" to add one.
                     </td>
                   </tr>
@@ -236,6 +287,14 @@ export default function PledgesDonationsPage() {
                         <button className={`inline-flex items-center rounded-md px-2.5 py-1 text-xs font-bold border border-transparent hover:border-gray-300 transition-colors ${pledge.statusColor}`}>
                           {pledge.status}
                         </button>
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm">
+                        <div className="flex flex-col">
+                          <span className={`text-xs font-bold ${pledge.assignment_status === 'Pending Assignment' ? 'text-red-600' : 'text-green-600'}`}>
+                            {pledge.assignment_status}
+                          </span>
+                          <span className="text-xs text-gray-500">{pledge.coordinator_name}</span>
+                        </div>
                       </td>
                       <td className="whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-bold">
                         <div className="flex justify-end gap-2">
@@ -294,6 +353,20 @@ export default function PledgesDonationsPage() {
                   onChange={(e) => setEditForm({...editForm, quantity: Number(e.target.value)})}
                   className="w-full border border-gray-300 rounded-lg p-2 focus:ring-1 focus:ring-orangeRed1 focus:border-orangeRed1 outline-none"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Assigned Coordinator</label>
+                <select 
+                  value={editForm.coordinator_id} 
+                  onChange={(e) => setEditForm({...editForm, coordinator_id: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg p-2 focus:ring-1 focus:ring-orangeRed1 focus:border-orangeRed1 outline-none"
+                >
+                  <option value="">Unassigned (Pending)</option>
+                  {admins.map(admin => (
+                    <option key={admin.id} value={admin.id}>{admin.full_name} ({admin.role})</option>
+                  ))}
+                </select>
               </div>
 
               <div>

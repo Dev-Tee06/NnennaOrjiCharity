@@ -12,18 +12,27 @@ export function TopHeader({ title }: { title: string }) {
   const supabase = createClient();
   const router = useRouter();
 
+  const [unreadCount, setUnreadCount] = useState(0);
+
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
         const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Admin';
         setUser({
           name: name,
-          initial: name.charAt(0).toUpperCase()
+          initial: name.charAt(0).toUpperCase(),
+          id: user.id
         });
+        fetchUnreadCount(user.id);
       } else {
         setUser({ name: 'Admin', initial: 'A' });
       }
     });
+
+    const channel = supabase.channel('notifications-header')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'notifications' }, (payload) => {
+        if (user?.id) fetchUnreadCount(user.id);
+      }).subscribe();
 
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -31,8 +40,19 @@ export function TopHeader({ title }: { title: string }) {
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      supabase.removeChannel(channel);
+    };
   }, []);
+
+  const fetchUnreadCount = async (userId: string) => {
+    const { count } = await supabase.from('notifications')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('read_status', false);
+    setUnreadCount(count || 0);
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -69,10 +89,18 @@ export function TopHeader({ title }: { title: string }) {
           />
         </div>
 
-        <button type="button" className="relative p-2 text-gray-600 hover:text-blackKnight rounded-full hover:bg-gray-100 transition-colors border border-gray-200">
+        <button 
+          type="button" 
+          onClick={() => router.push('/admin/notifications')}
+          className="relative p-2 text-gray-600 hover:text-blackKnight rounded-full hover:bg-gray-100 transition-colors border border-gray-200"
+        >
           <span className="sr-only">View notifications</span>
           <Bell className="h-5 w-5" aria-hidden="true" />
-          <span className="absolute top-2 right-2.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
+          {unreadCount > 0 && (
+            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full">
+              {unreadCount}
+            </span>
+          )}
         </button>
 
         <div 

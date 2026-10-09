@@ -32,8 +32,22 @@ export async function POST(request: Request) {
 
     const supabase = await getAdminSupabase();
 
+    // Find the eligible default coordinator
+    const { data: defaultCoord, error: coordError } = await supabase
+      .from('profiles')
+      .select('id, role, status')
+      .eq('is_default_coordinator', true)
+      .eq('status', 'Active')
+      .single();
+      
+    const isEligible = defaultCoord && (defaultCoord.role === 'admin' || defaultCoord.role === 'Super Admin');
+    const coordinatorId = isEligible ? defaultCoord.id : null;
+    const assignmentStatus = isEligible ? 'Assigned' : 'Pending Assignment';
+    const assignmentSource = isEligible ? 'Automatic' : null;
+    const assignedAt = isEligible ? new Date().toISOString() : null;
+
     // 1. Save to Supabase (Operational Record)
-    const { error } = await supabase
+    const { data: insertedDonation, error } = await supabase
       .from('donations')
       .insert({
         first_name: firstName,
@@ -43,12 +57,48 @@ export async function POST(request: Request) {
         message: message || null,
         donation_type: donationType || null,
         notes: location ? `Location: ${location}` : null,
-        status: 'Pending'
-      });
+        status: 'Pending',
+        coordinator_id: coordinatorId,
+        assignment_status: assignmentStatus,
+        assignment_source: assignmentSource,
+        assigned_at: assignedAt
+      })
+      .select('id')
+      .single();
 
     if (error) {
       console.error('Supabase insert error (donations):', error);
       return NextResponse.json({ error: 'Failed to process donation', details: error.message }, { status: 500 });
+    }
+
+    // 2. Handle Notifications
+    if (isEligible && coordinatorId) {
+       await supabase.from('notifications').insert({
+         user_id: coordinatorId,
+         title: 'New Pledge Assigned',
+         message: 'A new pledge has been automatically assigned to you.',
+         type: 'PledgeAssignment',
+         link_url: '/admin/donations'
+       });
+    } else {
+       // Notify Super Admin of assignment failure
+       const { data: superAdmin } = await supabase
+         .from('profiles')
+         .select('id')
+         .eq('role', 'Super Admin')
+         .eq('status', 'Active')
+         .limit(1)
+         .single();
+         
+       if (superAdmin) {
+         await supabase.from('notifications').insert({
+           user_id: superAdmin.id,
+           title: 'Pledge Assignment Failed',
+           message: `A new pledge (ID: ${insertedDonation?.id}) could not be assigned because no eligible default coordinator was found.`,
+           type: 'AssignmentFailure',
+           link_url: '/admin/donations'
+         });
+       }
     }
 
     // 2. Save to EmailOctopus
