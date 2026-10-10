@@ -78,7 +78,7 @@ export async function POST(request: Request) {
       
       // We don't need to invite them, but we should generate a password reset link 
       // so they can set a password if they only ever used magic links, but for now we just upgrade their profile.
-      await supabase.auth.admin.resetPasswordForEmail(email, {
+      await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/admin/onboarding`
       });
     } else {
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
           const foundUser = users.users.find(u => u.email === email);
           if (foundUser) {
             targetUserId = foundUser.id;
-            await supabase.auth.admin.resetPasswordForEmail(email, {
+            await supabase.auth.resetPasswordForEmail(email, {
               redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/admin/onboarding`
             });
           } else {
