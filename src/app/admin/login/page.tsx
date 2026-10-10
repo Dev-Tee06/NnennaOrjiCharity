@@ -15,6 +15,7 @@ export default function LoginPage() {
 
   const [mfaCode, setMfaCode] = useState('');
   const [mfaType, setMfaType] = useState<'totp' | 'email' | null>(null);
+  const [hasTotpEnabled, setHasTotpEnabled] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,18 +34,12 @@ export default function LoginPage() {
     } 
 
     if (data.session) {
-      // Check for native TOTP MFA
+      // Check if they have TOTP enrolled
       const mfaAssurance = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-      const needsTotp = mfaAssurance.data?.nextLevel === 'aal2' && mfaAssurance.data?.currentLevel === 'aal1';
+      const needsTotp = mfaAssurance.data?.nextLevel === 'aal2';
+      setHasTotpEnabled(needsTotp);
 
-      if (needsTotp) {
-        setMfaType('totp');
-        setIsLoading(false);
-        return;
-      }
-
-      // Password correct, no TOTP. Enforce Email OTP as 2nd factor fallback
-      // We sign out of the initial password session, and immediately send an OTP to email.
+      // Default to Email OTP per user request
       await supabase.auth.signOut();
       
       const otpRes = await supabase.auth.signInWithOtp({
@@ -61,6 +56,37 @@ export default function LoginPage() {
       setMfaType('email');
       setIsLoading(false);
     }
+  };
+
+  const switchToTotp = async () => {
+    setIsLoading(true);
+    setError(null);
+    // Silently re-authenticate to regain AAL1 session for TOTP challenge
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      setError("Session expired. Please reload and try again.");
+      setIsLoading(false);
+      return;
+    }
+    setMfaType('totp');
+    setMfaCode('');
+    setIsLoading(false);
+  };
+
+  const switchToEmail = async () => {
+    setIsLoading(true);
+    setError(null);
+    await supabase.auth.signOut();
+    const otpRes = await supabase.auth.signInWithOtp({
+      email: email,
+      options: { shouldCreateUser: false }
+    });
+    if (otpRes.error) {
+      setError(otpRes.error.message);
+    }
+    setMfaType('email');
+    setMfaCode('');
+    setIsLoading(false);
   };
 
   const handleVerifyMFA = async (e: React.FormEvent) => {
@@ -217,42 +243,69 @@ export default function LoginPage() {
             
           </form>
         ) : (
-          <form className="space-y-5" onSubmit={handleVerifyMFA}>
-            <div className="text-center mb-6">
-              <h3 className="text-lg font-bold text-blackKnight">
-                {mfaType === 'totp' ? 'Authenticator Verification Required' : 'Email Verification Required'}
-              </h3>
-              <p className="text-sm text-gray-500">
-                {mfaType === 'totp' ? 'Enter the 6-digit code from your Authenticator app.' : <>Enter the secure code sent to <strong>{email}</strong>.</>}
-              </p>
-            </div>
-            
-            <div>
-              <input
-                type="text"
-                required
-                maxLength={8}
-                value={mfaCode}
-                onChange={e => setMfaCode(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
-                placeholder="000000"
-                className="appearance-none block w-full px-3.5 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-orangeRed1 focus:border-orangeRed1 text-center text-xl tracking-widest bg-gray-50/50"
-              />
-            </div>
+          <div className="space-y-5">
+            <form onSubmit={handleVerifyMFA}>
+              <div className="text-center mb-6">
+                <h3 className="text-lg font-bold text-blackKnight">
+                  {mfaType === 'totp' ? 'Authenticator Verification Required' : 'Email Verification Required'}
+                </h3>
+                <p className="text-sm text-gray-500">
+                  {mfaType === 'totp' ? 'Enter the 6-digit code from your Authenticator app.' : <>Enter the secure code sent to <strong>{email}</strong>.</>}
+                </p>
+              </div>
+              
+              <div>
+                <input
+                  type="text"
+                  required
+                  maxLength={8}
+                  value={mfaCode}
+                  onChange={e => setMfaCode(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
+                  placeholder="000000"
+                  className="appearance-none block w-full px-3.5 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-orangeRed1 focus:border-orangeRed1 text-center text-xl tracking-widest bg-gray-50/50"
+                />
+              </div>
 
-            {error && (
-              <div className="text-red-500 text-sm font-medium text-center">{error}</div>
+              {error && (
+                <div className="text-red-500 text-sm font-medium text-center mt-3">{error}</div>
+              )}
+
+              <div className="pt-5">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-orangeRed1 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orangeRed1 disabled:opacity-70"
+                >
+                  {isLoading ? 'Verifying...' : 'Verify Code'}
+                </button>
+              </div>
+            </form>
+
+            {hasTotpEnabled && (
+              <div className="pt-2 text-center border-t border-gray-100 mt-4 pt-4">
+                <p className="text-xs text-gray-500 mb-2">Alternative Verification Method</p>
+                {mfaType === 'email' ? (
+                  <button 
+                    type="button" 
+                    onClick={switchToTotp} 
+                    disabled={isLoading}
+                    className="text-sm font-bold text-orangeRed1 hover:text-orange-700"
+                  >
+                    Use Authenticator App instead
+                  </button>
+                ) : (
+                  <button 
+                    type="button" 
+                    onClick={switchToEmail} 
+                    disabled={isLoading}
+                    className="text-sm font-bold text-orangeRed1 hover:text-orange-700"
+                  >
+                    Use Email OTP instead
+                  </button>
+                )}
+              </div>
             )}
-
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-orangeRed1 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orangeRed1 disabled:opacity-70"
-              >
-                {isLoading ? 'Verifying...' : 'Verify Code'}
-              </button>
-            </div>
-          </form>
+          </div>
         )}
       </div>
     </div>
