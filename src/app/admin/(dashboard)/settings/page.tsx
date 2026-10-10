@@ -32,6 +32,7 @@ export default function SettingsPage() {
   const [enrolling, setEnrolling] = useState(false);
   const [factorId, setFactorId] = useState('');
   const [qrCode, setQrCode] = useState('');
+  const [totpSecret, setTotpSecret] = useState('');
   const [mfaCode, setMfaCode] = useState('');
   const [mfaError, setMfaError] = useState('');
 
@@ -188,6 +189,7 @@ export default function SettingsPage() {
     if (data) {
       setFactorId(data.id);
       setQrCode(data.totp.qr_code);
+      setTotpSecret(data.totp.secret);
     }
   };
 
@@ -477,7 +479,13 @@ export default function SettingsPage() {
                 {enrolling && qrCode && !has2FA && (
                   <div className="mt-4 pt-4 border-t border-gray-100">
                     <p className="text-xs font-bold mb-2">1. Scan this QR Code with your Authenticator app (e.g. Google Authenticator, Authy)</p>
-                    <div className="bg-white p-2 border rounded inline-block mb-4" dangerouslySetInnerHTML={{ __html: qrCode }} />
+                    <div className="bg-white p-2 border rounded inline-block mb-2" dangerouslySetInnerHTML={{ __html: qrCode }} />
+                    
+                    <div className="text-xs text-gray-500 mb-4 bg-gray-50 p-3 rounded border border-gray-100 max-w-sm">
+                      Cannot scan the QR code? <br/> 
+                      Manual Setup Key: <strong className="select-all bg-white border p-1 rounded font-mono ml-1">{totpSecret}</strong>
+                    </div>
+
                     <p className="text-xs font-bold mb-2">2. Enter the 6-digit code below to verify</p>
                     <input 
                       type="text" 
