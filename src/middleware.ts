@@ -41,7 +41,10 @@ export async function middleware(request: NextRequest) {
     !request.nextUrl.pathname.startsWith('/admin/login') &&
     !request.nextUrl.pathname.startsWith('/admin/register') &&
     !request.nextUrl.pathname.startsWith('/admin/forgot-password') &&
-    !request.nextUrl.pathname.startsWith('/admin/reset-password')
+    !request.nextUrl.pathname.startsWith('/admin/reset-password') &&
+    !request.nextUrl.pathname.startsWith('/admin/password-success') &&
+    !request.nextUrl.pathname.startsWith('/admin/verify') &&
+    !request.nextUrl.pathname.startsWith('/admin/onboarding')
   ) {
     if (!user) {
       // no user, potentially respond by redirecting the user to the login page
