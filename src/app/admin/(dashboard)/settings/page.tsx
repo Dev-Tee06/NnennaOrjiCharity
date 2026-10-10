@@ -184,13 +184,16 @@ export default function SettingsPage() {
     // Clean up any hanging unverified factors from previous attempts
     const factors = await supabase.auth.mfa.listFactors();
     if (factors.data?.all) {
-      const unverified = factors.data.all.find(f => f.factor_type === 'totp' && f.status === 'unverified');
-      if (unverified) {
-        await supabase.auth.mfa.unenroll({ factorId: unverified.id });
+      const unverified = factors.data.all.filter(f => f.factor_type === 'totp' && f.status === 'unverified');
+      for (const f of unverified) {
+        await supabase.auth.mfa.unenroll({ factorId: f.id });
       }
     }
 
-    const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp' });
+    const { data, error } = await supabase.auth.mfa.enroll({ 
+      factorType: 'totp',
+      friendlyName: `Authenticator-${Date.now()}`
+    });
     if (error) {
       setMfaError(error.message);
       // We keep enrolling=true so the error is visible in the UI below the button
