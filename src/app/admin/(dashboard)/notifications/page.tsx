@@ -59,16 +59,24 @@ export default function NotificationsCenterPage() {
         .limit(50);
 
       if (auditLogs) {
-        const formattedAudit = auditLogs.map((log: any) => ({
-          id: `audit-${log.id}`,
-          type: 'AuditLog',
-          title: 'System Audit Log',
-          message: `${log.profiles?.full_name || 'Admin'} (${log.profiles?.email || 'Unknown'}) performed: ${log.action} on ${log.resource}. Details: ${log.details?.action_title || JSON.stringify(log.details)}`,
-          created_at: log.created_at,
-          read_status: true, // Audit logs don't have a read status for individual users
-          link_url: null,
-          is_audit: true
-        }));
+        const formattedAudit = auditLogs.map((log: any) => {
+          let message = `${log.profiles?.full_name || 'Admin'} (${log.profiles?.email || 'Unknown'}) performed: ${log.action} on ${log.resource}. Details: ${log.details?.action_title || JSON.stringify(log.details)}`;
+          
+          if (log.action === 'INVITE_ADMIN') {
+            message = `${log.profiles?.email || 'An Admin'} created an account for ${log.details?.email || 'a new user'}`;
+          }
+
+          return {
+            id: `audit-${log.id}`,
+            type: 'AuditLog',
+            title: 'System Audit Log',
+            message: message,
+            created_at: log.created_at,
+            read_status: true, // Audit logs don't have a read status for individual users
+            link_url: null,
+            is_audit: true
+          };
+        });
         
         allItems = [...allItems, ...formattedAudit];
       }

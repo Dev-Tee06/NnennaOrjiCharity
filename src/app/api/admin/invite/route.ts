@@ -79,12 +79,12 @@ export async function POST(request: Request) {
       // We don't need to invite them, but we should generate a password reset link 
       // so they can set a password if they only ever used magic links, but for now we just upgrade their profile.
       await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback?next=/admin/onboarding`
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/admin/onboarding`
       });
     } else {
       // Invite User via Supabase Auth
       const { data: authData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback?next=/admin/onboarding`,
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/admin/onboarding`,
         data: { full_name: fullName }
       });
 
@@ -96,7 +96,7 @@ export async function POST(request: Request) {
           if (foundUser) {
             targetUserId = foundUser.id;
             await supabase.auth.resetPasswordForEmail(email, {
-              redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback?next=/admin/onboarding`
+              redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/admin/onboarding`
             });
           } else {
             return NextResponse.json({ error: 'User exists but could not be located.' }, { status: 400 });

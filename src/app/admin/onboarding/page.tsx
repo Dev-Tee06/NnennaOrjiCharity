@@ -18,7 +18,8 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     async function checkUser() {
-      // If we just arrived with an invite link, wait for Supabase to parse the hash
+      // If we just arrived with an invite link (implicit flow), the session might take a moment to be available.
+      // But we always check getSession() to ensure we don't hang.
       if (typeof window !== 'undefined' && window.location.hash.includes('access_token')) {
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
           if (event === 'SIGNED_IN' && session) {
@@ -26,12 +27,15 @@ export default function OnboardingPage() {
             subscription.unsubscribe();
           }
         });
-        return;
       }
 
+      // Check session directly (this also handles PKCE code exchange automatically in the browser)
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        router.push('/admin/login');
+        // Only redirect to login if we really have no session and no access_token in the URL that is still processing
+        if (typeof window !== 'undefined' && !window.location.hash.includes('access_token')) {
+          router.push('/admin/login');
+        }
         return;
       }
       
