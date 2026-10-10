@@ -6,14 +6,19 @@ import { createClient } from '@/lib/supabase/client';
 
 import { TopHeader } from '@/components/dashboard/TopHeader';
 import { MobilePageTitle } from '@/components/dashboard/MobilePageTitle';
+import { RolesManagement } from '@/components/dashboard/RolesManagement';
+
 export default function AdminRolesPage() {
   const [admins, setAdmins] = useState<any[]>([]);
   const [defaultCoordinators, setDefaultCoordinators] = useState<any[]>([]);
+  const [customRoles, setCustomRoles] = useState<any[]>([]);
+  const [mainTab, setMainTab] = useState<'Admins' | 'Roles'>('Admins');
   const supabase = createClient();
 
   useEffect(() => {
     fetchAdmins();
     fetchDefaultCoordinators();
+    fetchCustomRoles();
     const channel = supabase
       .channel('admins-table')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => {
@@ -39,16 +44,26 @@ export default function AdminRolesPage() {
     }
   };
 
+  const fetchCustomRoles = async () => {
+    const { data } = await supabase.from('custom_roles').select('*');
+    if (data) setCustomRoles(data);
+  };
+
   const [currentUser, setCurrentUser] = useState<any>(null);
 
   const fetchAdmins = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
-      const { data: profile } = await supabase.from('profiles').select('role, status').eq('id', user.id).single();
-      setCurrentUser(profile);
+      const { data: profile } = await supabase.from('profiles').select('role, status, email, full_name, is_role_coordinator, role_coordinator_quota').eq('id', user.id).single();
+      setCurrentUser({
+        ...profile,
+        id: user.id,
+        email: user.email || profile?.email,
+        name: profile?.full_name || user.user_metadata?.full_name || 'Admin'
+      });
     }
 
-    const { data } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+    const { data } = await supabase.from('profiles').select('*, custom_roles:custom_role_id(name)').order('created_at', { ascending: false });
     if (data) {
       const formatted = data.map((u: any) => {
         let displayStatus = u.status || 'Active';
@@ -60,15 +75,23 @@ export default function AdminRolesPage() {
         if (displayStatus === 'Pending Setup') statusColor = 'text-orange-600';
         if (displayStatus === 'Revoked' || displayStatus === 'Suspended') statusColor = 'text-red-600';
 
+        let displayRole = u.role || 'Invited User';
+        if (u.custom_roles && u.custom_roles.name) {
+          displayRole = u.custom_roles.name;
+        }
+
         return {
           id: u.id,
           name: u.full_name || 'N/A',
           email: u.email || 'N/A',
-          role: u.role || 'Invited User',
-          roleColor: u.role === 'Super Admin' ? 'bg-blackKnight text-white' : 'bg-gray-100 text-gray-700',
+          role: displayRole,
+          has_custom_role: !!u.custom_role_id,
+          roleColor: u.role === 'Super Admin' ? 'bg-blackKnight text-white' : (u.custom_role_id ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'),
           date: u.created_at ? new Date(u.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A',
           status: displayStatus,
-          statusColor: statusColor
+          statusColor: statusColor,
+          is_role_coordinator: u.is_role_coordinator || false,
+          role_coordinator_quota: u.role_coordinator_quota || 0
         };
       });
       setAdmins(formatted);
@@ -77,6 +100,8 @@ export default function AdminRolesPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showRevokeModal, setShowRevokeModal] = useState(false);
   const [showCoordinatorModal, setShowCoordinatorModal] = useState(false);
+  const [showCoordinatorSettingsModal, setShowCoordinatorSettingsModal] = useState(false);
+  const [editingCoordinatorUser, setEditingCoordinatorUser] = useState<any>(null);
   const [showPermissionsModal, setShowPermissionsModal] = useState(false);
   const [editingPermissionsUser, setEditingPermissionsUser] = useState<any>(null);
   const [permissionsData, setPermissionsData] = useState<any[]>([]);
@@ -84,6 +109,47 @@ export default function AdminRolesPage() {
 
   const [inviteError, setInviteError] = useState('');
   const [isInviting, setIsInviting] = useState(false);
+
+  // Security Confirmation State
+  const [securityAction, setSecurityAction] = useState<{title: string, action: () => void, description: string} | null>(null);
+  const [securityEmail, setSecurityEmail] = useState('');
+  const [securityError, setSecurityError] = useState('');
+
+  const executeSecurityAction = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (securityEmail.trim().toLowerCase() !== currentUser?.email?.toLowerCase()) {
+      setSecurityError('Email does not match your logged-in account.');
+      return;
+    }
+    
+    // Log this explicit confirmation to the audit logs directly
+    await supabase.from('admin_activity_logs').insert({
+      actor_id: currentUser.id,
+      action: 'SECURITY_CONFIRMATION',
+      resource: 'Admin Portal',
+      details: { action_title: securityAction?.title, confirmed_email: securityEmail }
+    });
+
+    // Notify all active Admins for maximum transparency
+    const { data: allAdmins } = await supabase.from('profiles').select('id').eq('status', 'Active');
+    if (allAdmins) {
+      const notifications = allAdmins.map(admin => ({
+        user_id: admin.id,
+        title: 'System Change Alert',
+        message: `${currentUser.name} (${currentUser.email}) executed: ${securityAction?.title}`,
+        type: 'AuditAlert',
+        link_url: '/admin/roles'
+      }));
+      await supabase.from('notifications').insert(notifications);
+    }
+
+    setSecurityError('');
+    setSecurityEmail('');
+    if (securityAction) {
+      securityAction.action();
+      setSecurityAction(null);
+    }
+  };
 
   const handleAddAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,13 +159,20 @@ export default function AdminRolesPage() {
     const form = e.target as HTMLFormElement;
     const fullName = (form.elements.namedItem('fullName') as HTMLInputElement).value;
     const email = (form.elements.namedItem('email') as HTMLInputElement).value;
-    const role = (form.elements.namedItem('role') as HTMLSelectElement).value;
+    const roleValue = (form.elements.namedItem('role') as HTMLSelectElement).value;
+    
+    let role = roleValue;
+    let custom_role_id = null;
+    if (roleValue.startsWith('custom:')) {
+      role = 'Standard Admin';
+      custom_role_id = roleValue.replace('custom:', '');
+    }
 
     try {
       const response = await fetch('/api/admin/invite', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName, email, role, permissions: [] })
+        body: JSON.stringify({ fullName, email, role, permissions: [], custom_role_id })
       });
 
       const data = await response.json();
@@ -165,8 +238,8 @@ export default function AdminRolesPage() {
     
     // Default modules if not present
     const defaultModules = [
-      'Dashboard', 'Admin Role & Management', 'Pledges & Records', 
-      'Pages & Content', 'Reports & Analytics', 'Notifications & Activity Logs', 'Platform Settings'
+      'Dashboard Overview', 'Pledges & Donations', 'Partnership Inquiries', 
+      'Admin & Role Management', 'System Settings'
     ];
     
     const formattedData = defaultModules.map(mod => {
@@ -215,7 +288,27 @@ export default function AdminRolesPage() {
 
       <div className="flex-1 overflow-y-auto p-4 md:p-4 relative">
         
-        {showSuccessBanner && (
+        {/* Tab Switcher */}
+        <div className="flex items-center gap-6 border-b border-gray-200 mb-6">
+          <button 
+            onClick={() => setMainTab('Admins')}
+            className={`pb-3 text-sm font-bold border-b-2 transition-colors ${mainTab === 'Admins' ? 'border-orangeRed1 text-orangeRed1' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+          >
+            Admin Access
+          </button>
+          <button 
+            onClick={() => setMainTab('Roles')}
+            className={`pb-3 text-sm font-bold border-b-2 transition-colors ${mainTab === 'Roles' ? 'border-orangeRed1 text-orangeRed1' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+          >
+            Defined System Roles & Access Levels
+          </button>
+        </div>
+
+        {mainTab === 'Roles' ? (
+          <RolesManagement currentUser={currentUser} />
+        ) : (
+          <>
+            {showSuccessBanner && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 flex justify-between items-center shadow-sm">
             <div className="flex items-center gap-2 text-green-800">
               <CheckCircle2 className="h-4 w-4 text-green-600" />
@@ -238,7 +331,7 @@ export default function AdminRolesPage() {
             <h2 className="text-2xl font-heading font-bold text-blackKnight">Admin Portal Users & Permissions</h2>
             <p className="text-sm text-text-secondary mt-1">Manage Admin access levels, reset passwords, or revoke access to the dashboard below.</p>
           </div>
-          {currentUser?.role === 'Super Admin' && (
+          {(currentUser?.role === 'Super Admin' || currentUser?.is_role_coordinator) && (
             <button 
               onClick={() => setShowAddModal(true)}
               className="w-full sm:w-auto flex items-center justify-center gap-2 bg-orangeRed1 hover:bg-orange-700 text-white px-4 py-2 rounded-md font-bold text-sm transition-colors shadow-sm"
@@ -249,71 +342,7 @@ export default function AdminRolesPage() {
           )}
         </div>
 
-        {/* Default Pledge Coordinator Section */}
-        <div className="bg-white border border-border rounded-xl shadow-sm overflow-hidden mb-6 w-full min-w-0 p-5">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h3 className="text-lg font-heading font-bold text-blackKnight">Default Pledge Coordinators</h3>
-              <p className="text-sm text-text-secondary mt-1">
-                New pledges are automatically distributed among these administrators.
-              </p>
-            </div>
-            {currentUser?.role === 'Super Admin' && (
-              <div className="flex gap-2 w-full md:w-auto">
-                <button 
-                  onClick={() => setShowCoordinatorModal(true)}
-                  className="w-full md:w-auto px-4 py-2 text-sm font-bold bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md shadow-sm border border-gray-300 transition-colors"
-                >
-                  Manage Coordinators
-                </button>
-              </div>
-            )}
-          </div>
-          
-          <div className="mt-5 p-4 rounded-lg border border-transparent">
-            {defaultCoordinators.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {defaultCoordinators.map((coord: any) => (
-                  <div key={coord.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col sm:flex-row items-center gap-4 relative pr-10">
-                    <div className="h-12 w-12 rounded-full bg-orange-100 flex items-center justify-center text-lg font-bold text-orangeRed1 shrink-0">
-                      {coord.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2)}
-                    </div>
-                    <div className="flex-1 text-center sm:text-left">
-                      <h4 className="text-base font-bold text-blackKnight">{coord.name}</h4>
-                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-1 text-sm text-text-secondary">
-                        <span>{coord.email}</span>
-                        <span className="hidden sm:inline text-gray-300">•</span>
-                        <span className="font-medium text-gray-700">{coord.role}</span>
-                        <span className="hidden sm:inline text-gray-300">•</span>
-                        <span className={coord.status === 'Active' ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>
-                          {coord.status}
-                        </span>
-                      </div>
-                    </div>
-                    {currentUser?.role === 'Super Admin' && (
-                      <button 
-                        onClick={async () => {
-                          await supabase.from('profiles').update({ is_default_coordinator: false }).eq('id', coord.id);
-                          setShowSuccessBanner('Coordinator removed successfully.');
-                          setTimeout(() => setShowSuccessBanner(''), 3000);
-                          fetchDefaultCoordinators();
-                        }}
-                        className="absolute top-4 right-4 text-gray-400 hover:text-red-600 transition-colors"
-                        title="Remove Coordinator"
-                      >
-                        <X className="h-5 w-5" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-sm text-gray-500 italic py-2 bg-gray-50 p-4 rounded-lg border border-gray-200 text-center">
-                No default coordinator assigned. New pledges will be marked as "Pending Assignment".
-              </div>
-            )}
-          </div>
-        </div>
+
 
         {/* Table Area */}
         <div className="bg-white border border-border rounded-xl shadow-sm overflow-hidden flex flex-col min-h-[400px] w-full min-w-0">
@@ -366,10 +395,22 @@ export default function AdminRolesPage() {
                             <>
                               <button 
                                 onClick={() => handleEditPermissions(admin)}
-                                disabled={['danielorjikalu102@gmail.com', 'tomisinbabayode@gmail.com'].includes(admin.email)}
-                                className={`px-3 py-1.5 rounded-md flex items-center justify-center gap-1 text-xs border border-transparent ${['danielorjikalu102@gmail.com', 'tomisinbabayode@gmail.com'].includes(admin.email) ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'text-blue-600 hover:text-blue-800 bg-blue-50 hover:border-blue-200'}`}
+                                disabled={['danielorjikalu102@gmail.com', 'tomisinbabayode@gmail.com'].includes(admin.email) || admin.has_custom_role}
+                                className={`px-3 py-1.5 rounded-md flex items-center justify-center gap-1 text-xs border border-transparent ${['danielorjikalu102@gmail.com', 'tomisinbabayode@gmail.com'].includes(admin.email) || admin.has_custom_role ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'text-blue-600 hover:text-blue-800 bg-blue-50 hover:border-blue-200'}`}
+                                title={admin.has_custom_role ? "Custom role permissions are managed in the Roles tab" : ""}
                               >
                                 Edit Access
+                              </button>
+                              <button 
+                                onClick={() => {
+                                  const dbUser = admins.find(a => a.id === admin.id);
+                                  setEditingCoordinatorUser(dbUser);
+                                  setShowCoordinatorSettingsModal(true);
+                                }}
+                                disabled={['danielorjikalu102@gmail.com', 'tomisinbabayode@gmail.com'].includes(admin.email) || admin.role === 'Super Admin'}
+                                className={`px-3 py-1.5 rounded-md flex items-center justify-center gap-1 text-xs border border-transparent ${['danielorjikalu102@gmail.com', 'tomisinbabayode@gmail.com'].includes(admin.email) || admin.role === 'Super Admin' ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'text-purple-600 hover:text-purple-800 bg-purple-50 hover:border-purple-200'}`}
+                              >
+                                Role Coordinator
                               </button>
                               <button 
                                 onClick={() => {
@@ -419,7 +460,12 @@ export default function AdminRolesPage() {
                   <label className="block text-sm font-bold text-blackKnight mb-1.5">Assign System Role</label>
                   <select name="role" className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-orangeRed1 focus:border-orangeRed1 bg-white">
                     <option value="Standard Admin">Standard Admin</option>
-                    <option value="Super Admin">Super Admin</option>
+                    {currentUser?.role === 'Super Admin' && (
+                      <option value="Super Admin">Super Admin</option>
+                    )}
+                    {customRoles.map(cr => (
+                      <option key={cr.id} value={`custom:${cr.id}`}>{cr.name} (Custom)</option>
+                    ))}
                   </select>
                 </div>
                 <div className="flex justify-end gap-3 pt-4">
@@ -450,57 +496,20 @@ export default function AdminRolesPage() {
                   setShowRevokeModal(false);
                   setRevokingUser(null);
                 }} className="flex-1 py-2 text-sm font-bold border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md">Cancel</button>
-                <button onClick={handleRevoke} className="flex-1 py-2 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-md shadow-sm">Revoke Access</button>
+                <button onClick={() => {
+                  setShowRevokeModal(false);
+                  setSecurityAction({
+                    title: 'Revoke Admin Access',
+                    description: `You are about to revoke access for ${revokingUser.name}.`,
+                    action: handleRevoke
+                  });
+                }} className="flex-1 py-2 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-md shadow-sm">Revoke Access</button>
               </div>
             </div>
           </div>
         )}
 
-        {showCoordinatorModal && (
-          <div className="fixed inset-0 bg-black/50 flex flex-col items-center justify-center z-50 px-4">
-            <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-              <button onClick={() => setShowCoordinatorModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                <X className="h-5 w-5" />
-              </button>
-              <h2 className="text-xl font-heading font-bold text-blackKnight mb-2">Assign Default Coordinator</h2>
-              <p className="text-sm text-text-secondary mb-6">
-                Select an administrator to be assigned all new pledges automatically.
-              </p>
-              
-              <div className="space-y-4 max-h-[300px] overflow-y-auto mb-4 border border-gray-200 rounded-md p-2">
-                {admins.filter(a => a.status === 'Active').length === 0 && (
-                  <div className="p-4 text-center text-sm text-gray-500">No active administrators available.</div>
-                )}
-                {admins.filter(a => a.status === 'Active').map(admin => (
-                  <label key={admin.id} className="flex items-center p-3 hover:bg-gray-50 rounded-md cursor-pointer border border-transparent hover:border-gray-200">
-                    <input 
-                      type="checkbox" 
-                      name="coordinator" 
-                      value={admin.id}
-                      defaultChecked={defaultCoordinators.some(c => c.id === admin.id)}
-                      onChange={async (e) => {
-                        const isChecked = e.target.checked;
-                        await supabase.from('profiles').update({ is_default_coordinator: isChecked }).eq('id', admin.id);
-                        setShowSuccessBanner(isChecked ? 'Coordinator added successfully.' : 'Coordinator removed successfully.');
-                        setTimeout(() => setShowSuccessBanner(''), 3000);
-                        fetchDefaultCoordinators();
-                      }}
-                      className="h-4 w-4 text-orangeRed1 focus:ring-orangeRed1 border-gray-300 rounded"
-                    />
-                    <div className="ml-3">
-                      <span className="block text-sm font-bold text-gray-900">{admin.name}</span>
-                      <span className="block text-xs text-gray-500">{admin.email} - {admin.role}</span>
-                    </div>
-                  </label>
-                ))}
-              </div>
-              
-              <div className="flex justify-end gap-3 pt-2 mt-4 border-t border-gray-100">
-                <button type="button" onClick={() => setShowCoordinatorModal(false)} className="px-4 py-2 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-md">Done</button>
-              </div>
-            </div>
-          </div>
-        )}
+
 
         {showPermissionsModal && (
           <div className="fixed inset-0 bg-black/50 flex flex-col items-center justify-center z-50 px-4">
@@ -552,7 +561,7 @@ export default function AdminRolesPage() {
                               setPermissionsData(newData);
                             }}
                             className="h-4 w-4 text-orangeRed1 focus:ring-orangeRed1 border-gray-300 rounded"
-                            disabled={!perm.can_view && ['Reports & Analytics', 'Notifications & Activity Logs'].includes(perm.module)}
+                            disabled={!perm.can_view}
                           />
                         </td>
                         <td className="whitespace-nowrap px-3 py-3 text-center">
@@ -565,7 +574,7 @@ export default function AdminRolesPage() {
                               setPermissionsData(newData);
                             }}
                             className="h-4 w-4 text-orangeRed1 focus:ring-orangeRed1 border-gray-300 rounded"
-                            disabled={!perm.can_view && ['Notifications & Activity Logs'].includes(perm.module)}
+                            disabled={!perm.can_view}
                           />
                         </td>
                         <td className="whitespace-nowrap px-3 py-3 text-center">
@@ -578,7 +587,7 @@ export default function AdminRolesPage() {
                               setPermissionsData(newData);
                             }}
                             className="h-4 w-4 text-orangeRed1 focus:ring-orangeRed1 border-gray-300 rounded"
-                            disabled={!perm.can_view && ['Dashboard', 'Reports & Analytics', 'Notifications & Activity Logs'].includes(perm.module)}
+                            disabled={!perm.can_view}
                           />
                         </td>
                       </tr>
@@ -589,10 +598,141 @@ export default function AdminRolesPage() {
               
               <div className="flex justify-end gap-3 pt-2 shrink-0 border-t border-gray-100 mt-2">
                 <button type="button" onClick={() => setShowPermissionsModal(false)} className="px-4 py-2 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-md">Cancel</button>
-                <button onClick={handleSavePermissions} className="px-4 py-2 text-sm font-bold text-white bg-orangeRed1 hover:bg-orange-700 rounded-md shadow-sm">Save Permissions</button>
+                <button onClick={() => {
+                  setShowPermissionsModal(false);
+                  setSecurityAction({
+                    title: 'Update Admin Permissions',
+                    description: `You are about to change module access permissions for ${editingPermissionsUser?.name}.`,
+                    action: handleSavePermissions
+                  });
+                }} className="px-4 py-2 text-sm font-bold text-white bg-orangeRed1 hover:bg-orange-700 rounded-md shadow-sm">Save Permissions</button>
               </div>
             </div>
           </div>
+        )}
+
+        {showCoordinatorSettingsModal && editingCoordinatorUser && (
+          <div className="fixed inset-0 bg-black/50 flex flex-col items-center justify-center z-50 px-4">
+            <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+              <button onClick={() => setShowCoordinatorSettingsModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <X className="h-5 w-5" />
+              </button>
+              <h2 className="text-xl font-heading font-bold text-blackKnight mb-2">
+                Role Coordinator Settings
+              </h2>
+              <p className="text-sm text-text-secondary mb-6">
+                Grant <strong>{editingCoordinatorUser.name}</strong> the ability to invite users and manage their own members.
+              </p>
+              
+              <div className="space-y-4 mb-6">
+                <label className="flex items-center p-3 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-50">
+                  <input 
+                    type="checkbox"
+                    checked={editingCoordinatorUser.is_role_coordinator}
+                    onChange={(e) => setEditingCoordinatorUser({...editingCoordinatorUser, is_role_coordinator: e.target.checked})}
+                    className="h-4 w-4 text-orangeRed1 focus:ring-orangeRed1 border-gray-300 rounded"
+                  />
+                  <span className="ml-3 font-bold text-sm text-blackKnight">Is Role Coordinator</span>
+                </label>
+
+                {editingCoordinatorUser.is_role_coordinator && (
+                  <div>
+                    <label className="block text-sm font-bold text-blackKnight mb-1.5">Invitation Quota</label>
+                    <input 
+                      type="number"
+                      min="0"
+                      value={editingCoordinatorUser.role_coordinator_quota}
+                      onChange={(e) => setEditingCoordinatorUser({...editingCoordinatorUser, role_coordinator_quota: parseInt(e.target.value) || 0})}
+                      className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-orangeRed1 focus:border-orangeRed1"
+                    />
+                    <p className="text-xs text-text-secondary mt-1">Number of admins this coordinator can invite.</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onClick={() => setShowCoordinatorSettingsModal(false)} className="px-4 py-2 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-md">Cancel</button>
+                <button 
+                  onClick={async () => {
+                    await supabase.from('profiles').update({
+                      is_role_coordinator: editingCoordinatorUser.is_role_coordinator,
+                      role_coordinator_quota: editingCoordinatorUser.role_coordinator_quota
+                    }).eq('id', editingCoordinatorUser.id);
+                    
+                    setShowCoordinatorSettingsModal(false);
+                    setShowSuccessBanner('Coordinator settings updated.');
+                    setTimeout(() => setShowSuccessBanner(''), 3000);
+                    fetchAdmins();
+                  }}
+                  className="px-4 py-2 text-sm font-bold text-white bg-orangeRed1 hover:bg-orange-700 rounded-md shadow-sm"
+                >
+                  Save Settings
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {securityAction && (
+          <div className="fixed inset-0 bg-black/60 flex flex-col items-center justify-center z-50 px-4 backdrop-blur-sm">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+              <button 
+                onClick={() => { setSecurityAction(null); setSecurityError(''); setSecurityEmail(''); }} 
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              >
+                <X className="h-5 w-5" />
+              </button>
+              
+              <div className="flex items-center gap-3 mb-2 text-orangeRed1">
+                <AlertTriangle className="h-6 w-6" />
+                <h2 className="text-xl font-heading font-bold text-blackKnight">Security Confirmation</h2>
+              </div>
+              
+              <p className="text-sm text-text-secondary mb-6">
+                {securityAction.description}
+                <br /><br />
+                To execute this change and record it in the audit log, please type your email address <strong>({currentUser?.email})</strong> below to confirm.
+              </p>
+              
+              <form onSubmit={executeSecurityAction} className="space-y-4">
+                {securityError && (
+                  <div className="bg-red-50 border border-red-200 text-red-600 px-3 py-2 rounded text-sm font-medium">
+                    {securityError}
+                  </div>
+                )}
+                
+                <div>
+                  <input 
+                    type="email" 
+                    required
+                    value={securityEmail}
+                    onChange={(e) => setSecurityEmail(e.target.value)}
+                    placeholder="Enter your email to confirm"
+                    className="w-full border border-gray-300 rounded-md py-2.5 px-3 text-sm focus:ring-2 focus:ring-orangeRed1 focus:border-orangeRed1 font-medium" 
+                    autoComplete="off"
+                  />
+                </div>
+                
+                <div className="flex justify-end gap-3 pt-2">
+                  <button 
+                    type="button" 
+                    onClick={() => { setSecurityAction(null); setSecurityError(''); setSecurityEmail(''); }} 
+                    className="px-4 py-2 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-md border border-gray-200"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="px-4 py-2 text-sm font-bold text-white bg-blackKnight hover:bg-gray-900 rounded-md shadow-sm"
+                  >
+                    Confirm & Execute
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+        </>
         )}
 
       </div>

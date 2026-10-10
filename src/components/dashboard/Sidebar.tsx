@@ -25,12 +25,17 @@ export function Sidebar() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+        const { data: profile } = await supabase.from('profiles').select('role, custom_role_id').eq('id', user.id).single();
         if (profile) {
           setUserRole(profile.role);
           if (profile.role !== 'Super Admin') {
-            const { data: perms } = await supabase.from('admin_permissions').select('*').eq('profile_id', user.id);
-            if (perms) setPermissions(perms);
+            if (profile.custom_role_id) {
+              const { data: perms } = await supabase.from('custom_role_permissions').select('*').eq('role_id', profile.custom_role_id);
+              if (perms) setPermissions(perms);
+            } else {
+              const { data: perms } = await supabase.from('admin_permissions').select('*').eq('profile_id', user.id);
+              if (perms) setPermissions(perms);
+            }
           }
         }
       }

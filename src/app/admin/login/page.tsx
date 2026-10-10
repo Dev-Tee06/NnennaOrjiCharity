@@ -173,15 +173,6 @@ export default function LoginPage() {
               </button>
             </div>
             
-            <div className="text-center text-sm pt-4 border-t border-gray-100 mt-6">
-              <span className="text-text-secondary">Don't have an account? </span>
-              <Link
-                href="/admin/register"
-                className="font-semibold text-orangeRed1 hover:text-orange-700 ml-1"
-              >
-                Create one
-              </Link>
-            </div>
           </form>
         ) : (
           <form className="space-y-5" onSubmit={handleVerifyMFA}>
