@@ -14,7 +14,7 @@ export default function LoginPage() {
   const supabase = createClient();
 
   const [mfaCode, setMfaCode] = useState('');
-  const [showMfa, setShowMfa] = useState(false);
+  const [mfaType, setMfaType] = useState<'totp' | 'email' | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +33,17 @@ export default function LoginPage() {
     } 
 
     if (data.session) {
-      // Password correct. Enforce Email OTP as 2nd factor
+      // Check for native TOTP MFA
+      const mfaAssurance = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      const needsTotp = mfaAssurance.data?.nextLevel === 'aal2' && mfaAssurance.data?.currentLevel === 'aal1';
+
+      if (needsTotp) {
+        setMfaType('totp');
+        setIsLoading(false);
+        return;
+      }
+
+      // Password correct, no TOTP. Enforce Email OTP as 2nd factor fallback
       // We sign out of the initial password session, and immediately send an OTP to email.
       await supabase.auth.signOut();
       
@@ -48,7 +58,7 @@ export default function LoginPage() {
         return;
       }
       
-      setShowMfa(true);
+      setMfaType('email');
       setIsLoading(false);
     }
   };
@@ -58,17 +68,49 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
 
-    const { data, error } = await supabase.auth.verifyOtp({
-      email,
-      token: mfaCode,
-      type: 'email'
-    });
+    if (mfaType === 'totp') {
+      const factors = await supabase.auth.mfa.listFactors();
+      const totpFactor = factors.data?.totp?.[0] || factors.data?.all.find(f => f.factor_type === 'totp');
+      
+      if (!totpFactor) {
+        setError("Authenticator setup not found.");
+        setIsLoading(false);
+        return;
+      }
 
-    if (error) {
-      setError(error.message);
-      setIsLoading(false);
+      const challenge = await supabase.auth.mfa.challenge({ factorId: totpFactor.id });
+      if (challenge.error) {
+         setError(challenge.error.message);
+         setIsLoading(false);
+         return;
+      }
+
+      const verify = await supabase.auth.mfa.verify({
+         factorId: totpFactor.id,
+         challengeId: challenge.data.id,
+         code: mfaCode
+      });
+
+      if (verify.error) {
+         setError(verify.error.message);
+         setIsLoading(false);
+      } else {
+         const { data: { user } } = await supabase.auth.getUser();
+         if (user) await handleSuccessfulLogin(user.id);
+      }
     } else {
-      if (data.user) await handleSuccessfulLogin(data.user.id);
+      const { data, error } = await supabase.auth.verifyOtp({
+        email,
+        token: mfaCode,
+        type: 'email'
+      });
+
+      if (error) {
+        setError(error.message);
+        setIsLoading(false);
+      } else {
+        if (data.user) await handleSuccessfulLogin(data.user.id);
+      }
     }
   };
 
@@ -103,7 +145,7 @@ export default function LoginPage() {
           <p className="text-sm text-text-secondary mt-1">Please enter your details to access the dashboard.</p>
         </div>
 
-        {!showMfa ? (
+        {!mfaType ? (
           <form className="space-y-5" onSubmit={handleLogin}>
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-blackKnight mb-1.5">
@@ -177,8 +219,12 @@ export default function LoginPage() {
         ) : (
           <form className="space-y-5" onSubmit={handleVerifyMFA}>
             <div className="text-center mb-6">
-              <h3 className="text-lg font-bold text-blackKnight">Email Verification Required</h3>
-              <p className="text-sm text-gray-500">Enter the secure code sent to <strong>{email}</strong>.</p>
+              <h3 className="text-lg font-bold text-blackKnight">
+                {mfaType === 'totp' ? 'Authenticator Verification Required' : 'Email Verification Required'}
+              </h3>
+              <p className="text-sm text-gray-500">
+                {mfaType === 'totp' ? 'Enter the 6-digit code from your Authenticator app.' : <>Enter the secure code sent to <strong>{email}</strong>.</>}
+              </p>
             </div>
             
             <div>
@@ -188,7 +234,7 @@ export default function LoginPage() {
                 maxLength={8}
                 value={mfaCode}
                 onChange={e => setMfaCode(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
-                placeholder="00000000"
+                placeholder="000000"
                 className="appearance-none block w-full px-3.5 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-orangeRed1 focus:border-orangeRed1 text-center text-xl tracking-widest bg-gray-50/50"
               />
             </div>
