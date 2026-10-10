@@ -19,11 +19,13 @@ export default function SettingsPage() {
   const [activeTemplateId, setActiveTemplateId] = useState<string | null>(null);
   const [savingTemplate, setSavingTemplate] = useState(false);
 
-  // Password State
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [savingPassword, setSavingPassword] = useState(false);
   const [passwordMsg, setPasswordMsg] = useState('');
+
+  const [showPasswordAal2Prompt, setShowPasswordAal2Prompt] = useState(false);
+  const [passwordAal2Code, setPasswordAal2Code] = useState('');
 
   // 2FA State
   const [mfaStatus, setMfaStatus] = useState<any>(null);
@@ -97,8 +99,8 @@ export default function SettingsPage() {
 
   const activeTemplate = templates.find(t => t.id === activeTemplateId) || null;
 
-  const updatePassword = async (e: any) => {
-    e.preventDefault();
+  const updatePassword = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (password !== confirmPassword) {
       setPasswordMsg('Passwords do not match');
       return;
@@ -107,6 +109,13 @@ export default function SettingsPage() {
       setPasswordMsg('Password must be at least 8 characters');
       return;
     }
+
+    const mfaStatusData = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (mfaStatusData.data?.currentLevel === 'aal1' && mfaStatusData.data?.nextLevel === 'aal2') {
+      setShowPasswordAal2Prompt(true);
+      return;
+    }
+
     setSavingPassword(true);
     const { error } = await supabase.auth.updateUser({ password });
     setSavingPassword(false);
@@ -117,6 +126,53 @@ export default function SettingsPage() {
       showToast('Password updated successfully!');
       setPassword('');
       setConfirmPassword('');
+      setShowPasswordAal2Prompt(false);
+      setPasswordAal2Code('');
+    }
+  };
+
+  const verifyAal2ForPassword = async () => {
+    setSavingPassword(true);
+    setPasswordMsg('');
+    const factors = await supabase.auth.mfa.listFactors();
+    const totpFactor = factors.data?.totp?.[0] || factors.data?.all.find(f => f.factor_type === 'totp');
+    
+    if (!totpFactor) {
+      setPasswordMsg("Authenticator setup not found.");
+      setSavingPassword(false);
+      return;
+    }
+
+    const challenge = await supabase.auth.mfa.challenge({ factorId: totpFactor.id });
+    if (challenge.error) {
+       setPasswordMsg(challenge.error.message);
+       setSavingPassword(false);
+       return;
+    }
+
+    const verify = await supabase.auth.mfa.verify({
+       factorId: totpFactor.id,
+       challengeId: challenge.data.id,
+       code: passwordAal2Code
+    });
+
+    if (verify.error) {
+       setPasswordMsg(verify.error.message);
+       setSavingPassword(false);
+    } else {
+       const { error } = await supabase.auth.updateUser({ password });
+       setSavingPassword(false);
+       if (error) {
+         setPasswordMsg(error.message);
+       } else {
+         setPasswordMsg('');
+         showToast('Password updated successfully!');
+         setPassword('');
+         setConfirmPassword('');
+         setShowPasswordAal2Prompt(false);
+         setPasswordAal2Code('');
+         checkMfa();
+       }
     }
   };
 
@@ -373,11 +429,34 @@ export default function SettingsPage() {
                   </ul>
                 </div>
 
-                <div className="pt-2">
-                  <button type="submit" disabled={savingPassword} className="bg-orangeRed1 hover:bg-orange-700 text-white px-6 py-2.5 rounded-md text-sm font-bold transition-colors shadow-sm disabled:opacity-50">
-                    {savingPassword ? 'Updating...' : 'Update Security Settings'}
-                  </button>
-                </div>
+                {!showPasswordAal2Prompt ? (
+                  <div className="pt-2">
+                    <button type="submit" disabled={savingPassword} className="bg-orangeRed1 hover:bg-orange-700 text-white px-6 py-2.5 rounded-md text-sm font-bold transition-colors shadow-sm disabled:opacity-50">
+                      {savingPassword ? 'Updating...' : 'Update Security Settings'}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg">
+                    <h4 className="text-sm font-bold text-orange-800 mb-2">Authenticator Required</h4>
+                    <p className="text-xs text-orange-700 mb-3">To complete this security update, please enter the 6-digit code from your Authenticator app.</p>
+                    <input 
+                      type="text" 
+                      value={passwordAal2Code} 
+                      onChange={e => setPasswordAal2Code(e.target.value.replace(/[^0-9]/g, ''))} 
+                      placeholder="000000" 
+                      maxLength={6}
+                      className="block w-full max-w-[200px] rounded-md border border-orange-300 py-2 px-3 text-sm focus:ring-orangeRed1 mb-3 bg-white"
+                    />
+                    <div className="flex gap-3">
+                      <button type="button" onClick={verifyAal2ForPassword} disabled={savingPassword || passwordAal2Code.length < 6} className="bg-orangeRed1 hover:bg-orange-700 text-white px-4 py-2 rounded-md text-sm font-bold transition-colors disabled:opacity-50">
+                        {savingPassword ? 'Verifying...' : 'Verify & Update'}
+                      </button>
+                      <button type="button" onClick={() => setShowPasswordAal2Prompt(false)} className="px-4 py-2 text-sm font-bold text-gray-500 hover:text-gray-700 transition-colors">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
               </form>
             </div>
 
