@@ -180,10 +180,20 @@ export default function SettingsPage() {
   const startMfaEnrollment = async () => {
     setEnrolling(true);
     setMfaError('');
+
+    // Clean up any hanging unverified factors from previous attempts
+    const factors = await supabase.auth.mfa.listFactors();
+    if (factors.data?.all) {
+      const unverified = factors.data.all.find(f => f.factor_type === 'totp' && f.status === 'unverified');
+      if (unverified) {
+        await supabase.auth.mfa.unenroll({ factorId: unverified.id });
+      }
+    }
+
     const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp' });
     if (error) {
       setMfaError(error.message);
-      setEnrolling(false);
+      // We keep enrolling=true so the error is visible in the UI below the button
       return;
     }
     if (data) {
@@ -476,6 +486,13 @@ export default function SettingsPage() {
                 </div>
                 <p className="text-xs text-text-secondary">Provide an extra layer of security for your admin account using an Authenticator App.</p>
                 
+                {enrolling && mfaError && !qrCode && (
+                  <div className="mt-4 p-3 bg-red-50 text-red-600 text-xs rounded border border-red-100">
+                    {mfaError}
+                    <button onClick={() => {setEnrolling(false); setMfaError('');}} className="block mt-2 font-bold underline">Dismiss</button>
+                  </div>
+                )}
+
                 {enrolling && qrCode && !has2FA && (
                   <div className="mt-4 pt-4 border-t border-gray-100">
                     <p className="text-xs font-bold mb-2">1. Scan this QR Code with your Authenticator app (e.g. Google Authenticator, Authy)</p>
