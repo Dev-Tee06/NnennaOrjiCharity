@@ -472,7 +472,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleRequestNewQrCode}
                 disabled={isLoading}
-                className="text-xs font-bold text-orangeRed1 hover:text-orange-700 block mx-auto"
+                className="text-xs sm:text-sm font-bold text-orangeRed1 hover:text-orange-700 block mx-auto px-2 py-1 text-center leading-relaxed transition-colors"
               >
                 Don&apos;t have an authenticator app paired? Scan a new QR code
               </button>
@@ -481,7 +481,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={switchToEmailOtp}
                   disabled={isLoading}
-                  className="text-xs font-semibold text-text-secondary hover:text-blackKnight block mx-auto"
+                  className="text-xs sm:text-sm font-semibold text-text-secondary hover:text-blackKnight block mx-auto px-2"
                 >
                   Send code via Email OTP instead
                 </button>
@@ -489,7 +489,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={resetToCredentials}
-                className="text-xs text-gray-500 hover:text-gray-700 flex items-center justify-center gap-1 mx-auto"
+                className="text-xs text-gray-500 hover:text-gray-700 flex items-center justify-center gap-1 mx-auto pt-1"
               >
                 <ArrowLeft className="h-3.5 w-3.5" /> Back to email & password
               </button>
@@ -504,10 +504,10 @@ export default function LoginPage() {
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 mb-2 text-orangeRed1">
                 <ShieldCheck className="h-6 w-6" />
               </div>
-              <h2 className="text-lg font-heading font-bold text-blackKnight">
+              <h2 className="text-base sm:text-lg font-heading font-bold text-blackKnight">
                 Set Up Authenticator App
               </h2>
-              <p className="text-xs text-text-secondary">
+              <p className="text-xs sm:text-sm text-text-secondary mt-1 px-2 leading-relaxed">
                 Two-Factor Authentication is required for all administrative accounts.
               </p>
             </div>

@@ -529,9 +529,9 @@ export default function SettingsPage() {
         )}
 
         {activeTab === 'security' && (
-          <div className="grid grid-cols-1 lg:grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-white border border-border rounded-xl shadow-sm p-8">
-              <h3 className="text-lg font-heading font-bold text-blackKnight mb-6 pb-4 border-b border-border">Update Admin's Password</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 bg-white border border-border rounded-xl shadow-sm p-4 sm:p-6 lg:p-8">
+              <h3 className="text-base sm:text-lg font-heading font-bold text-blackKnight mb-6 pb-4 border-b border-border">Update Admin's Password</h3>
               <form onSubmit={updatePassword} className="space-y-6">
                 {passwordMsg && (
                   <div className={`p-3 rounded text-sm ${passwordMsg.includes('success') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
@@ -600,50 +600,53 @@ export default function SettingsPage() {
             </div>
 
             <div className="space-y-6">
-              <div className="bg-white border border-border rounded-xl shadow-sm p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="h-5 w-5 text-orangeRed1" />
-                    <h3 className="text-sm font-bold text-blackKnight">Two-Factor Authentication (2FA)</h3>
+              <div className="bg-white border border-border rounded-xl shadow-sm p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <ShieldCheck className="h-5 w-5 text-orangeRed1 shrink-0" />
+                    <h3 className="text-sm sm:text-base font-bold text-blackKnight">Two-Factor Authentication (2FA)</h3>
                   </div>
                   {has2FA ? (
-                    <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full flex items-center gap-1">
-                      <Check className="h-3 w-3" /> Enabled & Verified
+                    <span className="self-start sm:self-auto text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full flex items-center gap-1 shrink-0 whitespace-nowrap">
+                      <Check className="h-3 w-3" /> Enabled &amp; Verified
                     </span>
                   ) : (
-                    <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
-                      Not Enrolled
+                    <span className="self-start sm:self-auto text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">
+                      Action Required: Enable 2FA
                     </span>
                   )}
                 </div>
                 
-                <p className="text-xs text-text-secondary leading-relaxed">
-                  Provide an extra layer of security for your admin account using a TOTP Authenticator App (such as Google Authenticator or Microsoft Authenticator).
+                <p className="text-xs sm:text-sm text-text-secondary leading-relaxed break-words">
+                  Two-Factor Authentication (2FA) provides an essential layer of defense for your admin account using a TOTP Authenticator App (such as Google Authenticator or Microsoft Authenticator). All administrators are required to enable 2FA to safeguard foundation records and sensitive administrative actions.
                 </p>
 
                 {has2FA && !enrolling && (
                   <div className="mt-4 pt-4 border-t border-border flex flex-col gap-3">
-                    <div className="p-3 bg-green-50/70 border border-green-200 rounded-lg text-xs text-green-800">
+                    <div className="p-3 bg-green-50/70 border border-green-200 rounded-lg text-xs sm:text-sm text-green-800 leading-relaxed">
                       <strong>Status:</strong> Authenticator app is active. You will be prompted for a 6-digit verification code whenever logging into the admin portal.
                     </div>
                     <button 
                       type="button"
                       onClick={startMfaEnrollment} 
-                      className="self-start text-xs font-bold text-orangeRed1 hover:text-orange-700 flex items-center gap-1 transition-colors"
+                      className="self-start text-xs sm:text-sm font-bold text-orangeRed1 hover:text-orange-700 flex items-center gap-1.5 transition-colors py-1"
                     >
-                      <RefreshCw className="h-3.5 w-3.5" /> Reconfigure or Replace Authenticator
+                      <RefreshCw className="h-3.5 w-3.5 shrink-0" /> Reconfigure or Replace Authenticator
                     </button>
                   </div>
                 )}
 
                 {!has2FA && !enrolling && (
-                  <div className="mt-4 pt-4 border-t border-border">
+                  <div className="mt-4 pt-4 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="text-xs sm:text-sm text-amber-800 bg-amber-50 border border-amber-200 p-3 rounded-lg leading-relaxed flex-1">
+                      <strong>Security Notice:</strong> Your account does not have 2FA enabled yet. Please set up your authenticator app below to ensure uninterrupted access.
+                    </div>
                     <button 
                       type="button"
                       onClick={startMfaEnrollment} 
-                      className="bg-orangeRed1 hover:bg-orange-700 text-white px-4 py-2 rounded-md text-xs font-bold transition-colors shadow-sm"
+                      className="w-full sm:w-auto bg-orangeRed1 hover:bg-orange-700 text-white px-5 py-2.5 rounded-md text-xs sm:text-sm font-bold transition-colors shadow-sm shrink-0 text-center"
                     >
-                      Set Up Authenticator App
+                      Enable 2FA Now
                     </button>
                   </div>
                 )}
