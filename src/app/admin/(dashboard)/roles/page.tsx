@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, ChevronDown, Bell, Plus, MoreHorizontal, CheckCircle2, AlertTriangle, X } from 'lucide-react';
+import { Search, ChevronDown, Bell, Plus, MoreHorizontal, CheckCircle2, AlertTriangle, X, Send, Mail, RefreshCw } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 
@@ -68,12 +68,16 @@ export default function AdminRolesPage() {
       const formatted = data.map((u: any) => {
         let displayStatus = u.status || 'Active';
         if (u.onboarding_status === 'Pending Setup' && u.status !== 'Revoked' && u.status !== 'Suspended') {
-          displayStatus = 'Pending Setup';
+          displayStatus = 'Invitation Pending';
         }
         
-        let statusColor = 'text-green-600';
-        if (displayStatus === 'Pending Setup') statusColor = 'text-orange-600';
-        if (displayStatus === 'Revoked' || displayStatus === 'Suspended') statusColor = 'text-red-600';
+        let statusBadgeClass = 'text-green-700 bg-green-50 border border-green-200';
+        if (displayStatus === 'Invitation Pending' || displayStatus === 'Pending Setup') {
+          statusBadgeClass = 'text-amber-700 bg-amber-50 border border-amber-200';
+        }
+        if (displayStatus === 'Revoked' || displayStatus === 'Suspended') {
+          statusBadgeClass = 'text-red-700 bg-red-50 border border-red-200';
+        }
 
         let displayRole = u.role || 'Invited User';
         if (u.custom_roles && u.custom_roles.name) {
@@ -89,7 +93,8 @@ export default function AdminRolesPage() {
           roleColor: u.role === 'Super Admin' ? 'bg-blackKnight text-white' : (u.custom_role_id ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'),
           date: u.created_at ? new Date(u.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A',
           status: displayStatus,
-          statusColor: statusColor,
+          statusBadgeClass: statusBadgeClass,
+          isPending: displayStatus === 'Invitation Pending' || displayStatus === 'Pending Setup',
           is_role_coordinator: u.is_role_coordinator || false,
           role_coordinator_quota: u.role_coordinator_quota || 0
         };
@@ -151,6 +156,29 @@ export default function AdminRolesPage() {
     }
   };
 
+  const [resendingEmail, setResendingEmail] = useState<string | null>(null);
+
+  const handleResendInvite = async (admin: any) => {
+    setResendingEmail(admin.email);
+    try {
+      const response = await fetch('/api/admin/invite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'resend', email: admin.email })
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to resend invitation');
+
+      setShowSuccessBanner(`Admin invitation resent successfully to ${admin.email}.`);
+      setTimeout(() => setShowSuccessBanner(''), 4000);
+    } catch (err: any) {
+      alert(err.message || 'Failed to resend invitation.');
+    } finally {
+      setResendingEmail(null);
+    }
+  };
+
   const handleAddAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     setInviteError('');
@@ -179,7 +207,7 @@ export default function AdminRolesPage() {
       if (!response.ok) throw new Error(data.error || 'Failed to send invite');
 
       setShowAddModal(false);
-      setShowSuccessBanner('Admin Account Created and Invitation Sent');
+      setShowSuccessBanner('Admin invitation sent successfully.');
       setTimeout(() => setShowSuccessBanner(''), 4000);
       fetchAdmins();
     } catch (err: any) {
@@ -337,7 +365,7 @@ export default function AdminRolesPage() {
               className="w-full sm:w-auto flex items-center justify-center gap-2 bg-orangeRed1 hover:bg-orange-700 text-white px-4 py-2 rounded-md font-bold text-sm transition-colors shadow-sm"
             >
               <Plus className="h-4 w-4" />
-              Add New Admin
+              Create Admin Account
             </button>
           )}
         </div>
@@ -385,14 +413,25 @@ export default function AdminRolesPage() {
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-text-secondary">{admin.date}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm">
-                        <span className={`font-bold ${admin.statusColor}`}>
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${admin.statusBadgeClass}`}>
                           {admin.status}
                         </span>
                       </td>
                       <td className="whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-bold">
-                        <div className="flex justify-end gap-2">
+                        <div className="flex justify-end items-center gap-2">
                           {currentUser?.role === 'Super Admin' && (
                             <>
+                              {admin.isPending && (
+                                <button 
+                                  onClick={() => handleResendInvite(admin)}
+                                  disabled={resendingEmail === admin.email}
+                                  className="px-2.5 py-1.5 rounded-md flex items-center justify-center gap-1 text-xs font-bold text-orangeRed1 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 transition-colors disabled:opacity-50"
+                                  title="Resend invitation email"
+                                >
+                                  <Send className="h-3 w-3" />
+                                  {resendingEmail === admin.email ? 'Sending...' : 'Resend Invite'}
+                                </button>
+                              )}
                               <button 
                                 onClick={() => handleEditPermissions(admin)}
                                 disabled={['danielorjikalu102@gmail.com', 'tomisinbabayode@gmail.com'].includes(admin.email) || admin.has_custom_role}

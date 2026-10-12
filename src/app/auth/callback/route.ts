@@ -23,7 +23,7 @@ export async function GET(request: Request) {
               cookiesToSet.forEach(({ name, value, options }) =>
                 cookieStore.set(name, value, options)
               )
-            } catch (error) {
+            } catch {
               // The `setAll` method was called from a Server Component.
               // This can be ignored if you have middleware refreshing
               // user sessions.
@@ -38,6 +38,11 @@ export async function GET(request: Request) {
     }
   }
 
+  if (next.startsWith('/admin/onboarding')) {
+    return NextResponse.redirect(`${origin}/admin/onboarding?error=Invalid_or_expired_invitation`)
+  }
+
   // return the user to an error page with instructions
   return NextResponse.redirect(`${origin}/admin/login?error=Invalid_or_expired_link`)
 }
+
