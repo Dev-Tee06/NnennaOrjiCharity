@@ -179,6 +179,31 @@ export default function AdminRolesPage() {
     }
   };
 
+  const [resettingMfaEmail, setResettingMfaEmail] = useState<string | null>(null);
+
+  const handleResetMfa = async (admin: any) => {
+    if (!confirm(`Reset 2FA for ${admin.name}? They will be required to scan a new QR code on their next login.`)) {
+      return;
+    }
+    setResettingMfaEmail(admin.email);
+    try {
+      const response = await fetch('/api/admin/mfa/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'admin_reset', userId: admin.id }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to reset 2FA');
+
+      setShowSuccessBanner(`2FA reset successfully for ${admin.name}. They can now scan a new QR code upon login.`);
+      setTimeout(() => setShowSuccessBanner(''), 4000);
+    } catch (err: unknown) {
+      alert((err as Error).message || 'Failed to reset 2FA.');
+    } finally {
+      setResettingMfaEmail(null);
+    }
+  };
+
   const handleAddAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     setInviteError('');
@@ -430,6 +455,17 @@ export default function AdminRolesPage() {
                                 >
                                   <Send className="h-3 w-3" />
                                   {resendingEmail === admin.email ? 'Sending...' : 'Resend Invite'}
+                                </button>
+                              )}
+                              {!admin.isPending && (
+                                <button
+                                  onClick={() => handleResetMfa(admin)}
+                                  disabled={resettingMfaEmail === admin.email}
+                                  className="px-2.5 py-1.5 rounded-md flex items-center justify-center gap-1 text-xs border border-transparent text-amber-700 hover:text-amber-800 bg-amber-50 hover:bg-amber-100 transition-colors disabled:opacity-50"
+                                  title="Reset 2FA / Allow user to re-scan QR code"
+                                >
+                                  <RefreshCw className={`h-3 w-3 ${resettingMfaEmail === admin.email ? 'animate-spin' : ''}`} />
+                                  {resettingMfaEmail === admin.email ? 'Resetting...' : 'Reset 2FA'}
                                 </button>
                               )}
                               <button 

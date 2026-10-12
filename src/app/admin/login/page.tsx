@@ -20,6 +20,7 @@ export default function LoginPage() {
   const [mfaCode, setMfaCode] = useState('');
   const [factorId, setFactorId] = useState('');
   const [hasEmailOtpFallback, setHasEmailOtpFallback] = useState(false);
+  const [activeUserId, setActiveUserId] = useState('');
 
   // MFA Enrollment State
   const [qrCode, setQrCode] = useState('');
@@ -48,6 +49,8 @@ export default function LoginPage() {
       if (!data.user) {
         throw new Error('Authentication failed. Please check your credentials.');
       }
+
+      setActiveUserId(data.user.id);
 
       // Check user account status in profiles table
       const { data: profile } = await supabase
@@ -264,6 +267,27 @@ export default function LoginPage() {
     }
   };
 
+  const handleRequestNewQrCode = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/admin/mfa/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'self_reset', userId: activeUserId }),
+      });
+      const resData = await res.json();
+      if (!res.ok) {
+        throw new Error(resData.error || 'Failed to prepare new QR code.');
+      }
+      // Old factor cleared on backend, start fresh enrollment and display QR code
+      await startLoginEnrollment();
+    } catch (err: unknown) {
+      setError((err as Error).message || 'Failed to prepare new QR code.');
+      setIsLoading(false);
+    }
+  };
+
   const handleSuccessfulLogin = async (
     userId: string,
     existingProfile?: { onboarding_status?: string } | null
@@ -444,12 +468,20 @@ export default function LoginPage() {
             </form>
 
             <div className="pt-2 text-center border-t border-gray-100 space-y-2">
+              <button
+                type="button"
+                onClick={handleRequestNewQrCode}
+                disabled={isLoading}
+                className="text-xs font-bold text-orangeRed1 hover:text-orange-700 block mx-auto"
+              >
+                Don&apos;t have an authenticator app paired? Scan a new QR code
+              </button>
               {hasEmailOtpFallback && (
                 <button
                   type="button"
                   onClick={switchToEmailOtp}
                   disabled={isLoading}
-                  className="text-xs font-bold text-orangeRed1 hover:text-orange-700 block mx-auto"
+                  className="text-xs font-semibold text-text-secondary hover:text-blackKnight block mx-auto"
                 >
                   Send code via Email OTP instead
                 </button>

@@ -44,71 +44,107 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     async function initSession() {
-      // 1. Check URL parameters for explicit errors
-      if (typeof window !== 'undefined') {
-        const urlParams = new URLSearchParams(window.location.search);
-        const errParam = urlParams.get('error') || urlParams.get('error_description');
-        if (errParam) {
-          setLinkInvalid(true);
-          setInvalidMsg('This invitation link is invalid or has expired. Please contact your Super Admin for a new invitation.');
-          setLoading(false);
-          return;
-        }
+      if (typeof window === 'undefined') return;
 
-        // 2. PKCE code exchange in browser if ?code= exists
-        const code = urlParams.get('code');
-        if (code) {
-          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-          if (exchangeError) {
-            setLinkInvalid(true);
-            setInvalidMsg(exchangeError.message || 'The invitation code could not be verified.');
-            setLoading(false);
-            return;
-          }
-        }
-      }
+      const urlParams = new URLSearchParams(window.location.search);
+      const hash = window.location.hash.replace(/^#/, '');
+      const hashParams = new URLSearchParams(hash);
 
-      // 3. Listen for auth state change if implicit hash token exists
-      let authSubscription: { unsubscribe: () => void } | null = null;
-      if (typeof window !== 'undefined' && window.location.hash.includes('access_token')) {
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-          if ((event === 'SIGNED_IN' || event === 'USER_UPDATED') && session) {
-            await handleSession(session);
-            subscription.unsubscribe();
-          }
-        });
-        authSubscription = subscription;
-      }
+      // 1. Check for explicit error parameters
+      const errParam =
+        urlParams.get('error') ||
+        hashParams.get('error') ||
+        urlParams.get('error_description') ||
+        hashParams.get('error_description');
 
-      // 4. Fetch current active session
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        // If there's an implicit hash, wait a bit for supabase client to process it
-        if (typeof window !== 'undefined' && window.location.hash.includes('access_token')) {
-          setTimeout(async () => {
-            const { data: { session: delayedSession } } = await supabase.auth.getSession();
-            if (delayedSession) {
-              await handleSession(delayedSession);
-            } else {
-              setLinkInvalid(true);
-              setInvalidMsg('No active invitation session found. Please open the invitation link directly from your email.');
-              setLoading(false);
-            }
-          }, 1500);
-          return;
-        }
-
+      if (errParam) {
         setLinkInvalid(true);
-        setInvalidMsg('No invitation session found. Please open the invitation link from your email or log in.');
+        setInvalidMsg(
+          'This invitation link is invalid or has expired. Please ask your Super Admin to click "Resend Invite".'
+        );
         setLoading(false);
         return;
       }
 
-      await handleSession(session);
+      // 2. Extract and establish session from hash fragment (#access_token=...&refresh_token=...)
+      const accessToken = hashParams.get('access_token');
+      const refreshToken = hashParams.get('refresh_token');
+      if (accessToken && refreshToken) {
+        try {
+          const { data, error: setSessionError } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          if (!setSessionError && data?.session) {
+            await handleSession(data.session);
+            return;
+          }
+        } catch (e) {
+          console.warn('Failed to set session from hash fragment:', e);
+        }
+      }
 
-      return () => {
-        if (authSubscription) authSubscription.unsubscribe();
-      };
+      // 3. PKCE code exchange in browser if ?code= exists
+      const code = urlParams.get('code');
+      if (code) {
+        try {
+          const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          if (!exchangeError && data?.session) {
+            await handleSession(data.session);
+            return;
+          }
+        } catch (e) {
+          console.warn('Failed to exchange code for session:', e);
+        }
+      }
+
+      // 4. Token hash OTP verification (?token_hash=...&type=invite)
+      const tokenHash = urlParams.get('token_hash') || hashParams.get('token_hash');
+      const otpType = (urlParams.get('type') || hashParams.get('type') || 'invite') as 'invite' | 'email' | 'recovery';
+      if (tokenHash) {
+        try {
+          const { data, error: verifyError } = await supabase.auth.verifyOtp({
+            token_hash: tokenHash,
+            type: otpType,
+          });
+          if (!verifyError && data?.session) {
+            await handleSession(data.session);
+            return;
+          }
+        } catch (e) {
+          console.warn('Failed to verify OTP token hash:', e);
+        }
+      }
+
+      // 5. Existing active session check
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        await handleSession(session);
+        return;
+      }
+
+      // 6. Auth listener fallback in case client library is still asynchronously parsing tokens
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, changedSession) => {
+        if (changedSession) {
+          await handleSession(changedSession);
+          subscription.unsubscribe();
+        }
+      });
+
+      // Bounded wait fallback if all previous extraction attempts yielded no session
+      setTimeout(async () => {
+        const { data: { session: fallbackSession } } = await supabase.auth.getSession();
+        if (fallbackSession) {
+          await handleSession(fallbackSession);
+        } else {
+          setLinkInvalid(true);
+          setInvalidMsg(
+            'No active invitation session found. Please open the link directly from your invitation email, or contact your Super Admin to resend your invite.'
+          );
+          setLoading(false);
+        }
+        subscription.unsubscribe();
+      }, 1500);
     }
 
     async function handleSession(session: { user: User }) {

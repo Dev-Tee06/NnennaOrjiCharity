@@ -63,39 +63,79 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Email address is required to resend invitation.' }, { status: 400 });
       }
 
+      const cleanTargetEmail = email.trim().toLowerCase();
+
       const { data: targetProfile } = await supabase
         .from('profiles')
-        .select('id, full_name, onboarding_status, status, role')
-        .eq('email', email.trim().toLowerCase())
+        .select('id, full_name, onboarding_status, status, role, custom_role_id')
+        .eq('email', cleanTargetEmail)
         .single();
 
       if (!targetProfile) {
         return NextResponse.json({ error: 'No administrator profile found for this email address.' }, { status: 404 });
       }
 
-      // Re-send invite or reset password for onboarding
-      const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email.trim().toLowerCase(), {
+      if (targetProfile.onboarding_status === 'Completed' && targetProfile.status === 'Active') {
+        return NextResponse.json({
+          error: 'This administrator has already completed onboarding.'
+        }, { status: 400 });
+      }
+
+      // Preserve existing permissions
+      const { data: existingPerms } = await supabase
+        .from('admin_permissions')
+        .select('*')
+        .eq('profile_id', targetProfile.id);
+
+      // Clean up previous uncompleted auth user so Supabase sends a fresh invitation email
+      try {
+        await supabase.auth.admin.deleteUser(targetProfile.id);
+      } catch (delErr) {
+        console.warn('Could not delete stale auth user, continuing with invite:', delErr);
+      }
+
+      // Send authentic invitation email
+      const { data: inviteData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(cleanTargetEmail, {
         redirectTo,
         data: { full_name: targetProfile.full_name }
       });
 
       if (inviteError) {
-        // If user already registered in auth, dispatch onboarding password reset email
-        const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
-          redirectTo
-        });
+        return NextResponse.json({ error: inviteError.message }, { status: 400 });
+      }
 
-        if (resetError) {
-          return NextResponse.json({ error: resetError.message }, { status: 400 });
-        }
+      const newUserId = inviteData.user.id;
+
+      // Re-create profile with new auth user ID
+      await supabase.from('profiles').upsert({
+        id: newUserId,
+        email: cleanTargetEmail,
+        full_name: targetProfile.full_name,
+        role: targetProfile.role,
+        custom_role_id: targetProfile.custom_role_id || null,
+        status: 'Active',
+        onboarding_status: 'Pending Setup'
+      });
+
+      // Re-attach permissions
+      if (existingPerms && existingPerms.length > 0) {
+        const permsToInsert = existingPerms.map(p => ({
+          profile_id: newUserId,
+          module: p.module,
+          can_view: p.can_view,
+          can_create: p.can_create,
+          can_edit: p.can_edit,
+          can_delete: p.can_delete
+        }));
+        await supabase.from('admin_permissions').upsert(permsToInsert, { onConflict: 'profile_id,module' });
       }
 
       // Audit Log
       await supabase.from('admin_activity_logs').insert({
         actor_id: user.id,
         action: 'RESEND_INVITE_ADMIN',
-        resource: targetProfile.id,
-        details: { email: email.trim().toLowerCase() }
+        resource: newUserId,
+        details: { email: cleanTargetEmail }
       });
 
       return NextResponse.json({ success: true, message: 'Admin invitation resent successfully.' });
@@ -129,48 +169,39 @@ export async function POST(request: Request) {
     // 1. Check if user already exists in profiles
     const { data: existingProfile } = await supabase
       .from('profiles')
-      .select('id, role, status')
+      .select('id, role, status, onboarding_status')
       .eq('email', cleanEmail)
       .single();
 
     let targetUserId = '';
-    let isNewUser = false;
+    const isNewUser = !existingProfile;
 
     if (existingProfile) {
-      targetUserId = existingProfile.id;
-      // Prevent role coordinator or non-superadmin from downgrading or overwriting an existing Super Admin
-      if (!isSuperAdmin && existingProfile.role === 'Super Admin') {
-        return NextResponse.json({ error: 'Cannot modify an existing Super Admin account.' }, { status: 403 });
+      if (existingProfile.onboarding_status === 'Completed') {
+        return NextResponse.json({
+          error: 'An active administrator account with this email already exists.'
+        }, { status: 400 });
       }
-      
-      // Dispatch reset link for onboarding to the verified user
-      await supabase.auth.resetPasswordForEmail(cleanEmail, { redirectTo });
-    } else {
-      // Invite User via Supabase Auth Administrative API
-      const { data: authData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(cleanEmail, {
-        redirectTo,
-        data: { full_name: fullName.trim() }
-      });
 
-      if (inviteError) {
-        // Fallback: If user exists in Auth but not in profiles table
-        if (inviteError.message.includes('already been registered')) {
-          const { data: users } = await supabase.auth.admin.listUsers();
-          const foundUser = users.users.find(u => u.email?.toLowerCase() === cleanEmail);
-          if (foundUser) {
-            targetUserId = foundUser.id;
-            await supabase.auth.resetPasswordForEmail(cleanEmail, { redirectTo });
-          } else {
-            return NextResponse.json({ error: 'User exists in auth but could not be located.' }, { status: 400 });
-          }
-        } else {
-          return NextResponse.json({ error: inviteError.message }, { status: 400 });
-        }
-      } else {
-        targetUserId = authData.user.id;
-        isNewUser = true;
+      // User exists with pending setup: clean up stale auth user and send a fresh invite
+      try {
+        await supabase.auth.admin.deleteUser(existingProfile.id);
+      } catch (delErr) {
+        console.warn('Could not delete uncompleted auth user:', delErr);
       }
     }
+
+    // Invite User via Supabase Auth Administrative API
+    const { data: authData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(cleanEmail, {
+      redirectTo,
+      data: { full_name: fullName.trim() }
+    });
+
+    if (inviteError) {
+      return NextResponse.json({ error: inviteError.message }, { status: 400 });
+    }
+
+    targetUserId = authData.user.id;
 
     // 2. Create or Update Profile with Pending Setup status
     await supabase.from('profiles').upsert({
