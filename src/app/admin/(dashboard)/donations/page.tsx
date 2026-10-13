@@ -398,7 +398,7 @@ export default function PledgesDonationsPage() {
       )}
 
       {showRecordModal && (
-        <div className="absolute inset-0 bg-white z-50 flex flex-col">
+        <div className="fixed inset-0 bg-white z-50 flex flex-col">
           <header className="flex h-20 shrink-0 items-center border-b border-border px-8">
             <button onClick={() => setShowRecordModal(false)} className="text-sm font-bold text-text-secondary hover:text-blackKnight mr-4">
               &larr; Back

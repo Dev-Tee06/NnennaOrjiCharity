@@ -25,9 +25,12 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { firstName, lastName, email, phone, message, location, donationType } = body;
 
-    // Validate
-    if (!firstName || !email) {
-      return NextResponse.json({ error: 'First name and email are required' }, { status: 400 });
+    // Validate: require a name and at least one contact method (email or phone)
+    if (!firstName) {
+      return NextResponse.json({ error: 'First name is required' }, { status: 400 });
+    }
+    if (!email && !phone) {
+      return NextResponse.json({ error: 'Either an email address or phone number is required' }, { status: 400 });
     }
 
     const supabase = await getAdminSupabase();
@@ -101,18 +104,23 @@ export async function POST(request: Request) {
        }
     }
 
-    // 2. Save to EmailOctopus
-    const contact = await addDonorContact(email, {
-      FirstName: firstName,
-      LastName: lastName || undefined,
-      Phone: phone || undefined,
-      ContactType: 'Donation',
-      Message: message || undefined,
-    });
-
-    if (!contact) {
-      console.error('EmailOctopus integration failed for donation email:', email);
-      // We don't fail the request if EO fails, but we might want to flag it in a real app
+    // 2. Save to EmailOctopus (only when email provided; wrapped in own try/catch so
+    //    a network error never blocks the pledge from being recorded)
+    if (email) {
+      try {
+        const contact = await addDonorContact(email, {
+          FirstName: firstName,
+          LastName: lastName || undefined,
+          Phone: phone || undefined,
+          ContactType: 'Donation',
+          Message: message || undefined,
+        });
+        if (!contact) {
+          console.error('EmailOctopus: contact was not created for', email);
+        }
+      } catch (eoErr) {
+        console.error('EmailOctopus integration error (non-fatal):', eoErr);
+      }
     }
 
     return NextResponse.json({ success: true }, { status: 200 });

@@ -86,7 +86,14 @@ export function RolesManagement({ currentUser }: { currentUser: any }) {
         description: roleDesc,
         created_by: currentUser?.id
       }).select('id').single();
-      if (error) { alert(error.message); return; }
+      if (error) {
+        const isDuplicate = error.message.toLowerCase().includes('duplicate') || error.code === '23505';
+        alert(isDuplicate
+          ? `A role named "${roleName}" already exists. Please choose a different name.`
+          : `Failed to create role: ${error.message}`
+        );
+        return;
+      }
       roleId = data.id;
     }
 
