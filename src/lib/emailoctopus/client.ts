@@ -13,13 +13,33 @@ function getMd5Hash(email: string): string {
   return crypto.createHash('md5').update(email.toLowerCase().trim()).digest('hex');
 }
 
+async function parseJsonResponse<T>(res: Response): Promise<T | null> {
+  const text = await res.text();
+
+  if (!text) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(text) as T;
+  } catch (error) {
+    console.error('EmailOctopus response was not valid JSON:', {
+      status: res.status,
+      statusText: res.statusText,
+      bodyPreview: text.slice(0, 300),
+      error,
+    });
+    return null;
+  }
+}
+
 /**
  * Checks if a contact already exists and returns it, or returns null if not found.
  */
 export async function getContact(email: string): Promise<EmailOctopusContactResponse | null> {
   if (!API_KEY || !LIST_ID) return null;
   const hash = getMd5Hash(email);
-  
+
   try {
     const res = await fetch(`${API_URL}/lists/${LIST_ID}/contacts/${hash}?api_key=${API_KEY}`, {
       method: 'GET',
@@ -29,14 +49,15 @@ export async function getContact(email: string): Promise<EmailOctopusContactResp
     });
 
     if (res.ok) {
-      return await res.json();
+      return await parseJsonResponse<EmailOctopusContactResponse>(res);
     }
-    
+
     if (res.status === 404) {
       return null;
     }
 
-    console.error(`EmailOctopus GET contact failed: ${res.statusText}`);
+    const text = await res.text();
+    console.error(`EmailOctopus GET contact failed: ${res.status} - ${text || res.statusText}`);
     return null;
   } catch (error) {
     console.error('EmailOctopus GET contact error:', error);
@@ -49,9 +70,9 @@ export async function getContact(email: string): Promise<EmailOctopusContactResp
  */
 export async function createContact(payload: EmailOctopusContactPayload): Promise<EmailOctopusContactResponse | null> {
   if (!API_KEY || !LIST_ID) return null;
-  
+
   const endpoint = `${API_URL}/lists/${LIST_ID}/contacts`;
-  
+
   const body = {
     api_key: API_KEY,
     email_address: payload.email_address,
@@ -70,11 +91,11 @@ export async function createContact(payload: EmailOctopusContactPayload): Promis
     });
 
     if (res.ok) {
-      return await res.json();
+      return await parseJsonResponse<EmailOctopusContactResponse>(res);
     }
 
     const text = await res.text();
-    console.error(`EmailOctopus POST contact failed: ${res.status} - ${text}`);
+    console.error(`EmailOctopus POST contact failed: ${res.status} - ${text || res.statusText}`);
     return null;
   } catch (error) {
     console.error('EmailOctopus POST contact error:', error);
@@ -87,10 +108,10 @@ export async function createContact(payload: EmailOctopusContactPayload): Promis
  */
 export async function updateContact(payload: EmailOctopusContactPayload): Promise<EmailOctopusContactResponse | null> {
   if (!API_KEY || !LIST_ID) return null;
-  
+
   const hash = getMd5Hash(payload.email_address);
   const endpoint = `${API_URL}/lists/${LIST_ID}/contacts/${hash}`;
-  
+
   const body = {
     api_key: API_KEY,
     email_address: payload.email_address,
@@ -108,11 +129,11 @@ export async function updateContact(payload: EmailOctopusContactPayload): Promis
     });
 
     if (res.ok) {
-      return await res.json();
+      return await parseJsonResponse<EmailOctopusContactResponse>(res);
     }
 
     const text = await res.text();
-    console.error(`EmailOctopus PUT contact failed: ${res.status} - ${text}`);
+    console.error(`EmailOctopus PUT contact failed: ${res.status} - ${text || res.statusText}`);
     return null;
   } catch (error) {
     console.error('EmailOctopus PUT contact error:', error);

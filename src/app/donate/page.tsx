@@ -2,9 +2,9 @@
 
 import React, { useState, Suspense, useEffect } from "react";
 import { Button } from "@/components/Button";
+import { SuccessModal } from "@/components/SuccessModal";
 import { ShieldCheck, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { sendGAEvent } from "@next/third-parties/google";
 
@@ -17,7 +17,7 @@ function DonateContent() {
   const initialTab = (searchParams.get("tab") as DonationType) || "cash";
   const [activeTab, setActiveTab] = useState<DonationType>(initialTab);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const supabase = createClient();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -89,7 +89,7 @@ function DonateContent() {
       }
 
       sendGAEvent({ event: "donation_complete" });
-      router.push("/success");
+      setShowSuccessModal(true);
     } catch (error) {
       console.error(error);
       alert("Failed to submit pledge. Please try again.");
@@ -119,7 +119,7 @@ function DonateContent() {
         </div>
 
         <h1 className="font-heading font-bold text-[26px] sm:text-[30px] md:text-[42px] lg:text-[48px] xl:text-[52px] leading-[1.05] tracking-tight text-blackKnight max-w-[700px]">
-          Choose How You'd
+          Choose How You&apos;d
           <br className="lg:hidden" /> Like to Give
         </h1>
 
@@ -356,10 +356,11 @@ function DonateContent() {
                 <div className="mt-4 pt-6 border-t border-border-subtle">
                   <Button
                     type="submit"
-                    disabled={!isPledgeValid}
-                    className="w-full md:w-auto"
+                    disabled={!isPledgeValid || isSubmitting}
+                    className="w-full md:w-auto gap-2"
                   >
-                    Submit Pledge
+                    <span>{isSubmitting ? "Submitting..." : "Submit Pledge"}</span>
+                    <ArrowRight size={18} />
                   </Button>
                 </div>
               </form>
@@ -401,6 +402,19 @@ function DonateContent() {
           </div>
         </div>
       </section>
+
+      {showSuccessModal && (
+        <SuccessModal
+          theme="donation"
+          title="Pledge Request Received!"
+          description="Thank you for submitting your donation details. Our support team has logged your pledge and will reach out shortly to coordinate physical collection and pickup details."
+          emailLabel="NEED IMMEDIATE SUPPORT? Reach us here:"
+          emailAddress="support@nnennaorjicharityfoundation.org"
+          buttonText="Return to Homepage"
+          onPrimaryAction={() => router.push("/")}
+          onClose={() => setShowSuccessModal(false)}
+        />
+      )}
     </div>
   );
 }

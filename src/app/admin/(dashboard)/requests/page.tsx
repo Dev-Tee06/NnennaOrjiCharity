@@ -1,74 +1,131 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Search, Download, ChevronDown, Bell, X, Trash2 } from 'lucide-react';
+import { Download, X, Trash2 } from 'lucide-react';
 
 import { TopHeader } from '@/components/dashboard/TopHeader';
 import { MobilePageTitle } from '@/components/dashboard/MobilePageTitle';
 
+type SourceTable = 'partnerships' | 'company_enquiries' | 'company_requests';
+
+type InquiryRow = {
+  id: string | number;
+  sourceTable: SourceTable;
+  organisation?: string | null;
+  company_name?: string | null;
+  organization?: string | null;
+  organisation_name?: string | null;
+  company?: string | null;
+  contact_name?: string | null;
+  representative?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  subject?: string | null;
+  partnership_type?: string | null;
+  partnershipType?: string | null;
+  message?: string | null;
+  details?: string | null;
+  enquiry?: string | null;
+  created_at: string;
+  status?: string | null;
+};
+
+type FormattedInquiry = {
+  raw: InquiryRow;
+  id: string | number;
+  sourceTable: SourceTable;
+  org: string;
+  contact: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+  date: string;
+  status: string;
+  statusColor: string;
+};
+
 export default function PartnershipInquiriesPage() {
   const [activeTab, setActiveTab] = useState('all');
-  const [inquiries, setInquiries] = useState<any[]>([]);
-  const [viewingInquiry, setViewingInquiry] = useState<any>(null);
-  
+  const [inquiries, setInquiries] = useState<FormattedInquiry[]>([]);
+  const [viewingInquiry, setViewingInquiry] = useState<FormattedInquiry | null>(null);
+
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchInquiries();
-    const channel1 = supabase
-      .channel('partnerships-table')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'partnerships' }, fetchInquiries)
-      .subscribe();
-    const channel2 = supabase
-      .channel('enquiries-table')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'company_enquiries' }, fetchInquiries)
-      .subscribe();
-    const channel3 = supabase
-      .channel('company-requests-table')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'company_requests' }, fetchInquiries)
-      .subscribe();
-      
-    return () => { 
-      supabase.removeChannel(channel1); 
-      supabase.removeChannel(channel2); 
-      supabase.removeChannel(channel3);
-    };
-  }, []);
-
-  const fetchInquiries = async () => {
-    // Fetch from all related PRD tables
+  const fetchInquiries = useCallback(async () => {
     const [partnershipsRes, enquiriesRes, requestsRes] = await Promise.all([
       supabase.from('partnerships').select('*'),
       supabase.from('company_enquiries').select('*'),
       supabase.from('company_requests').select('*')
     ]);
 
-    const partnerships = (partnershipsRes.data || []).map(d => ({...d, sourceTable: 'partnerships'}));
-    const enquiries = (enquiriesRes.data || []).map(d => ({...d, sourceTable: 'company_enquiries'}));
-    const requests = (requestsRes.data || []).map(d => ({...d, sourceTable: 'company_requests'}));
+    const partnerships = (partnershipsRes.data || []).map((d) => ({ ...d, sourceTable: 'partnerships' as const }));
+    const enquiries = (enquiriesRes.data || []).map((d) => ({ ...d, sourceTable: 'company_enquiries' as const }));
+    const requests = (requestsRes.data || []).map((d) => ({ ...d, sourceTable: 'company_requests' as const }));
 
     const allData = [...partnerships, ...enquiries, ...requests].sort(
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
 
-    const formatted = allData.map((r: any) => ({
-      raw: r,
-      id: r.id,
-      sourceTable: r.sourceTable,
-      org: r.organisation || r.company_name || 'N/A',
-      contact: r.contact_name ? r.contact_name : `${r.first_name || ''} ${r.last_name || ''}`.trim() || 'N/A',
-      email: r.email || 'N/A',
-      phone: r.phone || 'N/A',
-      subject: r.subject || 'N/A',
-      message: r.message || 'No message provided',
-      date: new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      status: r.status || 'New',
-      statusColor: r.status === 'Resolved' ? 'bg-green-50 text-green-700' : 'bg-blue-50 text-blue-700'
-    }));
-    
+    const formatted = allData.map((r: InquiryRow) => {
+      const org = r.organisation || r.company_name || r.organization || r.organisation_name || r.company || 'N/A';
+      const contact = r.contact_name || r.representative || `${r.first_name || ''} ${r.last_name || ''}`.trim() || 'N/A';
+      const subject = r.subject || r.partnership_type || r.partnershipType || 'Partnership enquiry';
+      const message = r.message || r.details || r.enquiry || 'No message provided';
+
+      return {
+        raw: r,
+        id: r.id,
+        sourceTable: r.sourceTable,
+        org,
+        contact,
+        email: r.email || 'N/A',
+        phone: r.phone || 'N/A',
+        subject,
+        message,
+        date: new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        status: r.status || 'New',
+        statusColor: r.status === 'Resolved' ? 'bg-green-50 text-green-700' : 'bg-blue-50 text-blue-700'
+      };
+    });
+
     setInquiries(formatted);
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void fetchInquiries();
+    }, 0);
+
+    const channel1 = supabase
+      .channel('partnerships-table')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'partnerships' }, () => {
+        void fetchInquiries();
+      })
+      .subscribe();
+    const channel2 = supabase
+      .channel('enquiries-table')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'company_enquiries' }, () => {
+        void fetchInquiries();
+      })
+      .subscribe();
+    const channel3 = supabase
+      .channel('company-requests-table')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'company_requests' }, () => {
+        void fetchInquiries();
+      })
+      .subscribe();
+
+    return () => {
+      window.clearTimeout(timer);
+      supabase.removeChannel(channel1);
+      supabase.removeChannel(channel2);
+      supabase.removeChannel(channel3);
+    };
+  }, [fetchInquiries, supabase]);
 
   const handleDownload = () => {
     alert('Downloading report...');
@@ -220,7 +277,7 @@ export default function PartnershipInquiriesPage() {
               </div>
               
               <div className="border-t border-gray-200 pt-4">
-                <h4 className="text-xs font-bold text-text-secondary uppercase mb-2">Subject</h4>
+                <h4 className="text-xs font-bold text-text-secondary uppercase mb-2">Partnership Type / Subject</h4>
                 <p className="text-sm font-bold text-blackKnight">{viewingInquiry.subject}</p>
               </div>
 

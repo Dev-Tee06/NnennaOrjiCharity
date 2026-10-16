@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Button } from "@/components/Button";
+import { SuccessModal } from "@/components/SuccessModal";
 import {
   Building2,
   Package,
@@ -11,8 +12,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
 import { sendGAEvent } from "@next/third-parties/google";
 
 const PARTNERSHIP_AVENUES = [
@@ -48,8 +47,7 @@ export default function Partner() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const supabase = createClient();
-  const router = useRouter();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     sendGAEvent({ event: "partnership_page_view" });
@@ -93,7 +91,7 @@ export default function Partner() {
 
       sendGAEvent({ event: "partnership_submit" });
       sendGAEvent({ event: "company_enquiry_submit" });
-      router.push('/success');
+      setShowSuccessModal(true);
     } catch (error) {
       console.error(error);
       alert("Failed to send enquiry. Please try again.");
@@ -315,6 +313,19 @@ export default function Partner() {
           </div>
         </div>
       </section>
+
+      {showSuccessModal && (
+        <SuccessModal
+          theme="partnership"
+          title="Partnership Inquiry Received!"
+          description="Thank you for your interest in collaborating with NOCF. Our partnerships team is reviewing your proposal and will get back to you within 5 business days. Thank you for choosing to make a difference with us."
+          emailLabel="HAVE ADDITIONAL DOCUMENTS OR QUESTIONS? Reach us here:"
+          emailAddress="partnership@nnennaorjicharityfoundation.org"
+          buttonText="Done"
+          onPrimaryAction={() => setShowSuccessModal(false)}
+          onClose={() => setShowSuccessModal(false)}
+        />
+      )}
     </div>
   );
 }
